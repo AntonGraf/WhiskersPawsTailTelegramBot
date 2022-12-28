@@ -23,4 +23,6 @@ public class AdoptiveParent {
     String state;
     String status;
 
+    String xz;
+
 }
