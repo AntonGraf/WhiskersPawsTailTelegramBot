@@ -6,12 +6,14 @@ import lombok.Getter;
 import java.io.Serializable;
 
 /**
- * A DTO for the {@link pro.sky.whiskerspawstailtelegrambot.entity.Volunteer} entity
+ * A DTO for the {@link pro.sky.whiskerspawstailtelegrambot.entity.Dog} entity
  */
 @AllArgsConstructor
 @Getter
-public class VolunteerRecord implements Serializable {
+public class DogRecord implements Serializable {
     private final long id;
     private final String fullName;
-    private final String phone;
+    private final int age;
+    private final Byte[] photo;
+    private final String description;
 }

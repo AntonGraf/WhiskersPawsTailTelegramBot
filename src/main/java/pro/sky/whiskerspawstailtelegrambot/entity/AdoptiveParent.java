@@ -21,6 +21,6 @@ public class AdoptiveParent {
     String fullName;
     String phone;
     String state;
-    String status;
+    boolean status;
 
 }

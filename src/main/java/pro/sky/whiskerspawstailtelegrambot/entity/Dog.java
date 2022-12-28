@@ -14,10 +14,12 @@ import javax.persistence.Id;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class Volunteer {
+public class Dog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
     String fullName;
-    String phone;
+    int age;
+    Byte[] photo;
+    String description;
 }
