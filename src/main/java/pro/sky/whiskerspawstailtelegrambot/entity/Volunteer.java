@@ -14,14 +14,14 @@ import javax.persistence.Id;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-/* Класс шаблона волонтера */
+/** Класс шаблона волонтера */
 public class Volunteer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
 
-    /* Поле полное имя волонтера */
+    /** Поле полное имя волонтера */
     String fullName;
-    /* Поле номер телефона волонтера */
+    /** Поле номер телефона волонтера */
     String phone;
 }
