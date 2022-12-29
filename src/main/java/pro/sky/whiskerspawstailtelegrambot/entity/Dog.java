@@ -16,7 +16,8 @@ import javax.persistence.Id;
 @Entity
 public class Dog {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
     String fullName;
     int age;
