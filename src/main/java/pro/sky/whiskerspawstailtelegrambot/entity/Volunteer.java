@@ -18,6 +18,7 @@ public class Volunteer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
+    /**/
     String fullName;
     String phone;
 }
