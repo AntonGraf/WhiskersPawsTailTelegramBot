@@ -8,6 +8,13 @@
     <preConditions>
         <dbms type="postgresql"/>
     </preConditions>
+    
+    <changeSet id="1" author="sergei_lupaev">
+        <tagDatabase tag="0"/>
+    </changeSet>
+    <include file="v-1.0/01-create-dog-table.sql" relativeToChangelogFile="true"/>
+    
+
 
    <!-- это главный лог, здесь будут все изменения
     инструкция,как можно все сделать

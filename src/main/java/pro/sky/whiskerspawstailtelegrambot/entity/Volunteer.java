@@ -15,6 +15,7 @@ import javax.persistence.Id;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 /* Класс шаблона волонтера */
+
 public class Volunteer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

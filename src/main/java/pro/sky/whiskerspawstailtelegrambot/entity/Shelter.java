@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Entity
+//@Entity
 public class Shelter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -13,7 +13,7 @@ import javax.persistence.Id;
 @ToString
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Entity
+//@Entity
 public class AdoptiveParent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
