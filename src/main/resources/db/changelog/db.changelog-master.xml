@@ -8,13 +8,6 @@
     <preConditions>
         <dbms type="postgresql"/>
     </preConditions>
-    
-    <changeSet id="1" author="sergei_lupaev">
-        <tagDatabase tag="0"/>
-    </changeSet>
-    <include file="v-1.0/01-create-dog-table.sql" relativeToChangelogFile="true"/>
-    
-
 
    <!-- это главный лог, здесь будут все изменения
     инструкция,как можно все сделать
@@ -22,9 +15,10 @@
     лучше с прекондишинами
     обязательно автора указать-->
 
-    <changeSet id="1" author="anton graf">
-        <tagDatabase tag="0"/>
+    <changeSet id="create new table adoptive_parent" author="IgorBr">
+
     </changeSet>
-    <include file="v-1.0/graf_create_table_shelter.sql" relativeToChangelogFile="true"/>
+    <include file="db/changelog/v-1.0/IgorBr_create_table_user.xml"/>
+
 
 </databaseChangeLog>
