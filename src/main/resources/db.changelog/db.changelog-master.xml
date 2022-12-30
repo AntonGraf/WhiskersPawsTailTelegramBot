@@ -30,6 +30,6 @@
     <changeSet id="create new table adoptive_parent" author="IgorBr">
 
     </changeSet>
-    <include file="db/changelog/v-1.0/IgorBr_create_table_user.xml"/>
+    <include file="db.changelog/v-1.0/IgorBr_create_table_user.xml"/>
 
 </databaseChangeLog>
