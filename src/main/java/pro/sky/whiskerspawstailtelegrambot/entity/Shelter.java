@@ -10,6 +10,7 @@ import java.util.List;
 @Setter
 @ToString
 @RequiredArgsConstructor
+@EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 //@Entity
 public class Shelter {
