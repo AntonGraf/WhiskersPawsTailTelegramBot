@@ -15,5 +15,7 @@
     лучше с прекондишинами
     обязательно автора указать-->
 
+    <include file="db/changelog/IgorBr_create_table_user.xml"/>
+
 
 </databaseChangeLog>
