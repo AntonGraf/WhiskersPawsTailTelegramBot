@@ -15,6 +15,9 @@
     лучше с прекондишинами
     обязательно автора указать-->
 
+    <changeSet id="create new table adoptive_parent" author="IgorBr">
+
+    </changeSet>
     <include file="db/changelog/IgorBr_create_table_user.xml"/>
 
 
