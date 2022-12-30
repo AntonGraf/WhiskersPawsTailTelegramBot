@@ -20,6 +20,8 @@ public class Shelter {
     String shelterSafetyEquipment;
     String ruleOfMeeting;
     @ElementCollection
+    @CollectionTable(name = "shelter_list_of_doc", joinColumns = @JoinColumn(name = "shelter_id"))
+    @Column(name = "list_if_doc")
     List<String> listOfDoc;
     String recOfTransportation;
     String homeImprovementForPuppy;
@@ -27,8 +29,11 @@ public class Shelter {
     String homeImprovementForDogWithDisabilities;
     String cynologistAdvice;
     @ElementCollection
+    @CollectionTable(name = "shelter_cynologist", joinColumns = @JoinColumn(name = "shelter_id"))
+    @Column(name = "cynologist")
     List<String> cynologist;
     @ElementCollection
+    @CollectionTable(name = "shelter_list_of_reason_for_rejection", joinColumns = @JoinColumn(name = "shelter_id"))
+    @Column(name = "list_of_reason_for_rejection")
     List<String> listOfReasonForRejection;
-
 }
