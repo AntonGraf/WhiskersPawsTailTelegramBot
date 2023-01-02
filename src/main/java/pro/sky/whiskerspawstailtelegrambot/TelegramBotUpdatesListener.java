@@ -50,7 +50,7 @@ public class TelegramBotUpdatesListener extends SpringWebhookBot {
         }
         if(Objects.equals(update.getMessage().getText(), "start")){
             try {
-                execute(new SendMessage(String.valueOf(chat_id), "Hi " + update.getMessage().getText()));
+                execute(new SendMessage(String.valueOf(chat_id), "Start " + update.getMessage().getText()));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
