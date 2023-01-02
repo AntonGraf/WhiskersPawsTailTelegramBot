@@ -1,5 +1,6 @@
 package pro.sky.whiskerspawstailtelegrambot.controller;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ public class BotController {
      * @param update уведомление от пользвателя
      * @return ответ пользователю
      */
+    @ApiResponse
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public BotApiMethod<?> onUpdateReceived(@RequestBody Update update) {
         return telegramBotUpdatesListener.onWebhookUpdateReceived(update);

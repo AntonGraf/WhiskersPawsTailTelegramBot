@@ -9,19 +9,11 @@
         <dbms type="postgresql"/>
     </preConditions>
 
-
     <changeSet id="1" author="sergei_lupaev">
         <tagDatabase tag="0"/>
     </changeSet>
     <include file="v-1.0/01-create-dog-table.sql" relativeToChangelogFile="true"/>
 
-
-
-    <!-- это главный лог, здесь будут все изменения
-     инструкция,как можно все сделать
-     https://github.com/dmitriyspeliy/projectSchool/tree/main/src/main/resources/db.changelog
-     лучше с прекондишинами
-     обязательно автора указать-->
 
     <changeSet id="1" author="anton graf">
         <tagDatabase tag="0"/>

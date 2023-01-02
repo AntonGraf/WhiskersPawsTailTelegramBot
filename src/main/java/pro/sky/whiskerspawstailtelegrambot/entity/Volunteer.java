@@ -13,7 +13,7 @@ import javax.persistence.Id;
 @ToString
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Entity
+//@Entity
 /* Класс шаблона волонтера */
 public class Volunteer {
     @Id
