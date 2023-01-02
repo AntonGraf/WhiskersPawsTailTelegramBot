@@ -12,6 +12,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
 
+import java.util.Objects;
+
 /**
  * наш бот
  */
@@ -37,9 +39,16 @@ public class TelegramBotUpdatesListener extends SpringWebhookBot {
      */
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+        long chat_id = update.getMessage().getChatId();
         if (update.getMessage() != null && update.getMessage().hasText()) {
-            long chat_id = update.getMessage().getChatId();
 
+            try {
+                execute(new SendMessage(String.valueOf(chat_id), "Hi " + update.getMessage().getText()));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        if(Objects.equals(update.getMessage().getText(), "start")){
             try {
                 execute(new SendMessage(String.valueOf(chat_id), "Hi " + update.getMessage().getText()));
             } catch (TelegramApiException e) {
