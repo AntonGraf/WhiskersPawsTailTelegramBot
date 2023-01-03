@@ -30,4 +30,18 @@ public class Dog {
      */
     Byte[] photo;
     String description;
+
+    /**
+     * Приют, к которому принадлежит собака
+     */
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "shelter_id")
+    Shelter shelter;
+
+    /**
+     * Хозяин собаки
+     */
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "adoptive_parent_id")
+    AdoptiveParent adoptiveParent;
 }

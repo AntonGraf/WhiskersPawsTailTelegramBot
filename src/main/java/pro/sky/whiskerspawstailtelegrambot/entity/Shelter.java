@@ -1,5 +1,6 @@
 package pro.sky.whiskerspawstailtelegrambot.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -15,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
-//@Entity
+@Entity
 public class Shelter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,4 +52,18 @@ public class Shelter {
     @CollectionTable(name = "shelter_list_of_reason_for_rejection", joinColumns = @JoinColumn(name = "shelter_id"))
     @Column(name = "list_of_reason_for_rejection")
     List<String> listOfReasonForRejection;
+
+    /**
+     * Список собак, которые принадлежат приюту
+     */
+    @OneToMany(mappedBy = "shelter", fetch=FetchType.EAGER)
+    @JsonBackReference
+    List<Dog> dogs;
+
+    /**
+     * Список волонтеров приюта
+     */
+    @OneToMany(mappedBy = "shelter", fetch=FetchType.EAGER)
+    @JsonBackReference
+    List<Volunteer> volunteers;
 }
