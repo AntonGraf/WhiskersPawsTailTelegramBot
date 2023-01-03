@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Используется для хранения информации о приютах:
@@ -58,12 +59,12 @@ public class Shelter {
      */
     @OneToMany(mappedBy = "shelter", fetch=FetchType.EAGER)
     @JsonBackReference
-    List<Dog> dogs;
+    Set<Dog> dogs;
 
     /**
      * Список волонтеров приюта
      */
     @OneToMany(mappedBy = "shelter", fetch=FetchType.EAGER)
     @JsonBackReference
-    List<Volunteer> volunteers;
+    Set<Volunteer> volunteers;
 }
