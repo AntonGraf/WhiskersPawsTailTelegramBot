@@ -7,7 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 
-
+/**
+ * Класс сущность, взаимодействует с таблицей БД, отвечает за пользователя, который хочет взять
+ * животное к себе.
+ */
 @Getter
 @Setter
 @ToString
@@ -17,17 +20,26 @@ import javax.persistence.*;
 @Table(name = "adoptive_parent")
 @Slf4j
 public class AdoptiveParent {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
-    String fullName;
-    String phone;
 
-    /**
-     * Состояние (этапы) по которому проходит пользователь,
-     * от первоначального взятия животного, до полного одобрения со стороны приюта
-     * */
-    String state;
-    boolean isParent;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  long id;
+
+  @Column(name = "chat_id")
+  long chatId;
+  @Column(name = "full_name")
+  String fullName;
+  @Column(name = "phone")
+  String phone;
+
+  /**
+   * Состояние (этапы) по которому проходит пользователь, от первоначального взятия животного, до
+   * полного одобрения со стороны приюта
+   */
+  @Column(name = "state")
+  String state;
+  @Column(name = "is_parent")
+  boolean isParent;
 
 }
