@@ -4,37 +4,35 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
-    
+
     <preConditions>
         <dbms type="postgresql"/>
     </preConditions>
 
-
     <changeSet id="1" author="sergei_lupaev">
-        <tagDatabase tag="0"/>
+        <tagDatabase tag="CreateTableDog"/>
     </changeSet>
     <include file="v-1.0/01-create-dog-table.sql" relativeToChangelogFile="true"/>
 
     <changeSet id="2" author="igor_gritsuk">
-        <tagDatabase tag="0"/>
+        <tagDatabase tag="CreateTableVolunteer"/>
     </changeSet>
     <include file="v-1.0/04_great_table_volunteer.sql" relativeToChangelogFile="true"/>
 
-    <!-- это главный лог, здесь будут все изменения
-     инструкция,как можно все сделать
-     https://github.com/dmitriyspeliy/projectSchool/tree/main/src/main/resources/db.changelog
-     лучше с прекондишинами
-     обязательно автора указать-->
-
-    <changeSet id="1" author="anton graf">
-        <tagDatabase tag="0"/>
+    <changeSet id="3" author="anton graf">
+        <tagDatabase tag="CreateTableShelter"/>
     </changeSet>
-    <include file="v-1.0/graf_create_table_shelter.sql" relativeToChangelogFile="true"/>
+    <include id="3" file="v-1.0/graf_create_table_shelter.sql" relativeToChangelogFile="true"/>
 
-    <changeSet id="create new table adoptive_parent" author="IgorBr">
-
+    <changeSet id="4" author="IgorBr">
+        <tagDatabase tag="CreateTableUser"/>
     </changeSet>
-    <include file="db.changelog/v-1.0/IgorBr_create_table_user.xml"/>
+    <include file="v-1.0/IgorBr_create_table_user.xml" relativeToChangelogFile="true"/>
+
+    <changeSet id="5" author="DmitriyPospelov">
+        <tagDatabase tag="CreateTableReport"/>
+    </changeSet>
+    <include file="v-1.0/05-reportTable.sql" relativeToChangelogFile="true"/>
 
 
 </databaseChangeLog>

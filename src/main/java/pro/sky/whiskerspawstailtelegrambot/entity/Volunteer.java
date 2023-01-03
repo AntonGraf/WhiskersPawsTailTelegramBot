@@ -3,10 +3,7 @@ package pro.sky.whiskerspawstailtelegrambot.entity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -21,7 +18,9 @@ public class Volunteer {
     long id;
 
     /** Поле полное имя волонтера */
+    @Column(name = "full_name")
     String fullName;
     /** Поле номер телефона волонтера */
+    @Column(name = "phone")
     String phone;
 }

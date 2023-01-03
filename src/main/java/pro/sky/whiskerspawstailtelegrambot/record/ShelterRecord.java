@@ -1,6 +1,7 @@
 package pro.sky.whiskerspawstailtelegrambot.record;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.io.Serializable;
 import java.util.List;
@@ -8,7 +9,8 @@ import java.util.List;
 /**
  * A DTO for the {@link pro.sky.whiskerspawstailtelegrambot.entity.Shelter} entity
  */
-@Value
+@AllArgsConstructor
+@Getter
 public class ShelterRecord implements Serializable {
     Long id;
     String aboutShelter;
