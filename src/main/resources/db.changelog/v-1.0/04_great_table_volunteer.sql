@@ -1,7 +1,7 @@
 CREATE TABLE volunteer
 (
     id  bigserial PRIMARY KEY ,
-    fullName VARCHAR(256) ,
-    phone VARCHAR(30),
+    full_name VARCHAR(256) ,
+    phone VARCHAR(30)
 
 )
