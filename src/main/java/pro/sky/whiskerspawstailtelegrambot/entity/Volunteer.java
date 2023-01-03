@@ -23,4 +23,11 @@ public class Volunteer {
     /** Поле номер телефона волонтера */
     @Column(name = "phone")
     String phone;
+
+    /**
+     * Приют, которому помогает волонтер
+     */
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "shelter_id")
+    Shelter shelter;
 }

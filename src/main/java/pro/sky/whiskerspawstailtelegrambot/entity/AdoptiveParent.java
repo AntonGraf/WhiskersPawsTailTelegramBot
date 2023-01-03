@@ -1,13 +1,13 @@
 package pro.sky.whiskerspawstailtelegrambot.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.*;
+import java.util.List;
 
 
 @Getter
@@ -32,4 +32,10 @@ public class AdoptiveParent {
     String state;
     boolean isParent;
 
+    /**
+     * Список собак
+     */
+    @OneToMany(mappedBy = "adoptiveParent", fetch=FetchType.EAGER)
+    @JsonBackReference
+    List<Dog> dogs;
 }

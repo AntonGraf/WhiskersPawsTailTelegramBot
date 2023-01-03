@@ -34,7 +34,11 @@
     </changeSet>
     <include file="v-1.0/05-reportTable.sql" relativeToChangelogFile="true"/>
 
-    <changeSet id="insert data to shelter table" author="anton graf">
+    <changeSet id="6" author="anton graf">
     </changeSet>
     <include file="v-1.0/data/graf_insert_data_table_shelter.sql" relativeToChangelogFile="true"/>
+
+    <changeSet id="7" author="anton graf">
+    </changeSet>
+    <include file="v-1.0/graf_table_binding.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
