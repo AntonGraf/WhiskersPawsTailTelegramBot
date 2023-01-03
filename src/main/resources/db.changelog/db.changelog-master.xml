@@ -15,7 +15,10 @@
     </changeSet>
     <include file="v-1.0/01-create-dog-table.sql" relativeToChangelogFile="true"/>
 
-
+    <changeSet id="2" author="igor_gritsuk">
+        <tagDatabase tag="0"/>
+    </changeSet>
+    <include file="v-1.0/04_great_table_volunteer.sql" relativeToChangelogFile="true"/>
 
     <!-- это главный лог, здесь будут все изменения
      инструкция,как можно все сделать
