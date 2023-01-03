@@ -57,7 +57,7 @@ public class Shelter {
     /**
      * Список собак, которые принадлежат приюту
      */
-    @OneToMany(mappedBy = "shelter", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "shelter", fetch = FetchType.EAGER)
     @JsonBackReference
     Set<Dog> dogs;
 
