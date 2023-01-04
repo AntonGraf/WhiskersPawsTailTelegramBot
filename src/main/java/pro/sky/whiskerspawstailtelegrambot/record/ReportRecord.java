@@ -1,7 +1,10 @@
 package pro.sky.whiskerspawstailtelegrambot.record;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.experimental.FieldDefaults;
+import pro.sky.whiskerspawstailtelegrambot.entity.Dog;
 
 import java.io.Serializable;
 
@@ -10,10 +13,13 @@ import java.io.Serializable;
  */
 @AllArgsConstructor
 @Getter
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class ReportRecord implements Serializable {
-    private final long id;
-    private final String diet;
-    private final String reportAboutFeelings;
-    private final String reportAboutHabits;
-    private final Byte[] photoDog;
+    long report_id;
+    String diet;
+    String reportAboutFeelings;
+    //Dog dog;
+    String reportAboutHabits;
+    Byte[] photoDog;
+    long dog_id;
 }

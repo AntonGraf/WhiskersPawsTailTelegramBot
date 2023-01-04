@@ -1,7 +1,10 @@
 package pro.sky.whiskerspawstailtelegrambot.record;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.experimental.FieldDefaults;
+import pro.sky.whiskerspawstailtelegrambot.entity.Shelter;
 
 import java.io.Serializable;
 
@@ -10,8 +13,10 @@ import java.io.Serializable;
  */
 @AllArgsConstructor
 @Getter
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class VolunteerRecord implements Serializable {
-    private final long id;
-    private final String fullName;
-    private final String phone;
+    long id;
+    String fullName;
+    String phone;
+   // Shelter shelter;
 }
