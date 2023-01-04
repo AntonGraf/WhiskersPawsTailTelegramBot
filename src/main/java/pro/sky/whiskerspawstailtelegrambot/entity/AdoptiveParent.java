@@ -51,12 +51,6 @@ public class AdoptiveParent {
   @Column(name = "state")
   String state;
   /**
-   * явялется ли усыновителем или нет
-   */
-  @Column(name = "is_parent")
-  boolean isParent;
-
-  /**
    * chat id для отправки обратного сообщения
    */
   @Column(name = "chat_id")
