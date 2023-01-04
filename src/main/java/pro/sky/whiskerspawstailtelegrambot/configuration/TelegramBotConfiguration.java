@@ -61,6 +61,7 @@ public class TelegramBotConfiguration {
         bot.setBotUserName(this.getUserName());
         bot.setBotToken(this.getToken());
 
+
         return bot;
     }
 
