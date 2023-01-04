@@ -44,5 +44,5 @@
 
     <changeSet id="8" author="anton graf">
     </changeSet>
-    <include file="v-1.0/05_add_column_to_table.sql" relativeToChangelogFile="true"/>
+    <include file="v-1.0/08_add_column_to_table.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
