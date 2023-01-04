@@ -41,4 +41,8 @@
     <changeSet id="7" author="anton graf">
     </changeSet>
     <include file="v-1.0/graf_table_binding.sql" relativeToChangelogFile="true"/>
+
+    <changeSet id="8" author="igor_gritsuk">
+    </changeSet>
+    <include file="v-1.0/04_insert_date_table_volunter.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
