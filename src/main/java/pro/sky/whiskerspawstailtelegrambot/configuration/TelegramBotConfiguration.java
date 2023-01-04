@@ -19,6 +19,7 @@ import pro.sky.whiskerspawstailtelegrambot.TelegramBotUpdatesListener;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Configuration
 public class TelegramBotConfiguration {
+    final ConfigMenu configMenu;
 
     /**
      * токен бота
@@ -37,6 +38,10 @@ public class TelegramBotConfiguration {
      */
     @Value("${telegram.bot.userName}")
     String userName;
+
+    public TelegramBotConfiguration(ConfigMenu configMenu) {
+        this.configMenu = configMenu;
+    }
 
     /**
      * установка url для хука
@@ -60,6 +65,7 @@ public class TelegramBotConfiguration {
         bot.setWebHookPath(this.getWebHookPath());
         bot.setBotUserName(this.getUserName());
         bot.setBotToken(this.getToken());
+        configMenu.initMenu(bot);
 
 
         return bot;
