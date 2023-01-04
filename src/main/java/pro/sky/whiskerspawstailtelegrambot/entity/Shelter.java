@@ -22,6 +22,14 @@ public class Shelter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+    //Название приюта
+    String name;
+    //Адрес
+    String address;
+    //Телефон
+    String phone;
+    //Время работы приюта
+    String workingTime;
     //Информация о приюте
     String aboutShelter;
     //Информация о технике безопасности
@@ -53,17 +61,11 @@ public class Shelter {
     @CollectionTable(name = "shelter_list_of_reason_for_rejection", joinColumns = @JoinColumn(name = "shelter_id"))
     @Column(name = "list_of_reason_for_rejection")
     List<String> listOfReasonForRejection;
-
-    /**
-     * Список собак, которые принадлежат приюту
-     */
+    //Список собак, которые принадлежат приюту
     @OneToMany(mappedBy = "shelter", fetch=FetchType.EAGER)
     @JsonBackReference
     Set<Dog> dogs;
-
-    /**
-     * Список волонтеров приюта
-     */
+    //Список волонтеров приюта
     @OneToMany(mappedBy = "shelter", fetch=FetchType.EAGER)
     @JsonBackReference
     Set<Volunteer> volunteers;
