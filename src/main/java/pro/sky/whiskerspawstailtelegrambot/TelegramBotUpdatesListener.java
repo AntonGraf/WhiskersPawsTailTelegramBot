@@ -40,14 +40,14 @@ public class TelegramBotUpdatesListener extends SpringWebhookBot {
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
         long chat_id = update.getMessage().getChatId();
-        if (update.getMessage() != null && update.getMessage().hasText()) {
+        /*if (update.getMessage() != null && update.getMessage().hasText()) {
 
             try {
                 execute(new SendMessage(String.valueOf(chat_id), "Hi " + update.getMessage().getText()));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
         if(Objects.equals(update.getMessage().getText(), "start")){
             try {
                 execute(new SendMessage(String.valueOf(chat_id), "Start " + update.getMessage().getText()));
