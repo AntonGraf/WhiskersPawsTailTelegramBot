@@ -1,5 +1,8 @@
 package pro.sky.whiskerspawstailtelegrambot.controller;
 
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -11,10 +14,14 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import pro.sky.whiskerspawstailtelegrambot.TelegramBotUpdatesListener;
 
+/**
+ * Контроллер для бота в телеге
+ */
 @RestController
 @Getter
 @Setter
 @Slf4j
+@Hidden
 public class BotController {
     final TelegramBotUpdatesListener telegramBotUpdatesListener;
 
@@ -22,11 +29,6 @@ public class BotController {
         this.telegramBotUpdatesListener = telegramBotUpdatesListener;
     }
 
-    /**
-     * Метод принимает update и возвращает ответ
-     * @param update уведомление от пользвателя
-     * @return ответ пользователю
-     */
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public BotApiMethod<?> onUpdateReceived(@RequestBody Update update) {
         return telegramBotUpdatesListener.onWebhookUpdateReceived(update);
