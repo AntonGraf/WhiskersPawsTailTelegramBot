@@ -29,6 +29,7 @@
     </changeSet>
     <include file="v-1.0/IgorBr_01_create_table_user.xml" relativeToChangelogFile="true"/>
     <include file="v-1.0/IgorBr_02_add_column_chat_id_in_table_user.xml" relativeToChangelogFile="true"/>
+    <include file="v-1.0/data/IgorBr_03_insert_adoptive_parent.sql" relativeToChangelogFile="true"/>
 
     <changeSet id="5" author="DmitriyPospelov">
         <tagDatabase tag="CreateTableReport"/>
