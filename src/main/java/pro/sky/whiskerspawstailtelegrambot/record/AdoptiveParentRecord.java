@@ -23,5 +23,6 @@ public class AdoptiveParentRecord implements Serializable {
     String state;
     boolean status;
     boolean isParent;
+    long chatId;
     List<DogRecord> dogs;
 }

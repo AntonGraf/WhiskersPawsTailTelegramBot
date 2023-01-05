@@ -27,7 +27,8 @@
     <changeSet id="4" author="IgorBr">
         <tagDatabase tag="CreateTableUser"/>
     </changeSet>
-    <include file="v-1.0/IgorBr_create_table_user.xml" relativeToChangelogFile="true"/>
+    <include file="v-1.0/IgorBr_01_create_table_user.xml" relativeToChangelogFile="true"/>
+    <include file="v-1.0/IgorBr_02_add_column_chat_id_in_table_user.xml" relativeToChangelogFile="true"/>
 
     <changeSet id="5" author="DmitriyPospelov">
         <tagDatabase tag="CreateTableReport"/>
@@ -44,10 +45,5 @@
 
     <changeSet id="8" author="igor_gritsuk">
     </changeSet>
-    <include file="v-1.0/04_insert_date_table_volunter.sql" relativeToChangelogFile="true"/>
-
-    <changeSet id="9" author="sergei_lupaev">
-        <tagDatabase tag="dataForDogTable"/>
-    </changeSet>
-    <include file="v-1.0/data/insert_data_for_dog_table.sql" relativeToChangelogFile="true"/>
+    <include file="v-1.0/data/04_insert_date_table_volunter.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
