@@ -18,8 +18,7 @@ public class MessageHandler implements MainHandler {
     public SendMessage handler(Update update) {
         SendMessage sendMessage = null;
         String chatId = String.valueOf(update.getMessage().getChatId());
-        boolean checkUpdate = update.getMessage() == null && !update.getMessage().hasText()
-                && !update.hasMessage();
+        boolean checkUpdate = !update.getMessage().hasText();
         if (!checkUpdate) {
             if (readUpdate(update).equals("/start")) {
                 sendMessage = new SendMessage(chatId,"Здрасте");
