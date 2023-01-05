@@ -11,23 +11,19 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import pro.sky.whiskerspawstailtelegrambot.TelegramBotUpdatesListener;
+import pro.sky.whiskerspawstailtelegrambot.textAndButtons.AllText;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Configuration
 @Slf4j
 public class ConfigMenu {
     public void initMenu(TelegramBotUpdatesListener bot){
         List<BotCommand> listofCommands = new ArrayList<>();
-        listofCommands.add(new BotCommand("/start", "get a welcome message"));
-        listofCommands.add(new BotCommand("/mydata", "get your data stored"));
-        listofCommands.add(new BotCommand("/deletedata", "delete my data"));
-        listofCommands.add(new BotCommand("/help", "info how to use this bot"));
-        listofCommands.add(new BotCommand("/settings", "set your preferences"));
+        listofCommands.add(new BotCommand(AllText.START_TEXT, "get a welcome message"));
+        listofCommands.add(new BotCommand(AllText.CALL_TO_VOLUNTEER, "call to volunteer"));
+
         try {
             bot.execute(new SetMyCommands(listofCommands, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException e) {

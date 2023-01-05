@@ -30,10 +30,11 @@ public class TelegramBotUpdatesListener extends SpringWebhookBot {
     String botToken;
 
     @Qualifier("MessageHandler")
-    final MainHandler messageHandler;
-    public TelegramBotUpdatesListener(SetWebhook webhook, MainHandler mainHandler) {
+    @Autowired
+    MainHandler messageHandler;
+
+    public TelegramBotUpdatesListener(SetWebhook webhook) {
         super(webhook);
-        this.messageHandler = mainHandler;
     }
 
 
