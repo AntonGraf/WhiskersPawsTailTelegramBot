@@ -11,7 +11,8 @@ import javax.persistence.*;
 import java.util.List;
 
 /**
- * Усыновитель. В база данных adoptive_parent.
+ * Класс сущность, взаимодействует с таблицей БД adoptive_parent, отвечает за пользователя, который
+ * хочет взять животное к себе.
  */
 @Getter
 @Setter
@@ -22,33 +23,43 @@ import java.util.List;
 @Table(name = "adoptive_parent")
 @Slf4j
 public class AdoptiveParent {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
-    /**
-     * Поле полного имени
-     */
-    String fullName;
-    /**
-     * Поле телефона
-     */
-    String phone;
 
-    /**
-     * Состояние (этапы) по которому проходит пользователь,
-     * от первоначального взятия животного, до полного одобрения со стороны приюта
-     * */
-    String state;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  long id;
+  /**
+   * Поле полного имени
+   */
+  @Column(name = "full_name")
+  String fullName;
+  /**
+   * Поле телефона
+   */
+  @Column(name = "phone")
+  String phone;
 
-    /**
-     * явялется ли усыновителем или нет
-     */
-    boolean isParent;
+  /**
+   * явялется ли усыновителем или нет
+   */
+  @Column(name = "is_parent")
+  boolean isParent;
+  /**
+   * Состояние (этапы) по которому проходит пользователь, от первоначального взятия животного, до
+   * полного одобрения со стороны приюта
+   */
+  @Column(name = "state")
+  String state;
+  /**
+   * chat id для отправки обратного сообщения
+   */
+  @Column(name = "chat_id")
+  long chatId;
 
-    /**
-     * Список собак
-     */
-    @OneToMany(mappedBy = "adoptiveParent", fetch=FetchType.EAGER)
-    @JsonBackReference
-    List<Dog> dogs;
+  /**
+   * Список собак
+   */
+  @OneToMany(mappedBy = "adoptiveParent", fetch = FetchType.EAGER)
+  @JsonBackReference
+  List<Dog> dogs;
 }
