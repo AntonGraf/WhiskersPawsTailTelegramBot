@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import pro.sky.whiskerspawstailtelegrambot.TelegramBotUpdatesListener;
+import pro.sky.whiskerspawstailtelegrambot.mainHandler.MainHandler;
 
 /**
  * Настройка бота
@@ -20,7 +21,7 @@ import pro.sky.whiskerspawstailtelegrambot.TelegramBotUpdatesListener;
 @Configuration
 public class TelegramBotConfiguration {
     final ConfigMenu configMenu;
-
+    final MainHandler mainHandler;
     /**
      * токен бота
      */
@@ -39,8 +40,9 @@ public class TelegramBotConfiguration {
     @Value("${telegram.bot.userName}")
     String userName;
 
-    public TelegramBotConfiguration(ConfigMenu configMenu) {
+    public TelegramBotConfiguration(ConfigMenu configMenu, MainHandler mainHandler) {
         this.configMenu = configMenu;
+        this.mainHandler = mainHandler;
     }
 
     /**
@@ -60,7 +62,7 @@ public class TelegramBotConfiguration {
      */
     @Bean
     public TelegramBotUpdatesListener springWebhookBot(SetWebhook setWebhook) {
-        TelegramBotUpdatesListener bot = new TelegramBotUpdatesListener(setWebhook);
+        TelegramBotUpdatesListener bot = new TelegramBotUpdatesListener(setWebhook,mainHandler);
 
         bot.setWebHookPath(this.getWebHookPath());
         bot.setBotUserName(this.getUserName());
