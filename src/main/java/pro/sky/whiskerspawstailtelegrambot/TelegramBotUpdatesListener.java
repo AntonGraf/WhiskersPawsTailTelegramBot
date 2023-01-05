@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
 import pro.sky.whiskerspawstailtelegrambot.mainHandler.MainHandler;
 
@@ -43,7 +44,11 @@ public class TelegramBotUpdatesListener extends SpringWebhookBot {
      */
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        messageHandler.handler(update);
+        try {
+            execute(messageHandler.handler(update));
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
