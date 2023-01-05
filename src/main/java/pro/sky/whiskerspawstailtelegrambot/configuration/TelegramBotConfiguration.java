@@ -22,6 +22,7 @@ import pro.sky.whiskerspawstailtelegrambot.mainHandler.MainHandler;
 public class TelegramBotConfiguration {
     final ConfigMenu configMenu;
     final MainHandler mainHandler;
+
     /**
      * токен бота
      */
@@ -40,13 +41,14 @@ public class TelegramBotConfiguration {
     @Value("${telegram.bot.userName}")
     String userName;
 
-    public TelegramBotConfiguration(ConfigMenu configMenu, MainHandler mainHandler) {
+    public TelegramBotConfiguration(ConfigMenu configMenu, MainHandler mainHandler, ConfigButton configButton) {
         this.configMenu = configMenu;
         this.mainHandler = mainHandler;
     }
 
     /**
      * установка url для хука
+     *
      * @return хук
      */
     @Bean
@@ -56,13 +58,14 @@ public class TelegramBotConfiguration {
 
     /**
      * установка хука для бота
+     *
      * @param setWebhook наш хук выше
      * @return бот с установленным хуком
      * @see pro.sky.whiskerspawstailtelegrambot.TelegramBotUpdatesListener
      */
     @Bean
     public TelegramBotUpdatesListener springWebhookBot(SetWebhook setWebhook) {
-        TelegramBotUpdatesListener bot = new TelegramBotUpdatesListener(setWebhook,mainHandler);
+        TelegramBotUpdatesListener bot = new TelegramBotUpdatesListener(setWebhook, mainHandler);
 
         bot.setWebHookPath(this.getWebHookPath());
         bot.setBotUserName(this.getUserName());
