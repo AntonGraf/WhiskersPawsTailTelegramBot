@@ -23,7 +23,9 @@ public class MessageHandler implements MainHandler {
             if (readUpdate(update).equals("/start")) {
                 sendMessage = new SendMessage(chatId,"Здрасте");
                 configButton.initButton(sendMessage);
-            }else {
+            } else if (update.getMessage().hasPhoto()) {
+                sendMessage = new SendMessage(chatId,"asd");
+            } else {
                 sendMessage = new SendMessage(chatId,"Воспользуйтесь кнопками, либо командами меню");
             }
         }
