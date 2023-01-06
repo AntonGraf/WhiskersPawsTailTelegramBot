@@ -12,10 +12,15 @@ import javax.validation.ConstraintViolationException;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Контроллер для всех эксепш
+ */
 @RestControllerAdvice
 public class CustomExceptionHandler {
 
-
+    /**
+     * эксепш, если элемента нет в базе
+     */
     @ExceptionHandler(ElemNotFound.class)
     public final ResponseEntity<ErrorResponse> handleUserNotFoundException(ElemNotFound ex) {
         String incorrectRequest = "Такого элемента нет";
@@ -34,6 +39,9 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Отловка спринга
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public final ResponseEntity<ErrorResponse> handleInvalidTraceIdException(MethodArgumentTypeMismatchException ex) {
@@ -42,6 +50,9 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Отловка спринга
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
     public final ResponseEntity<ErrorResponse> handleInvalidTraceIdException(ConstraintViolationException ex) {
@@ -50,6 +61,9 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * эксепш, если элемент уже есть в базе
+     */
     @ExceptionHandler(IFElementExist.class)
     public final ResponseEntity<ErrorResponse> handleInvalidTraceIdException(IFElementExist ex) {
         String badRequest = "Элемент уже есть в базе";

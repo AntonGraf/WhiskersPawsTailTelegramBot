@@ -7,6 +7,10 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
+/**
+ * эксепш - класс обертка
+ * {@link pro.sky.whiskerspawstailtelegrambot.exception.CustomExceptionHandler#handleUserNotFoundException(ElemNotFound)}
+ */
 public class ErrorResponse {
     private String message;
 

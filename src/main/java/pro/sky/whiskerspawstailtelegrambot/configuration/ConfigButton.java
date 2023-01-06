@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtons.AllText;
 
+/**
+ * Класс, где создается кнопки в боте
+ */
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)

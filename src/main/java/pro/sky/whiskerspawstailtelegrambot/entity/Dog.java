@@ -9,7 +9,7 @@ import java.util.List;
 
 
 /**
- * Собака. В база данных dog.
+ * Собака. В база данных dog .
  */
 @Getter
 @Setter
