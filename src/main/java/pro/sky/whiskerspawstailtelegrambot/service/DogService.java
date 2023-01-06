@@ -25,8 +25,8 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @Transactional
 public class DogService {
 
-//    @Value("./photo_dog")
-    @Value(value = "dog.photo.dir.path")
+
+    @Value(value = "photo_dog")
     private String dogDir;
 
     DogRepository dogRepository;
