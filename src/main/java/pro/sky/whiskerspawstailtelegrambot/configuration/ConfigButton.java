@@ -31,7 +31,7 @@ public class ConfigButton {
         List<KeyboardRow> keyboardRows = new ArrayList<>();
         KeyboardRow row = new KeyboardRow();
         row.add("/start");
-        row.add("/mydata");
+        // row.add("/mydata");
         keyboardRows.add(row);
         keyboardMarkup.setResizeKeyboard(true);
         keyboardMarkup.setKeyboard(keyboardRows);
