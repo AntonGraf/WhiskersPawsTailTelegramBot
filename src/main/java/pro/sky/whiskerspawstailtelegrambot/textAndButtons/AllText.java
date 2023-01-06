@@ -1,5 +1,7 @@
-package pro.sky.whiskerspawstailtelegrambot.TextAndButtons;
-
+package pro.sky.whiskerspawstailtelegrambot.textAndButtons;
+/**
+ * Текстовые поля используемые в боте
+ */
 public abstract class AllText {
 
   public static final String START_TEXT = "/start";
