@@ -30,6 +30,7 @@ public class MessageHandler implements MainHandler {
             //здесь инжект текст кнопок, любой текст крч
             if (readUpdate(update).equals(AllText.START_TEXT)) {
                 sendMessage = new SendMessage(chatId,"get a welcome message");
+                sendMessage.setReplyMarkup(null);
             } else if (readUpdate(update).equals(AllText.CALL_TO_VOLUNTEER)) {
                 //цепляем сервисом бд волонтера
             } else {
