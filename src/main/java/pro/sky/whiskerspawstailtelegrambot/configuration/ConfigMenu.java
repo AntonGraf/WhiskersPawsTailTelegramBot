@@ -1,6 +1,7 @@
 package pro.sky.whiskerspawstailtelegrambot.configuration;
 
 import lombok.AccessLevel;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Configuration
 @Slf4j
+@Data
 public class ConfigMenu {
     public void initMenu(TelegramBotUpdatesListener bot){
         List<BotCommand> listofCommands = new ArrayList<>();
