@@ -12,7 +12,6 @@ import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
-import pro.sky.whiskerspawstailtelegrambot.configuration.ConfigButton;
 import pro.sky.whiskerspawstailtelegrambot.mainHandler.MainHandler;
 
 /**
