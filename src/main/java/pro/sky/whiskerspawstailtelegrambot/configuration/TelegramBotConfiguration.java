@@ -21,8 +21,7 @@ import pro.sky.whiskerspawstailtelegrambot.mainHandler.MainHandler;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Configuration
 public class TelegramBotConfiguration {
-    final
-    ConfigMenu configMenu;
+    final ConfigMenu configMenu;
 
     /**
      * токен бота
