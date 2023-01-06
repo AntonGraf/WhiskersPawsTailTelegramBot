@@ -47,6 +47,10 @@ public class MessageHandler implements MainHandler {
           //цепляем сервисом бд волонтера
           break;
 
+        case (AllText.SEND_PET_REPORT_TEXT):
+          // реализация логики отправить отчет
+          break;
+
         default:
           sendMessage = new SendMessage(chatId, AllText.UNKNOWN_COMMAND_TEXT);
           break;
