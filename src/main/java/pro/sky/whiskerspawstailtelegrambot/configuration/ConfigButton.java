@@ -18,6 +18,7 @@ import pro.sky.whiskerspawstailtelegrambot.TelegramBotUpdatesListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import pro.sky.whiskerspawstailtelegrambot.textAndButtons.AllText;
 
 @Getter
 @Setter
@@ -30,7 +31,7 @@ public class ConfigButton {
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         List<KeyboardRow> keyboardRows = new ArrayList<>();
         KeyboardRow row = new KeyboardRow();
-        row.add("/start");
+        row.add(AllText.START_TEXT);
         // row.add("/mydata");
         keyboardRows.add(row);
         keyboardMarkup.setResizeKeyboard(true);

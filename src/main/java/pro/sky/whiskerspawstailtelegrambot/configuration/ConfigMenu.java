@@ -1,10 +1,6 @@
 package pro.sky.whiskerspawstailtelegrambot.configuration;
 
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
@@ -23,8 +19,8 @@ import java.util.List;
 public class ConfigMenu {
     public void initMenu(TelegramBotUpdatesListener bot){
         List<BotCommand> listofCommands = new ArrayList<>();
-        listofCommands.add(new BotCommand(AllText.START_TEXT, "get a welcome message"));
-        listofCommands.add(new BotCommand(AllText.CALL_TO_VOLUNTEER, "call to volunteer"));
+        listofCommands.add(new BotCommand(AllText.START_TEXT, AllText.WELCOME_MESSAGE_TEXT));
+        listofCommands.add(new BotCommand(AllText.CALL_TO_VOLUNTEER_TEXT, AllText.CALL_VOLUNTEER_TEXT));
 
         try {
             bot.execute(new SetMyCommands(listofCommands, new BotCommandScopeDefault(), null));
