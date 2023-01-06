@@ -15,43 +15,50 @@ import pro.sky.whiskerspawstailtelegrambot.textAndButtons.AllText;
 @Component("MessageHandler")
 public class MessageHandler implements MainHandler {
 
-    final ConfigButton configButton;
+  final ConfigButton configButton;
 
-    public MessageHandler(ConfigButton configButton) {
-        this.configButton = configButton;
+  public MessageHandler(ConfigButton configButton) {
+    this.configButton = configButton;
+  }
+
+  /**
+   * Метод, который отвечает на входящее сообщение, либо на выбор в меню
+   *
+   * @param update адейт от пользователя в виде текста
+   * @return отправляем ответ
+   */
+  @Override
+  public SendMessage handler(Update update) {
+    SendMessage sendMessage = null;
+    String chatId = String.valueOf(update.getMessage().getChatId());
+    boolean checkUpdate = !update.getMessage().hasText();
+    if (!checkUpdate) {
+      log.debug("Обработка сообщения в виде текста");
+      String textMessage = update.getMessage().getText();
+      //здесь инжект текст кнопок, любой текст крч
+      switch (textMessage) {
+
+        case (AllText.START_TEXT):
+          sendMessage = new SendMessage(chatId, AllText.WELCOME_MESSAGE_TEXT);
+          configButton.initButton(sendMessage);
+          break;
+
+        case (AllText.CALL_TO_VOLUNTEER_TEXT):
+          //цепляем сервисом бд волонтера
+          break;
+
+        default:
+          sendMessage = new SendMessage(chatId, AllText.UNKNOWN_COMMAND_TEXT);
+          break;
+      }
     }
+    return sendMessage;
+  }
 
-    /**
-     * Метод, который отвечает на входящее сообщение, либо на выбор в меню
-     * @param update адейт от пользователя в виде текста
-     * @return отправляем ответ
-     */
-    @Override
-    public SendMessage handler(Update update) {
-        SendMessage sendMessage = null;
-        String chatId = String.valueOf(update.getMessage().getChatId());
-        boolean checkUpdate = !update.getMessage().hasText();
-        if (!checkUpdate) {
-            log.debug("Обработка сообщения в виде текста");
-            //здесь инжект текст кнопок, любой текст крч
-            if (readUpdate(update).equals(AllText.START_TEXT)) {
-                sendMessage = new SendMessage(chatId,"get a welcome message");
-                configButton.initButton(sendMessage);
-            } else if (readUpdate(update).equals(AllText.CALL_TO_VOLUNTEER)) {
-                //цепляем сервисом бд волонтера
-            } else {
-                sendMessage = new SendMessage(chatId,"Воспользуйтесь кнопками, либо командами меню");
-            }
-        }
-        return sendMessage;
-    }
-
-    //для удобства
-    private String readUpdate(Update update) {
-        return update.getMessage().getText();
-    }
-
-
+  //для удобства
+  private String readUpdate(Update update) {
+    return update.getMessage().getText();
+  }
 
 
 }
