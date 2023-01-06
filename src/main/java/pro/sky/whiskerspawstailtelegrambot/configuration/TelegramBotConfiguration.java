@@ -21,7 +21,7 @@ import pro.sky.whiskerspawstailtelegrambot.mainHandler.MainHandler;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Configuration
 public class TelegramBotConfiguration {
-    @Autowired
+    final
     ConfigMenu configMenu;
 
     /**
@@ -41,6 +41,10 @@ public class TelegramBotConfiguration {
      */
     @Value("${telegram.bot.userName}")
     String userName;
+
+    public TelegramBotConfiguration(ConfigMenu configMenu) {
+        this.configMenu = configMenu;
+    }
 
 
     /**
