@@ -2,6 +2,7 @@ package pro.sky.whiskerspawstailtelegrambot.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
 import pro.sky.whiskerspawstailtelegrambot.mapper.AdoptiveParentMapper;
 import pro.sky.whiskerspawstailtelegrambot.mapper.ReportMapper;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
@@ -39,7 +40,7 @@ public class AdoptiveParentService {
                 .stream()
                 .filter(x -> x.getId() == dogId)
                 .findFirst()
-                .orElseThrow(IllegalArgumentException::new)
+                .orElseThrow(ElemNotFound::new)
                 .getReports();
     }
 
@@ -51,7 +52,7 @@ public class AdoptiveParentService {
      */
     public AdoptiveParentRecord getAdoptiveParentByID(long parentId) {
         log.info("Was invoked method for get AdoptiveParent by current parentId");
-        return adoptiveParentMapper.toRecord(adoptiveParentRepo.findById(parentId).orElseThrow(IllegalArgumentException::new));
+        return adoptiveParentMapper.toRecord(adoptiveParentRepo.findById(parentId).orElseThrow(ElemNotFound::new));
     }
 
 
