@@ -4,6 +4,8 @@ package pro.sky.whiskerspawstailtelegrambot.controller;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +30,7 @@ public class DogController {
         this.dogService = dogService;
     }
 
-    @GetMapping("{id}")
+    @GetMapping(value = "{id}")
     public ResponseEntity<Dog> findDog(@PathVariable Long id) {
         return ResponseEntity.ok(dogService.findDog(id));
     }
@@ -36,6 +38,16 @@ public class DogController {
     @GetMapping("/all")
     public ResponseEntity<Collection<Dog>> findAllDog() {
         return ResponseEntity.ok(dogService.findAllDog());
+    }
+
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<byte[]> getDogPhoto(@RequestParam(name = "id") Long id) {
+        Dog dog = dogService.findDog(id);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(dog.getMediaType()));
+        headers.setContentLength(dog.getPhoto().length);
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(dog.getPhoto());
     }
 
 
