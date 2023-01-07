@@ -19,5 +19,13 @@ public class VolunteerRecord implements Serializable {
     String phone;
     String info_volunteer;
     String schedule;
-   // Shelter shelter;
+
+    @Override
+    public String toString() {
+        return "Меня зовут " + fullName + ",мой телефон для связи " + phone +
+                ",доступен: " + schedule;
+    }
+
+
+    // Shelter shelter;
 }
