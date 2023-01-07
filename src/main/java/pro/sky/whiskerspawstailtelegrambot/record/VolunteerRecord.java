@@ -22,8 +22,8 @@ public class VolunteerRecord implements Serializable {
 
     @Override
     public String toString() {
-        return "Меня зовут " + fullName + ",мой телефон для связи " + phone +
-                ",доступен: " + schedule;
+        return "Меня зовут " + fullName + ", мой телефон для связи " + phone +
+                ", доступен: " + schedule + ".";
     }
 
 
