@@ -21,6 +21,8 @@ import pro.sky.whiskerspawstailtelegrambot.mainHandler.MainHandler;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Configuration
 public class TelegramBotConfiguration {
+
+    //инжект меню команд
     final ConfigMenu configMenu;
 
     /**
@@ -70,6 +72,7 @@ public class TelegramBotConfiguration {
         bot.setWebHookPath(this.getWebHookPath());
         bot.setBotUserName(this.getUserName());
         bot.setBotToken(this.getToken());
+        //инит меню комнад
         configMenu.initMenu(bot);
 
 

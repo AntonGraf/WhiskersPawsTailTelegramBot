@@ -13,6 +13,9 @@ import pro.sky.whiskerspawstailtelegrambot.textAndButtons.AllText;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс, где создается меню комнад в боте
+ */
 @Configuration
 @Slf4j
 @Data
