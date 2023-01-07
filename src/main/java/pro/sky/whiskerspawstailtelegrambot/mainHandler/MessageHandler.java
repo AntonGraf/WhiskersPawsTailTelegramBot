@@ -55,8 +55,9 @@ public class MessageHandler implements MainHandler {
               configKeyboard.initKeyboardOnClickStart());
           break;
 
-        case (AllText.CALL_TO_VOLUNTEER_TEXT):
-          volunteerService.getAllVolunteers();
+        case (AllText.CALL_TO_VOLUNTEER_TEXT): //ответ на позвать волонтера, просто инфа про волонтеров
+          sendMessage = formReplyMessages.replyMessage(message, volunteerService.getAllVolunteers().toString(),
+                  configKeyboard.initKeyboardOnClickStart());
           break;
 
         case (AllText.SEND_PET_REPORT_TEXT):     // реализация логики отправить отчет
