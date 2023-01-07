@@ -106,4 +106,27 @@ public class AdoptiveParentService {
         log.debug("check before save {}", oldParent);
         return adoptiveParentMapper.toRecord(adoptiveParentRepo.save(adoptiveParentMapper.toEntity(oldParent)));
     }
+
+    /**
+     * Метод по поиску усыновителя по 3 параметрам, если их передали
+     * @param fullName Поспелов Дмитрий александрови (необязательный параметр)
+     * @param phone Телефон усыновителя (необязательный параметр)
+     * @param chatId chatId (необязательный параметр)
+     * @return либо id усыновителя, либо эксепш {@link pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound}
+     */
+    public Long getParentIdByNameAndPhoneAndChatId(String fullName, String phone, Long chatId) {
+        log.info("Was invoked method for getParentIdByNameAndPhoneAndChatId");
+        long result;
+        if(fullName!=null && !fullName.isBlank()){
+            result = adoptiveParentRepo.getAdoptiveParentByFullName(fullName).getId();
+            return result;
+        } else if (phone!=null && !phone.isBlank()) {
+            result = adoptiveParentRepo.getAdoptiveParentByPhone(phone).getId();
+            return result;
+        }else if (chatId!=null && chatId > 0){
+            result = adoptiveParentRepo.getAdoptiveParentByChatId(chatId).getId();
+            return result;
+        }
+        throw new ElemNotFound();
+    }
 }

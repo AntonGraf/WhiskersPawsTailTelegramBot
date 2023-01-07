@@ -23,6 +23,8 @@ import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 
 /**
@@ -41,7 +43,9 @@ public class AdoptiveParentController {
         this.service = service;
     }
 
-    @Operation(summary = "Получить массив отчетов по идентификатору родитетеля и собаки")
+
+    @Operation(summary = "Получить массив отчетов по идентификатору родитетеля и собаки",
+    hidden = true)
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
@@ -246,6 +250,54 @@ public class AdoptiveParentController {
             AdoptiveParentRecord adoptiveParentRecord
     ){
         return ResponseEntity.ok(service.updateAdoptiveParent(parentId,adoptiveParentRecord));
+    }
+
+    /**
+     * Поиск id усыновителя
+     * @param fullName Поспелов Дмитрий александрови (необязательный параметр)
+     * @param phone Телефон усыновителя (необязательный параметр)
+     * @param chatId chatId (необязательный параметр)
+     * @return id усыновителя
+     */
+    @Operation(summary = "Поиск Id усыновителя")
+    @ApiResponses(
+            {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Get Id AdoptiveParent",
+                            content = {
+                                    @Content(
+                                            schema = @Schema(implementation = Long.class))
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Нужно заполнить хотя бы один параметр",
+                            content = {
+                                    @Content(
+                                            schema = @Schema(implementation = ErrorResponse.class))
+                            }
+                    )
+            })
+    @RequestMapping(value = "/getParentIdByNameAndPhoneAndChatId", method = RequestMethod.GET)
+    public ResponseEntity<Long> getParentIdByNameAndPhoneAndChatId(
+            @Size(message = "Длина не должна быть меньше 5 знаков и не больше 30", min = 5, max = 30)
+            @RequestParam(name = "fullName",required = false)
+            @Parameter(description = "Полное имя родителя",
+                    example = "Поспелов Дмитрий александрович")
+            String fullName,
+            @Size(message = "Длина не должна быть меньше 5 знаков и не больше 30", min = 5, max = 30)
+            @RequestParam(name = "phone",required = false)
+            @Parameter(description = "Телефон усыновителя",
+                    example = "89246554324")
+            String phone,
+            @RequestParam(name = "chatId",required = false)
+            @Parameter(description = "Chat Id",
+                    example = "23")
+            Long chatId
+    ){
+        return ResponseEntity.ok(service
+                .getParentIdByNameAndPhoneAndChatId(fullName,phone,chatId));
     }
 }
 

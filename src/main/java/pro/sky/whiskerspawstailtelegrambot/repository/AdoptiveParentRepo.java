@@ -9,4 +9,7 @@ import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
  */
 @Repository
 public interface AdoptiveParentRepo extends JpaRepository<AdoptiveParent, Long> {
+    AdoptiveParent getAdoptiveParentByFullName(String fullName);
+    AdoptiveParent getAdoptiveParentByPhone(String phone);
+    AdoptiveParent getAdoptiveParentByChatId(Long chatId);
 }
