@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
-import pro.sky.whiskerspawstailtelegrambot.entity.Shelter;
 
 import java.io.Serializable;
 
@@ -18,5 +17,7 @@ public class VolunteerRecord implements Serializable {
     long id;
     String fullName;
     String phone;
+    String info_volunteer;
+    String schedule;
    // Shelter shelter;
 }

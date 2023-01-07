@@ -49,6 +49,10 @@
     </changeSet>
     <include file="v-1.0/data/04_insert_date_table_volunter.sql" relativeToChangelogFile="true"/>
 
+    <changeSet id="9" author="anton graf">
+    </changeSet>
+    <include file="v-1.0/08_add_column_to_table.sql" relativeToChangelogFile="true"/>
+
     <changeSet id="9" author="sergei_lupaev">
         <tagDatabase tag="DataForTableDog"/>
     </changeSet>
