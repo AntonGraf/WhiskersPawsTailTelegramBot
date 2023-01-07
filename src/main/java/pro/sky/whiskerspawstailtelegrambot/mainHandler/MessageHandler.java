@@ -1,11 +1,14 @@
 package pro.sky.whiskerspawstailtelegrambot.mainHandler;
 
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import pro.sky.whiskerspawstailtelegrambot.configuration.ConfigButton;
-import pro.sky.whiskerspawstailtelegrambot.textAndButtons.AllText;
+import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
+import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
+import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
 
 
 /**
@@ -15,10 +18,15 @@ import pro.sky.whiskerspawstailtelegrambot.textAndButtons.AllText;
 @Component("MessageHandler")
 public class MessageHandler implements MainHandler {
 
-  final ConfigButton configButton;
+  final ConfigKeyboard configKeyboard;
+  private final ReportAddHandler reportAddHandler;
+  private final FormReplyMessages formReplyMessages;
 
-  public MessageHandler(ConfigButton configButton) {
-    this.configButton = configButton;
+  public MessageHandler(ConfigKeyboard configKeyboard, ReportAddHandler reportAddHandler,
+      FormReplyMessages formReplyMessages) {
+    this.configKeyboard = configKeyboard;
+    this.reportAddHandler = reportAddHandler;
+    this.formReplyMessages = formReplyMessages;
   }
 
   /**
@@ -34,21 +42,23 @@ public class MessageHandler implements MainHandler {
     boolean checkUpdate = !update.getMessage().hasText();
     if (!checkUpdate) {
       log.debug("Обработка сообщения в виде текста");
-      String textMessage = update.getMessage().getText();
+      Message message = update.getMessage();
+      String textMessage = message.getText();
       //здесь инжект текст кнопок, любой текст крч
       switch (textMessage) {
 
         case (AllText.START_TEXT):
-          sendMessage = new SendMessage(chatId, AllText.WELCOME_MESSAGE_TEXT);
-          configButton.initButton(sendMessage);
+          sendMessage = formReplyMessages.replyMessage(message, AllText.WELCOME_MESSAGE_TEXT,
+              configKeyboard.initKeyboardOnClickStart());
           break;
 
         case (AllText.CALL_TO_VOLUNTEER_TEXT):
           //цепляем сервисом бд волонтера
           break;
 
-        case (AllText.SEND_PET_REPORT_TEXT):
-          // реализация логики отправить отчет
+        case (AllText.SEND_PET_REPORT_TEXT):     // реализация логики отправить отчет
+          sendMessage = reportAddHandler.handlerReport(message, AllText.MENU_SEND_PET_REPORT_TEXT,
+              configKeyboard.initKeyboardOnClickSendPetReport());
           break;
 
         default:

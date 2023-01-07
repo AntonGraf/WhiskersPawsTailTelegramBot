@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import pro.sky.whiskerspawstailtelegrambot.TelegramBotUpdatesListener;
-import pro.sky.whiskerspawstailtelegrambot.textAndButtons.AllText;
+import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 
 import java.util.ArrayList;
 import java.util.List;
