@@ -6,9 +6,11 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import pro.sky.whiskerspawstailtelegrambot.service.VolunteerService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
+import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
 
 
 /**
@@ -22,11 +24,18 @@ public class MessageHandler implements MainHandler {
   private final ReportAddHandler reportAddHandler;
   private final FormReplyMessages formReplyMessages;
 
+  private final VolunteerService volunteerService;
+
+  private final ParserToBot parserToBot;
+
+
   public MessageHandler(ConfigKeyboard configKeyboard, ReportAddHandler reportAddHandler,
-      FormReplyMessages formReplyMessages) {
+                        FormReplyMessages formReplyMessages, VolunteerService volunteerService, ParserToBot parserToBot) {
     this.configKeyboard = configKeyboard;
     this.reportAddHandler = reportAddHandler;
     this.formReplyMessages = formReplyMessages;
+    this.volunteerService = volunteerService;
+    this.parserToBot = parserToBot;
   }
 
   /**
@@ -52,8 +61,9 @@ public class MessageHandler implements MainHandler {
               configKeyboard.initKeyboardOnClickStart());
           break;
 
-        case (AllText.CALL_TO_VOLUNTEER_TEXT):
-          //цепляем сервисом бд волонтера
+        case (AllText.CALL_TO_VOLUNTEER_TEXT): //ответ на позвать волонтера, просто инфа про волонтеров
+          sendMessage = formReplyMessages.replyMessage(message, parserToBot.parserVolunteer(volunteerService.getAllVolunteers()),
+                  configKeyboard.initKeyboardOnClickStart());
           break;
 
         case (AllText.SEND_PET_REPORT_TEXT):     // реализация логики отправить отчет
