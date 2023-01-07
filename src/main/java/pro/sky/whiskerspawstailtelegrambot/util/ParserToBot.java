@@ -19,7 +19,10 @@ public class ParserToBot {
         StringBuilder stringBuilder = new StringBuilder();
         int count = 0;
         for (VolunteerRecord volunteerRecord : volunteerList)
-            stringBuilder.append(++count).append(volunteerRecord).append('\n').append('\n');
+            stringBuilder.append(++count)
+                    .append(") ")
+                    .append(volunteerRecord)
+                    .append('\n').append('\n');
         return stringBuilder.toString();
     }
 }
