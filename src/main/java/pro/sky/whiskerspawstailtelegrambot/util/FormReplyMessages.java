@@ -11,7 +11,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
  */
 @Service
 public class FormReplyMessages {
-
+    /**
+     * сформировать ответное сообщение, с указаным текстом и клавиатурой
+     */
     public SendMessage replyMessage(Message message, String textReplyMessage, ReplyKeyboardMarkup keyboardMarkup) {
         String chatId = String.valueOf(message.getChatId());
         SendMessage sendMessage = new SendMessage(chatId, textReplyMessage);

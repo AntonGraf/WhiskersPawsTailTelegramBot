@@ -22,6 +22,9 @@ import java.util.List;
 @Configuration
 @Slf4j
 public class ConfigKeyboard extends Button {
+    /**
+     * Метод установки клавиатуры на нажатие start
+     */
     public ReplyKeyboardMarkup initKeyboardOnClickStart(){
 
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
@@ -35,6 +38,9 @@ public class ConfigKeyboard extends Button {
         return keyboardMarkup;
 //        message.setReplyMarkup(keyboardMarkup);
     }
+    /**
+     * Метод установки клавиатуры на нажатие отправить отчет
+     */
     public ReplyKeyboardMarkup initKeyboardOnClickSendPetReport(){
 
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
