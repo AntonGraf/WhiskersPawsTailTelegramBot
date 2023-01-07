@@ -5,11 +5,13 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import pro.sky.whiskerspawstailtelegrambot.TelegramBotUpdatesListener;
+import pro.sky.whiskerspawstailtelegrambot.mainHandler.MainHandler;
 
 /**
  * Настройка бота
@@ -19,6 +21,9 @@ import pro.sky.whiskerspawstailtelegrambot.TelegramBotUpdatesListener;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Configuration
 public class TelegramBotConfiguration {
+
+    //инжект меню команд
+    final ConfigMenu configMenu;
 
     /**
      * токен бота
@@ -38,8 +43,14 @@ public class TelegramBotConfiguration {
     @Value("${telegram.bot.userName}")
     String userName;
 
+    public TelegramBotConfiguration(ConfigMenu configMenu) {
+        this.configMenu = configMenu;
+    }
+
+
     /**
      * установка url для хука
+     *
      * @return хук
      */
     @Bean
@@ -49,6 +60,7 @@ public class TelegramBotConfiguration {
 
     /**
      * установка хука для бота
+     *
      * @param setWebhook наш хук выше
      * @return бот с установленным хуком
      * @see pro.sky.whiskerspawstailtelegrambot.TelegramBotUpdatesListener
@@ -60,6 +72,9 @@ public class TelegramBotConfiguration {
         bot.setWebHookPath(this.getWebHookPath());
         bot.setBotUserName(this.getUserName());
         bot.setBotToken(this.getToken());
+        //инит меню комнад
+        configMenu.initMenu(bot);
+
 
         return bot;
     }

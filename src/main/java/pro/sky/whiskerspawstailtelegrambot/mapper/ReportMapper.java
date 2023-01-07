@@ -1,6 +1,7 @@
 package pro.sky.whiskerspawstailtelegrambot.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
 import pro.sky.whiskerspawstailtelegrambot.entity.Report;
 import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
@@ -14,6 +15,7 @@ import java.util.Collection;
 @Mapper(componentModel = "spring")
 public interface ReportMapper {
     Report toEntity(ReportRecord reportRecord);
+
 
     ReportRecord toRecord(Report report);
 

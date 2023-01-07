@@ -21,7 +21,7 @@ public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    long id;
+    long report_id;
 
     /**
      * Рацион животного
@@ -47,10 +47,19 @@ public class Report {
     @Column(name = "photo_dog")
     Byte[] photoDog;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id", referencedColumnName = "id", updatable = false, insertable = false)
+    /**
+     * id собаки
+     */
+    @Column(name = "dog_id")
+    long dog_id;
+
+    /**
+     * Присоединение к собаке
+     */
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "dog_id", referencedColumnName = "id", insertable = false, updatable = false)
     @JsonBackReference
-    private Dog dog;
+    Dog dog;
 
 }
 

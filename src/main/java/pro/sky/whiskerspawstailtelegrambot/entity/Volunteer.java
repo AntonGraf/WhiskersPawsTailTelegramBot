@@ -17,12 +17,17 @@ public class Volunteer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
 
+    /** Информация о волонтерах */
+    String info_volunteer;
     /** Поле полное имя волонтера */
     @Column(name = "full_name")
     String fullName;
     /** Поле номер телефона волонтера */
     @Column(name = "phone")
     String phone;
+    /** Расписание волонтера */
+    @Column(name = "schedule")
+    String schedule;
 
     /**
      * Приют, которому помогает волонтер
