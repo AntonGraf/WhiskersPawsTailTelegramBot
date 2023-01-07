@@ -14,6 +14,12 @@ import java.util.Collection;
 @Component
 public class ParserToBot {
 
+    /**
+     * Парсит строки из каждой сущнсоти в одну строку. Тут конкретно для ответа на вызов
+     * /calltovolunteer
+     * @param volunteerList принимаем лист волонтеров
+     * @return отпарсиная строка для ответа
+     */
     public String parserVolunteer(Collection<VolunteerRecord> volunteerList) {
         if(volunteerList.isEmpty()) throw new ElemNotFound();
         StringBuilder stringBuilder = new StringBuilder();
