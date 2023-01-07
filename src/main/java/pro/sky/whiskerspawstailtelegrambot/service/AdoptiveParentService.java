@@ -2,7 +2,6 @@ package pro.sky.whiskerspawstailtelegrambot.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
 import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
 import pro.sky.whiskerspawstailtelegrambot.mapper.AdoptiveParentMapper;
 import pro.sky.whiskerspawstailtelegrambot.mapper.ReportMapper;
@@ -71,6 +70,7 @@ public class AdoptiveParentService {
 
     /**
      * Добавить усыновителя
+     *
      * @param adoptiveParentRecord, сущность которую нужно сохранить
      * @return если все успешно то сам усыновитель, либо ошибка
      */
@@ -82,15 +82,17 @@ public class AdoptiveParentService {
 
     /**
      * Метод, который показывает всех усыновителей в бд
+     *
      * @return список всех усыновителей
      */
     public Collection<AdoptiveParentRecord> getListOfAdoptiveParent() {
         log.info("Was invoked method for get list of AdoptiveParent from DB");
-        return  adoptiveParentMapper.toRecordList(adoptiveParentRepo.findAll());
+        return adoptiveParentMapper.toRecordList(adoptiveParentRepo.findAll());
     }
 
     /**
      * Метод, который делает адейт полей усыновителя
+     *
      * @return обновленный усыновитель
      */
     public AdoptiveParentRecord updateAdoptiveParent(long parentId, AdoptiveParentRecord adoptiveParentRecord) {
