@@ -16,11 +16,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import pro.sky.whiskerspawstailtelegrambot.entity.Dog;
 import pro.sky.whiskerspawstailtelegrambot.exception.ErrorResponse;
 import pro.sky.whiskerspawstailtelegrambot.mapper.DogMapper;
 import pro.sky.whiskerspawstailtelegrambot.record.DogRecord;
-import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.DogService;
 import java.io.IOException;
 import java.util.Collection;
@@ -40,7 +38,6 @@ public class DogController {
         this.dogService = dogService;
         this.dogMapper = dogMapper;
     }
-
 
 
     @Operation(summary = "Получение собаки по id")
@@ -151,18 +148,12 @@ public class DogController {
             )
     })
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<DogRecord> addDog (
+    public ResponseEntity<DogRecord> addDog(
             @RequestParam String fullName,
             @RequestParam int age,
             @RequestParam String description,
             @RequestParam MultipartFile photo) throws IOException {
-        Dog dog = new Dog();
-        dog.setFullName(fullName);
-        dog.setAge(age);
-        dog.setDescription(description);
-        dog.setPhoto(photo.getBytes());
-        dogService.editDog(dog.getId(), dogMapper.toRecord(dog));
-        dogService.uploadPhoto(dog.getId(), photo);
+        dogService.addDog(fullName, age, description, photo);
         return ResponseEntity.ok().build();
     }
 
@@ -189,20 +180,13 @@ public class DogController {
             )
     })
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<DogRecord> editDog (
-                                   @RequestParam Long id,
-                                   @RequestParam String fullName,
-                                   @RequestParam int age,
-                                   @RequestParam String description,
-                                   @RequestParam MultipartFile photo) throws IOException {
-        Dog dog = new Dog();
-        dog.setId(id);
-        dog.setFullName(fullName);
-        dog.setAge(age);
-        dog.setDescription(description);
-        dog.setPhoto(photo.getBytes());
-        dogService.editDog(id, dogMapper.toRecord(dog));
-        dogService.uploadPhoto(id, photo);
+    public ResponseEntity<DogRecord> editDog(
+            @RequestParam Long id,
+            @RequestParam String fullName,
+            @RequestParam int age,
+            @RequestParam String description,
+            @RequestParam MultipartFile photo) throws IOException {
+        dogService.editDog(id, fullName, age, description, photo);
         return ResponseEntity.ok().build();
     }
 
@@ -229,7 +213,7 @@ public class DogController {
             )
     })
     @PutMapping(value = "/{dogId}/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<DogRecord> uploadAvatar (@RequestParam MultipartFile photo, @PathVariable Long dogId) throws IOException {
+    public ResponseEntity<DogRecord> uploadAvatar(@RequestParam MultipartFile photo, @PathVariable Long dogId) throws IOException {
         dogService.uploadPhoto(dogId, photo);
         return ResponseEntity.ok().build();
     }
@@ -258,12 +242,9 @@ public class DogController {
             )
     })
     @DeleteMapping("{id}")
-    public ResponseEntity<DogRecord>  removeDog (@PathVariable Long id) {
+    public ResponseEntity<DogRecord> removeDog(@PathVariable Long id) {
         dogService.removeDog(id);
         return ResponseEntity.ok().build();
     }
-
-
-
 
 }
