@@ -2,6 +2,7 @@ package pro.sky.whiskerspawstailtelegrambot.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
 import pro.sky.whiskerspawstailtelegrambot.mapper.AdoptiveParentMapper;
 import pro.sky.whiskerspawstailtelegrambot.mapper.ReportMapper;
@@ -76,6 +77,7 @@ public class AdoptiveParentService {
      */
     public AdoptiveParentRecord addAdoptiveParent(AdoptiveParentRecord adoptiveParentRecord) {
         log.info("Was invoked method for add AdoptiveParent to DB");
+        if(adoptiveParentRecord == null) throw new ElemNotFound();
         return adoptiveParentMapper.toRecord(
                 adoptiveParentRepo.save(adoptiveParentMapper.toEntity(adoptiveParentRecord)));
     }
@@ -87,7 +89,9 @@ public class AdoptiveParentService {
      */
     public Collection<AdoptiveParentRecord> getListOfAdoptiveParent() {
         log.info("Was invoked method for get list of AdoptiveParent from DB");
-        return adoptiveParentMapper.toRecordList(adoptiveParentRepo.findAll());
+        Collection<AdoptiveParentRecord> collection = adoptiveParentMapper.toRecordList(adoptiveParentRepo.findAll());
+        if(collection == null || collection.isEmpty()) throw new ElemNotFound();
+        return collection;
     }
 
     /**
@@ -97,6 +101,7 @@ public class AdoptiveParentService {
      */
     public AdoptiveParentRecord updateAdoptiveParent(long parentId, AdoptiveParentRecord adoptiveParentRecord) {
         log.info("Was invoked method for updateAdoptiveParent");
+        if(adoptiveParentRecord == null || parentId < 1) throw new ElemNotFound();
         AdoptiveParentRecord oldParent = getAdoptiveParentByID(parentId);
         oldParent.setFullName(adoptiveParentRecord.getFullName());
         oldParent.setPhone(adoptiveParentRecord.getPhone());
@@ -117,10 +122,10 @@ public class AdoptiveParentService {
     public Long getParentIdByNameAndPhoneAndChatId(String fullName, String phone, Long chatId) {
         log.info("Was invoked method for getParentIdByNameAndPhoneAndChatId");
         long result;
-        if(fullName!=null && !fullName.isBlank()){
+        if(fullName!=null && !fullName.isEmpty()){
             result = adoptiveParentRepo.getAdoptiveParentByFullName(fullName).getId();
             return result;
-        } else if (phone!=null && !phone.isBlank()) {
+        } else if (phone!=null && !phone.isEmpty()) {
             result = adoptiveParentRepo.getAdoptiveParentByPhone(phone).getId();
             return result;
         }else if (chatId!=null && chatId > 0){
