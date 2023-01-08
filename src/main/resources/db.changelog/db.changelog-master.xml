@@ -52,4 +52,8 @@
     <changeSet id="9" author="anton graf">
     </changeSet>
     <include file="v-1.0/08_add_column_to_table.sql" relativeToChangelogFile="true"/>
+
+    <changeSet id="10" author="anton graf">
+    </changeSet>
+    <include file="v-1.0/10_add_column_to_table_shelter.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
