@@ -71,6 +71,7 @@ public class MessageHandler implements MainHandler {
               configKeyboard.initKeyboardOnClickSendPetReport());
           break;
 
+
         default:
           sendMessage = new SendMessage(chatId, AllText.UNKNOWN_COMMAND_TEXT);
           break;
