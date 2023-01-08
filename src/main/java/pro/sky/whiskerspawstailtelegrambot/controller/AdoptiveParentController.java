@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
 import pro.sky.whiskerspawstailtelegrambot.exception.ErrorResponse;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
@@ -23,7 +22,6 @@ import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Collection;
 
@@ -43,9 +41,9 @@ public class AdoptiveParentController {
         this.service = service;
     }
 
-
+    //пока спрятали
     @Operation(summary = "Получить массив отчетов по идентификатору родитетеля и собаки",
-    hidden = true)
+            hidden = true)
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
@@ -61,14 +59,13 @@ public class AdoptiveParentController {
                     description = "Либо не введены парметры, либо нет объекта по указанному идентификатору" +
                             "и идентификаторы меньше 1",
                     content = {
-                    @Content(
-                            mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = ErrorResponse.class)))
-            }
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ErrorResponse.class)))
+                    }
             )
     })
     @RequestMapping(value = "/getReportByParentAndDog", method = RequestMethod.GET)
-
     public ResponseEntity<Collection<ReportRecord>> getReportByParentAndDog(
             @NotBlank(message = "parentId is empty")
             @Min(value = 1, message = "Идентификатор родителя должен быть больше 0")
@@ -109,14 +106,14 @@ public class AdoptiveParentController {
     })
     @RequestMapping(value = "/getAdoptiveParentByID", method = RequestMethod.GET)
     public ResponseEntity<AdoptiveParentRecord> getAdoptiveParentByID
-    (
-            @NotBlank(message = "parentId is empty")
-            @Min(value = 1, message = "Идентификатор родителя должен быть больше 0")
-            @RequestParam(name = "parentId")
-            @Parameter(description = "Идентификатор родителя",
-                    example = "1")
-            long parentId
-    ) {
+            (
+                    @NotBlank(message = "parentId is empty")
+                    @Min(value = 1, message = "Идентификатор родителя должен быть больше 0")
+                    @RequestParam(name = "parentId")
+                    @Parameter(description = "Идентификатор родителя",
+                            example = "1")
+                    long parentId
+            ) {
         return ResponseEntity.ok(service.getAdoptiveParentByID(parentId));
     }
 
@@ -144,14 +141,14 @@ public class AdoptiveParentController {
     })
     @RequestMapping(value = "/deleteAdoptiveParentByID", method = RequestMethod.DELETE)
     public ResponseEntity<AdoptiveParentRecord> deleteAdoptiveParentByID
-    (
-    @NotBlank(message = "parentId is empty")
-    @Min(value = 1, message = "Идентификатор родителя должен быть больше 0")
-    @RequestParam(name = "parentId")
-    @Parameter(description = "Идентификатор родителя",
-            example = "1")
-    long parentId
-    ) {
+            (
+                    @NotBlank(message = "parentId is empty")
+                    @Min(value = 1, message = "Идентификатор родителя должен быть больше 0")
+                    @RequestParam(name = "parentId")
+                    @Parameter(description = "Идентификатор родителя",
+                            example = "1")
+                    long parentId
+            ) {
         return ResponseEntity.ok(service.deleteAdoptiveParentByID(parentId));
     }
 
@@ -159,25 +156,25 @@ public class AdoptiveParentController {
     @Operation(summary = "Добавить усыновителя")
     @ApiResponses(
             {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Add adoptiveParent to db",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    array = @ArraySchema(schema = @Schema(implementation = AdoptiveParentRecord.class)))
-                    }
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Посмотрите на правильность ввода всех полей. Не должно быть null и пустая строка",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    array = @ArraySchema(schema = @Schema(implementation = MethodArgumentNotValidException.class)))
-                    }
-            )
-    })
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Add adoptiveParent to db",
+                            content = {
+                                    @Content(
+                                            mediaType = "application/json",
+                                            array = @ArraySchema(schema = @Schema(implementation = AdoptiveParentRecord.class)))
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Посмотрите на правильность ввода всех полей. Не должно быть null и пустая строка",
+                            content = {
+                                    @Content(
+                                            mediaType = "application/json",
+                                            array = @ArraySchema(schema = @Schema(implementation = MethodArgumentNotValidException.class)))
+                            }
+                    )
+            })
     @RequestMapping(value = "/addAdoptiveParent", method = RequestMethod.POST)
     public ResponseEntity<AdoptiveParentRecord> addAdoptiveParent
             (
@@ -211,7 +208,7 @@ public class AdoptiveParentController {
                     )
             })
     @RequestMapping(value = "/getListOfAdoptiveParent", method = RequestMethod.GET)
-    public ResponseEntity<Collection<AdoptiveParentRecord>> getListOfAdoptiveParent(){
+    public ResponseEntity<Collection<AdoptiveParentRecord>> getListOfAdoptiveParent() {
         return ResponseEntity.ok(service.getListOfAdoptiveParent());
     }
 
@@ -248,15 +245,16 @@ public class AdoptiveParentController {
             @Valid
             @RequestBody
             AdoptiveParentRecord adoptiveParentRecord
-    ){
-        return ResponseEntity.ok(service.updateAdoptiveParent(parentId,adoptiveParentRecord));
+    ) {
+        return ResponseEntity.ok(service.updateAdoptiveParent(parentId, adoptiveParentRecord));
     }
 
     /**
      * Поиск id усыновителя
+     *
      * @param fullName Поспелов Дмитрий александрови (необязательный параметр)
-     * @param phone Телефон усыновителя (необязательный параметр)
-     * @param chatId chatId (необязательный параметр)
+     * @param phone    Телефон усыновителя (необязательный параметр)
+     * @param chatId   chatId (необязательный параметр)
      * @return id усыновителя
      */
     @Operation(summary = "Поиск Id усыновителя")
@@ -282,22 +280,22 @@ public class AdoptiveParentController {
     @RequestMapping(value = "/getParentIdByNameAndPhoneAndChatId", method = RequestMethod.GET)
     public ResponseEntity<Long> getParentIdByNameAndPhoneAndChatId(
             @Size(message = "Длина не должна быть меньше 5 знаков и не больше 30", min = 5, max = 30)
-            @RequestParam(name = "fullName",required = false)
+            @RequestParam(name = "fullName", required = false)
             @Parameter(description = "Полное имя родителя",
                     example = "Поспелов Дмитрий александрович")
             String fullName,
             @Size(message = "Длина не должна быть меньше 5 знаков и не больше 30", min = 5, max = 30)
-            @RequestParam(name = "phone",required = false)
+            @RequestParam(name = "phone", required = false)
             @Parameter(description = "Телефон усыновителя",
                     example = "89246554324")
             String phone,
-            @RequestParam(name = "chatId",required = false)
+            @RequestParam(name = "chatId", required = false)
             @Parameter(description = "Chat Id",
                     example = "23")
             Long chatId
-    ){
+    ) {
         return ResponseEntity.ok(service
-                .getParentIdByNameAndPhoneAndChatId(fullName,phone,chatId));
+                .getParentIdByNameAndPhoneAndChatId(fullName, phone, chatId));
     }
 }
 
