@@ -10,4 +10,5 @@ import pro.sky.whiskerspawstailtelegrambot.entity.Dog;
 @Repository
 public interface DogRepository extends JpaRepository<Dog, Long> {
 
+
 }

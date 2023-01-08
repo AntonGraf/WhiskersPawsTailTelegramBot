@@ -6,7 +6,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pro.sky.whiskerspawstailtelegrambot.entity.Dog;
+import pro.sky.whiskerspawstailtelegrambot.mapper.DogMapper;
+import pro.sky.whiskerspawstailtelegrambot.record.DogRecord;
 import pro.sky.whiskerspawstailtelegrambot.repository.DogRepository;
+import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
+
 
 import javax.transaction.Transactional;
 import java.io.*;
@@ -26,49 +30,70 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 public class DogService {
 
 
-//    @Value(value = "photo_dog")
     @Value("${dog.photo.dir.path}")
     private String dogDir;
 
     DogRepository dogRepository;
+    DogMapper dogMapper;
 
 
-    public DogService(DogRepository dogRepository) {
+    public DogService(DogRepository dogRepository, DogMapper dogMapper) {
         this.dogRepository = dogRepository;
+        this.dogMapper = dogMapper;
     }
 
 
-    public Dog findDog(long dogId) { //Get
-        log.info("Поиск собаки в БД");
-        Dog dog = dogRepository.findById(dogId).orElseThrow(); //(DogNotFoundException::new)
-        log.info("Собака найдена в БД");
-        return dog;
+    /**
+     * Получение собаки bp БД по id
+     * @param dogId
+     * @return возвращает собаку
+     */
+    public DogRecord findDog(long dogId) { //Get
+        log.info("Поиск собаки в БД" + dogId);
+        Dog dog = dogRepository.findById(dogId).orElseThrow(ElemNotFound::new);
+        return dogMapper.toRecord(dog);
     }
-    public Collection<Dog> findAllDog() { //Get
+
+    /**
+     * Коллекция всех собак в БД
+     * @return список всех собак хранящиеся в БД
+     */
+    public Collection<DogRecord> findAllDog() { //Get
         log.info("Поиск всех собак в БД");
-        Collection<Dog> dog = dogRepository.findAll();
-        log.info("Собака найдена в БД");
+        Collection<DogRecord> dog = dogMapper.toRecordList(dogRepository.findAll());
         return dog;
     }
 
-    public void removeDog (long dogId) { //Delete
+    /**
+     * Удаление сбаки из БД по id
+     * @param dogId
+     */
+    public DogRecord removeDog (long dogId) { //Delete
         log.info("Поиск собаки в БД");
-        Dog dog = findDog(dogId);
-        if (dog.getId() > 0) {
-            dogRepository.deleteById(dogId);
-        }
-        log.info("Собака удалена из БД");
+        DogRecord dogRecord = findDog(dogId);
+        dogRepository.deleteById(dogId);
+        return dogRecord;
     }
 
-    public Dog editDog(Dog dog) { //Put
+    /**
+     * Изменение собаки в БД
+     * @param dogRecord
+     * @return измененую собаку
+     */
+    public DogRecord editDog(Long gogId, DogRecord dogRecord) { //Put
         log.info("Изменение данных собаки в БД");
-        dogRepository.save(dog);
-        log.info("Данные в БД изменены");
-        return dog;
+        Dog dog = dogMapper.toEntity(dogRecord);
+        return dogMapper.toRecord(dogRepository.save(dog));
     }
 
+    /**
+     * загрузка фотографии собаки в БД
+     * @param dogId
+     * @param file
+     * @throws IOException
+     */
     public void uploadPhoto(long dogId, MultipartFile file) throws IOException { //Put фото
-        Dog dog = findDog(dogId);
+        DogRecord dogRecord = findDog(dogId);
         Path filePath = Path.of(dogDir, dogId + "." + getExtension(file.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
@@ -80,7 +105,7 @@ public class DogService {
         ) {
             bis.transferTo(bos);
         }
-
+        Dog dog = dogMapper.toEntity(dogRecord);
         dog.setFilePath(filePath.toString());
         dog.setFileSize(file.getSize());
         dog.setMediaType(file.getContentType());
@@ -88,16 +113,26 @@ public class DogService {
         dogRepository.save(dog);
     }
 
+
+    /**
+     * вспомогательный медот для загрузки фотографий
+     * @param fileName
+     * @return расширение файла
+     */
     private String getExtension(String fileName) {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 
 
-    public Dog addDog(Dog dog) { //Post
-        log.info("Изменение данных собаки в БД");
-        dogRepository.save(dog);
-        log.info("Данные в БД изменены");
-        return dog;
+    /**
+     * Добавление собаки в БД
+     * @param dogRecord
+     * @return новая собака
+     */
+    public DogRecord addDog(DogRecord dogRecord) { //Post
+        log.info("Добавление собаки в БД");
+        Dog dog = dogMapper.toEntity(dogRecord);
+        return dogMapper.toRecord(dogRepository.save(dog));
     }
 
 

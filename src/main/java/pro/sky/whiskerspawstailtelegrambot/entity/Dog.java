@@ -24,6 +24,10 @@ public class Dog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
 
+
+    /**
+     * Кличка собаки
+     */
     @Column(name = "name")
     String fullName;
 
@@ -32,28 +36,37 @@ public class Dog {
      */
     int age;
 
+
     /**
-     * Необходимо установить ограничение на размер файла при заполнении БД. Например в 1024Кб.
-     * Продублировать это ограничение в контроллер для Swagger API для заполнения БД.
+     * Описание собаки
      */
-//    Byte[] photo;
     String description;
 
+
+    /**
+     * Путь по которому будеть храниться фото
+     */
     @Column(name = "file_path")
-//    @JsonIgnore
-    String filePath;//путь до файла на диске
+    String filePath;
 
+    /**
+     * Указывается размер файлов
+     */
     @Column(name = "size")
-//    @JsonIgnore
-    long fileSize;//поле содержит информацию о размере файла в байтах
+    long fileSize;
 
+    /**
+     * Медиатип
+     */
     @Column(name = "type")
-//    @JsonIgnore
-    String mediaType;//тип файла
+    String mediaType;
+
+    /**
+     * Фото
+     */
     @Lob
-//    @JsonIgnore
     @Column(name = "photo")
-    byte[] photo;// данные о файле хранящиеся в массиве данных
+    byte[] photo;
 
 
     /**
