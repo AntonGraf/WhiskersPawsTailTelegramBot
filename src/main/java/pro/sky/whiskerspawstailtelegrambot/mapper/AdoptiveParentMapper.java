@@ -1,7 +1,6 @@
 package pro.sky.whiskerspawstailtelegrambot.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 

@@ -1,5 +1,7 @@
 package pro.sky.whiskerspawstailtelegrambot.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -22,6 +24,10 @@ public class Dog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
 
+
+    /**
+     * Кличка собаки
+     */
     @Column(name = "name")
     String fullName;
 
@@ -30,24 +36,54 @@ public class Dog {
      */
     int age;
 
+
     /**
-     * Необходимо установить ограничение на размер файла при заполнении БД. Например в 1024Кб.
-     * Продублировать это ограничение в контроллер для Swagger API для заполнения БД.
+     * Описание собаки
      */
-    Byte[] photo;
     String description;
+
+
+    /**
+     * Путь по которому будеть храниться фото
+     */
+    @Column(name = "file_path")
+    String filePath;
+
+    /**
+     * Указывается размер файлов
+     */
+    @Column(name = "size")
+    long fileSize;
+
+    /**
+     * Медиатип
+     */
+    @Column(name = "type")
+    String mediaType;
+
+    /**
+     * Фото
+     */
+    @Lob
+    @Column(name = "photo")
+    byte[] photo;
+
 
     /**
      * Приют, к которому принадлежит собака
      */
-    @ManyToOne(cascade = CascadeType.ALL)
+//    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "shelter_id")
     Shelter shelter;
 
     /**
      * Хозяин собаки
      */
-    @ManyToOne(cascade = CascadeType.ALL)
+//    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "adoptive_parent_id")
     AdoptiveParent adoptiveParent;
 
@@ -56,6 +92,10 @@ public class Dog {
      * Отчеты хозяина для данной собаки
      */
     @OneToMany(mappedBy = "dog", fetch=FetchType.EAGER)
-    @JsonManagedReference
+//    @JsonManagedReference // Мешает заполнению через сваггер
+    @JsonIgnore
     List<Report> reports;
+
+
+
 }
