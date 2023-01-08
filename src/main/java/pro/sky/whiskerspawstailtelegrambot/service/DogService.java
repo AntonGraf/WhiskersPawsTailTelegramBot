@@ -1,6 +1,7 @@
 package pro.sky.whiskerspawstailtelegrambot.service;
 
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,8 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @Service
 @Slf4j
 @Transactional
+@Tag(name = "DogController",
+        description = "The Admin API")
 public class DogService {
 
 
@@ -90,8 +93,8 @@ public class DogService {
         dog.setFullName(fullName);
         dog.setAge(age);
         dog.setDescription(description);
-        uploadPhoto(dogId, photo);
         dogRepository.save(dog);
+        uploadPhoto(dogId, photo);
     }
 
     /**
