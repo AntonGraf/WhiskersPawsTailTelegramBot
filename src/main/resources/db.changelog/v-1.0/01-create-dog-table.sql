@@ -5,7 +5,7 @@ CREATE TABLE dog
     age INTEGER CHECK ( age > 0 ),
     description TEXT,
     file_path TEXT,
-    size BIGINT,
+    size BIGINT DEFAULT 1024,
     type TEXT,
     photo oid
 );

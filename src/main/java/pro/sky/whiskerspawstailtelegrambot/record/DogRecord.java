@@ -9,7 +9,6 @@ import lombok.experimental.FieldDefaults;
 import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
 import pro.sky.whiskerspawstailtelegrambot.entity.Report;
 import pro.sky.whiskerspawstailtelegrambot.entity.Shelter;
-
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
