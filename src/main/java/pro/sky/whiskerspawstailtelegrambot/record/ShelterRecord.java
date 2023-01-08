@@ -4,8 +4,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
-import pro.sky.whiskerspawstailtelegrambot.entity.Dog;
-import pro.sky.whiskerspawstailtelegrambot.entity.Volunteer;
 
 import java.io.Serializable;
 import java.util.List;
@@ -32,4 +30,5 @@ public class ShelterRecord implements Serializable {
     List<String> listOfReasonForRejection;
     Set<DogRecord> dogs;
     Set<VolunteerRecord> volunteers;
+    Byte[] locationMap;
 }
