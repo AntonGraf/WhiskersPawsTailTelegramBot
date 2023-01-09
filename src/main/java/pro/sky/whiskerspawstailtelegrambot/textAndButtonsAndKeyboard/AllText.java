@@ -22,7 +22,7 @@ public abstract class AllText {
 
     //кнопки для регистрации
     public static final String REGISTRATION_BUTTON = "Регистрация";
-    public static final String REGISTRATION_CANCEL = "Отмена регистрации и выход в меню";
+    public static final String REGISTRATION_CANCEL = "/start";
     public static final String REGISTRATION_SUCCESS = "Регистрация прошла успешно, ваш Id : \n";
     public static final String REG_FULL_NAME = "Как к Вам обращаться?";
     public static final String REG_PHONE = "По какому номеру с Вами связаться?";
