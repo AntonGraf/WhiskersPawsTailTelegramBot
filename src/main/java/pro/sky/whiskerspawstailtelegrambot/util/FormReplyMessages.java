@@ -18,6 +18,7 @@ public class FormReplyMessages {
         String chatId = String.valueOf(message.getChatId());
         SendMessage sendMessage = new SendMessage(chatId, textReplyMessage);
         sendMessage.setReplyMarkup(keyboardMarkup);
+        sendMessage.setAllowSendingWithoutReply(false);
         return sendMessage;
     }
 
