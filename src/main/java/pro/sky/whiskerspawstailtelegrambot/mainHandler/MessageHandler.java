@@ -66,20 +66,20 @@ public class MessageHandler implements MainHandler {
                         .findAdoptiveParentByChatId((Long.parseLong(chatId)))
                         .getState()
                         .equals(StatusRegistration.THE_FIRST_STATE.name())) {
-
-            if (textMessage.length() > 5) {
+            //проверка имени, пока только длина, а и зачем еще что то....
+            if (textMessage.length() > 6) {
                 AdoptiveParentRecord adoptiveParentOld = adoptiveParentService
                         .findAdoptiveParentByChatId(Long.parseLong(chatId));
                 AdoptiveParentRecord adoptiveParentRecord = new AdoptiveParentRecord();
                 adoptiveParentRecord.setFullName(textMessage);
-                adoptiveParentRecord.setPhone("test");
+                adoptiveParentRecord.setPhone("somePhone");
                 adoptiveParentRecord.setState(StatusRegistration.ONLY_NAME.name());
                 adoptiveParentRecord.setChatId(adoptiveParentOld.getChatId());
                 adoptiveParentService.updateAdoptiveParent(adoptiveParentOld.getId(),
                         adoptiveParentRecord);
                 sendMessage = new SendMessage(chatId, AllText.REG_PHONE);
             } else {
-                sendMessage = new SendMessage(chatId, AllText.REG_FULL_NAME_INCORRECT);
+                sendMessage = new SendMessage(chatId, "Введите правильное имя, длина больше 6 символов.");
             }
         } else if (adoptiveParentService
                 .findAdoptiveParentByChatId(Long.parseLong(chatId)) != null &&
@@ -87,7 +87,8 @@ public class MessageHandler implements MainHandler {
                         .findAdoptiveParentByChatId((Long.parseLong(chatId)))
                         .getState()
                         .equals(StatusRegistration.ONLY_NAME.name())) {
-            if (textMessage.length() > 5) {
+            //проверка phone, пока только длина, а и зачем еще что то....
+            if (textMessage.length() > 6) {
                 AdoptiveParentRecord adoptiveParentOld = adoptiveParentService
                         .findAdoptiveParentByChatId(Long.parseLong(chatId));
                 AdoptiveParentRecord adoptiveParentRecord = new AdoptiveParentRecord();
@@ -97,7 +98,9 @@ public class MessageHandler implements MainHandler {
                 adoptiveParentRecord.setChatId(adoptiveParentOld.getChatId());
                 adoptiveParentService.updateAdoptiveParent(adoptiveParentOld.getId(),
                         adoptiveParentRecord);
-                sendMessage = new SendMessage(chatId, AllText.REGISTRATION_SUCCESS);
+                sendMessage = new SendMessage(chatId, AllText.REGISTRATION_SUCCESS + adoptiveParentOld.getChatId());
+            } else {
+                sendMessage = new SendMessage(chatId, "Введите правильный телефон, длина больше 6 символов.");
             }
         } else {
 
@@ -143,13 +146,12 @@ public class MessageHandler implements MainHandler {
                         }
                         AdoptiveParentRecord adoptiveParentRecord = new AdoptiveParentRecord();
                         adoptiveParentRecord.setFullName("newParent");
-                        adoptiveParentRecord.setPhone("89299292857");
+                        adoptiveParentRecord.setPhone("somePhone");
                         adoptiveParentRecord.setState(StatusRegistration.THE_FIRST_STATE.name());
                         adoptiveParentRecord.setChatId(Long.parseLong(chatId));
                         adoptiveParentService.addAdoptiveParent(adoptiveParentRecord);
                         sendMessage = new SendMessage(chatId, AllText.REG_FULL_NAME);
                         break;
-
 
                     default:
                         sendMessage = new SendMessage(chatId, AllText.UNKNOWN_COMMAND_TEXT);

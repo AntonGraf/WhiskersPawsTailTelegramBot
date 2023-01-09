@@ -24,14 +24,10 @@ public abstract class AllText {
     public static final String REGISTRATION_BUTTON = "Регистрация";
     public static final String REGISTRATION_CANCEL = "Отмена регистрации и выход в меню";
     public static final String REGISTRATION_SUCCESS = "Регистрация прошла успешно, ваш Id : \n";
-    public static final String REG_FULL_NAME = "Введите ваше имя";
-    public static final String REG_FULL_NAME_INCORRECT = "Введите правильное имя";
-    public static final String REG_PHONE = "Введите номер телефона, например 89261234567";
-    public static final String REG_PHONE_INCORRECT = "Введите правильный телефон, +7 926 123 45 67";
-    public static final String REGEX_PHONE = "^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$";
+    public static final String REG_FULL_NAME = "Как к Вам обращаться?";
+    public static final String REG_PHONE = "По какому номеру с Вами связаться?";
     public static final String ALREADY_REGISTERED = "Вы уже зарегестрированы";
 
     //кнопки для регистрации
-
 
 }
