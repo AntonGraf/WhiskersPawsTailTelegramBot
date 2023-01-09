@@ -14,6 +14,8 @@ public abstract class AllText {
   public static final String UNKNOWN_COMMAND_TEXT = "Воспользуйтесь кнопками, либо командами меню";
   public static final String SEND_PET_REPORT_TEXT = "Прислать отчет о питомце";
   public static final String SEND_REPORT_TEXT = "Прислать отчет";
+  public static final String HOW_TAKE_DOG = "Как получить собаку";
+  public static final String HOW_TAKE_DOG_SHELTER = "Обратитесь к волонтеру за подробной информацией";
 
   public static final String SHOW_ALL_YOUR_PET_TEXT = "Показать имена всех ваших животных";
   public static final String CANCEL_TEXT = "Отмена";
