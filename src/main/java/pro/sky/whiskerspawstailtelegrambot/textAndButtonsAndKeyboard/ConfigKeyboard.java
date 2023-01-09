@@ -36,7 +36,6 @@ public class ConfigKeyboard extends Button {
         keyboardMarkup.setResizeKeyboard(true);
         keyboardMarkup.setKeyboard(KEYBOARD_BUTTONS_ROW_INFO_REPORT);
         return keyboardMarkup;
-//        message.setReplyMarkup(keyboardMarkup);
     }
     /**
      * Метод установки клавиатуры на нажатие отправить отчет
@@ -53,6 +52,5 @@ public class ConfigKeyboard extends Button {
         keyboardMarkup.setResizeKeyboard(true);
         keyboardMarkup.setKeyboard(KEYBOARD_BUTTONS_ROW_INFO_REPORT);
         return keyboardMarkup;
-//        message.setReplyMarkup(keyboardMarkup);
     }
 }

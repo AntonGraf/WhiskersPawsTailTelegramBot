@@ -34,7 +34,7 @@ import java.util.Collection;
 @Slf4j
 @Tag(name = "VolunteerController",
         description = "The Admin API")
-public class VolunteerController {
+public class  VolunteerController {
 
     private final VolunteerService volunteerService;
 
