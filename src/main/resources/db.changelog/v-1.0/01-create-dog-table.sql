@@ -1,10 +1,13 @@
 CREATE TABLE dog
 (
-    id BIGINT PRIMARY KEY,
-    name TEXT,
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(256),
     age INTEGER CHECK ( age > 0 ),
     description TEXT,
-    photo bytea
+    file_path TEXT,
+    size BIGINT DEFAULT 1024,
+    type TEXT,
+    photo oid
 );
 
 
