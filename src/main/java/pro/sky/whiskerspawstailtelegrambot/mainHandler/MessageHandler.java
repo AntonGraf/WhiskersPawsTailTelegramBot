@@ -68,7 +68,7 @@ public class MessageHandler implements MainHandler {
                 adoptiveParentService
                         .deleteAdoptiveParentByID(adoptiveParent.getId());
             }
-            sendMessage = formReplyMessages.replyMessage(message,"Вы в главном меню",configKeyboard.initKeyboardOnClickStart());
+            sendMessage = formReplyMessages.replyMessage(message,"/start",configKeyboard.initKeyboardOnClickStart());
         }
         if (adoptiveParentService
                 .findAdoptiveParentByChatId(Long.parseLong(chatId)) != null &&
