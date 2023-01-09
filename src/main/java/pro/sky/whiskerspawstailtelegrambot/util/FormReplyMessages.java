@@ -19,11 +19,6 @@ public class FormReplyMessages {
         String chatId = String.valueOf(message.getChatId());
         SendMessage sendMessage = new SendMessage(chatId, textReplyMessage);
         sendMessage.setReplyMarkup(keyboardMarkup);
-        System.out.println(sendMessage.getChatId());
-        sendMessage.setReplyToMessageId(3);
-        MessageEntity messageEntity = new MessageEntity();
-        sendMessage.setChatId("1");
-        System.out.println(sendMessage.getChatId());
         return sendMessage;
     }
 
