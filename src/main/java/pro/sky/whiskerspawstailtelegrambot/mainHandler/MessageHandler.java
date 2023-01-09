@@ -104,6 +104,7 @@ public class MessageHandler implements MainHandler {
                     AdoptiveParentRecord adoptiveParentRecord = new AdoptiveParentRecord();
                     adoptiveParentRecord.setFullName("newParent");
                     adoptiveParentRecord.setPhone("89299292857");
+
                     adoptiveParentRecord.setState(StatusRegistration.THE_FIRST_STATE.name());
                     adoptiveParentRecord.setChatId(Long.parseLong(chatId));
                     adoptiveParentService.addAdoptiveParent(adoptiveParentRecord);
