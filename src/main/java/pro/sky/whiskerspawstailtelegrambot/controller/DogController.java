@@ -219,6 +219,38 @@ public class DogController {
     }
 
 
+    @Operation(summary = "Добавление id усыновителя в БД в таблицу Dog")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Добавлено id усыновителя",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = DogRecord.class)))
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Либо не введены парметры, либо нет объекта по указанному идентификатору" +
+                            "и идентификаторы меньше 1",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ErrorResponse.class)))
+                    }
+            )
+    })
+    @PutMapping(value = "/{dogId}")
+    public ResponseEntity<DogRecord> addIdAdoptiveParent(@RequestParam Long dogId, @RequestParam Long adoptiveParentId) {
+        dogService.addIdAdoptiveParent(dogId, adoptiveParentId);
+        return ResponseEntity.ok().build();
+    }
+
+
+
+
+
     @Operation(summary = "Удаление собаки по id")
     @ApiResponses({
             @ApiResponse(

@@ -88,13 +88,24 @@ public class DogService {
      */
     public void editDog(Long dogId, String fullName, int age, String description, MultipartFile photo) throws IOException { //Put
         log.info("Изменение данных собаки в БД");
-        DogRecord dogRecord = findDog(dogId);
-        Dog dog = dogMapper.toEntity(dogRecord);
+        Dog dog = dogMapper.toEntity(findDog(dogId));
         dog.setFullName(fullName);
         dog.setAge(age);
         dog.setDescription(description);
         dogRepository.save(dog);
         uploadPhoto(dogId, photo);
+    }
+
+    /**
+     * Добавление id усыновителя в БД в таблицу Dog
+     * @param dogId
+     * @param adoptiveParentId
+     */
+    public void addIdAdoptiveParent(Long dogId, Long adoptiveParentId) {
+        log.info("Изменение данных собаки в БД");
+        Dog dog = dogMapper.toEntity(findDog(dogId));
+        dogRepository.addIdAdoptiveParent(dogId, adoptiveParentId);
+
     }
 
     /**
