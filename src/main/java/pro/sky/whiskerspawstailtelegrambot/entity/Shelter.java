@@ -69,4 +69,6 @@ public class Shelter {
     @OneToMany(mappedBy = "shelter", fetch=FetchType.EAGER)
     @JsonBackReference
     Set<Volunteer> volunteers;
+    //Схема проезда
+    Byte[] locationMap;
 }
