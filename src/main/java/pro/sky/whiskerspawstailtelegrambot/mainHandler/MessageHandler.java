@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.service.ShelterService;
@@ -91,7 +90,7 @@ public class MessageHandler implements MainHandler {
 
                 //регистрация
                 case (AllText.REGISTRATION_BUTTON):
-                  //если уже есть такой в таблице со статусом зареган, то просто сообщение что вы уже есть у нас
+                    //если уже есть такой в таблице со статусом зареган, то просто сообщение что вы уже есть у нас
                     if (adoptiveParentService
                             .findAdoptiveParentByChatId(Long.parseLong(chatId)) != null &&
                             adoptiveParentService

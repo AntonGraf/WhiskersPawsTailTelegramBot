@@ -2,7 +2,6 @@ package pro.sky.whiskerspawstailtelegrambot.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
 import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
 import pro.sky.whiskerspawstailtelegrambot.mapper.AdoptiveParentMapper;
@@ -140,5 +139,16 @@ public class AdoptiveParentService {
             return result;
         }
         throw new ElemNotFound();
+    }
+
+    /**
+     * Поиск усыновителя по chatId
+     * @param chatId
+     * @return рекордер усыновителя если есть, null если нет
+     */
+    public AdoptiveParentRecord findAdoptiveParentByChatId(Long chatId){
+        log.info("Was invoked method for findAdoptiveParentByChatId");
+        return adoptiveParentMapper
+        .toRecord(adoptiveParentRepo.getAdoptiveParentByChatId(chatId));
     }
 }

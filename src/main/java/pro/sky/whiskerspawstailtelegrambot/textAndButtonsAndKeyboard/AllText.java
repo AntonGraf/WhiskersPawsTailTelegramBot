@@ -19,8 +19,19 @@ public abstract class AllText {
     public static final String SHOW_ALL_YOUR_PET_TEXT = "Показать имена всех ваших животных";
     public static final String CANCEL_TEXT = "Отмена";
     public static final String MENU_SEND_PET_REPORT_TEXT = "В этом меню вы можете прислать отчет о вашем питомце";
-    public static final String REGISTRATION = "/registration";
-    public static final String REGISTRATION_IN_TEXT = "registration in service";
+
+    //кнопки для регистрации
     public static final String REGISTRATION_BUTTON = "Регистрация";
+    public static final String REGISTRATION_CANCEL = "Отмена регистрации и выход в меню";
+    public static final String REGISTRATION_SUCCESS = "Регистрация прошла успешно, ваш Id : \n";
+    public static final String REG_FULL_NAME = "Введите ваше имя";
+    public static final String REG_FULL_NAME_INCORRECT = "Введите правильное имя";
+    public static final String REG_PHONE = "Введите номер телефона, например 89261234567";
+    public static final String REG_PHONE_INCORRECT = "Введите правильный телефон, +7 926 123 45 67";
+    public static final String REGEX_PHONE = "^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$";
+    public static final String ALREADY_REGISTERED = "Вы уже зарегестрированы";
+
+    //кнопки для регистрации
+
 
 }
