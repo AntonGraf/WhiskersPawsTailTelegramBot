@@ -60,6 +60,9 @@ public class MessageHandler implements MainHandler {
         boolean checkUpdate = !update.getMessage().hasText();
         Message message = update.getMessage();
         String textMessage = message.getText();
+        if(textMessage.equals(AllText.REGISTRATION_CANCEL)){
+            sendMessage = formReplyMessages.replyMessage(message,null,configKeyboard.initKeyboardOnClickStart());
+        }
         if (adoptiveParentService
                 .findAdoptiveParentByChatId(Long.parseLong(chatId)) != null &&
                 adoptiveParentService
@@ -98,7 +101,7 @@ public class MessageHandler implements MainHandler {
                 adoptiveParentRecord.setChatId(adoptiveParentOld.getChatId());
                 adoptiveParentService.updateAdoptiveParent(adoptiveParentOld.getId(),
                         adoptiveParentRecord);
-                sendMessage = new SendMessage(chatId, AllText.REGISTRATION_SUCCESS + adoptiveParentOld.getChatId());
+                sendMessage = new SendMessage(chatId, AllText.REGISTRATION_SUCCESS + adoptiveParentOld.getId());
             } else {
                 sendMessage = new SendMessage(chatId, "Введите правильный телефон, длина больше 6 символов.");
             }
@@ -150,7 +153,8 @@ public class MessageHandler implements MainHandler {
                         adoptiveParentRecord.setState(StatusRegistration.THE_FIRST_STATE.name());
                         adoptiveParentRecord.setChatId(Long.parseLong(chatId));
                         adoptiveParentService.addAdoptiveParent(adoptiveParentRecord);
-                        sendMessage = new SendMessage(chatId, AllText.REG_FULL_NAME);
+                        sendMessage = formReplyMessages.replyMessage(message,AllText.REG_FULL_NAME,configKeyboard.initKeyboardOnClickRegistration());
+
                         break;
 
                     default:
