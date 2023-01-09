@@ -58,62 +58,103 @@ public class MessageHandler implements MainHandler {
         SendMessage sendMessage = null;
         String chatId = String.valueOf(update.getMessage().getChatId());
         boolean checkUpdate = !update.getMessage().hasText();
-        if (!checkUpdate) {
-            log.debug("Обработка сообщения в виде текста");
-            Message message = update.getMessage();
-            String textMessage = message.getText();
-            //здесь инжект текст кнопок, любой текст крч
-            switch (textMessage) {
+        Message message = update.getMessage();
+        String textMessage = message.getText();
+        if (adoptiveParentService
+                .findAdoptiveParentByChatId(Long.parseLong(chatId)) != null &&
+                adoptiveParentService
+                        .findAdoptiveParentByChatId((Long.parseLong(chatId)))
+                        .getState()
+                        .equals(StatusRegistration.THE_FIRST_STATE.name())) {
 
-                case (AllText.START_TEXT):
-                    sendMessage = formReplyMessages.replyMessage(message, AllText.WELCOME_MESSAGE_TEXT,
-                            configKeyboard.initKeyboardOnClickStart());
-                    break;
+            if (textMessage.length() > 5) {
+                AdoptiveParentRecord adoptiveParentOld = adoptiveParentService
+                        .findAdoptiveParentByChatId(Long.parseLong(chatId));
+                AdoptiveParentRecord adoptiveParentRecord = new AdoptiveParentRecord();
+                adoptiveParentRecord.setFullName(textMessage);
+                adoptiveParentRecord.setPhone("test");
+                adoptiveParentRecord.setState(StatusRegistration.ONLY_NAME.name());
+                adoptiveParentRecord.setChatId(adoptiveParentOld.getChatId());
+                adoptiveParentService.updateAdoptiveParent(adoptiveParentOld.getId(),
+                        adoptiveParentRecord);
+                sendMessage = new SendMessage(chatId, AllText.REG_PHONE);
+            } else {
+                sendMessage = new SendMessage(chatId, AllText.REG_FULL_NAME_INCORRECT);
+            }
+        } else if (adoptiveParentService
+                .findAdoptiveParentByChatId(Long.parseLong(chatId)) != null &&
+                adoptiveParentService
+                        .findAdoptiveParentByChatId((Long.parseLong(chatId)))
+                        .getState()
+                        .equals(StatusRegistration.ONLY_NAME.name())) {
+            if (textMessage.length() > 5) {
+                AdoptiveParentRecord adoptiveParentOld = adoptiveParentService
+                        .findAdoptiveParentByChatId(Long.parseLong(chatId));
+                AdoptiveParentRecord adoptiveParentRecord = new AdoptiveParentRecord();
+                adoptiveParentRecord.setFullName(adoptiveParentOld.getFullName());
+                adoptiveParentRecord.setPhone(textMessage);
+                adoptiveParentRecord.setState(StatusRegistration.SUCCESS.name());
+                adoptiveParentRecord.setChatId(adoptiveParentOld.getChatId());
+                adoptiveParentService.updateAdoptiveParent(adoptiveParentOld.getId(),
+                        adoptiveParentRecord);
+                sendMessage = new SendMessage(chatId, AllText.REGISTRATION_SUCCESS);
+            }
+        } else {
 
-                case (AllText.CALL_TO_VOLUNTEER_TEXT): //ответ на позвать волонтера, просто инфа про волонтеров
-                    sendMessage = formReplyMessages.replyMessage(message, parserToBot.parserVolunteer(volunteerService.getAllVolunteers()),
-                            configKeyboard.initKeyboardOnClickStart());
-                    break;
+            if (!checkUpdate) {
+                log.debug("Обработка сообщения в виде текста");
+                //здесь инжект текст кнопок, любой текст крч
+                switch (textMessage) {
 
-                case (AllText.SEND_PET_REPORT_TEXT):     // реализация логики отправить отчет
-                    sendMessage = reportAddHandler.handlerReport(message, AllText.MENU_SEND_PET_REPORT_TEXT,
-                            configKeyboard.initKeyboardOnClickSendPetReport());
-                    break;
-                case (AllText.HOW_TAKE_DOG):
-                    sendMessage = formReplyMessages.replyMessage(message, AllText.HOW_TAKE_DOG_SHELTER,
-                            configKeyboard.initKeyboardOnClickStart());
-                    break;
-                case (AllText.INFO_SHELTER_TEXT):
-                    sendMessage = formReplyMessages.replyMessage(message, shelterService.getOfShelterMessage(1L),
-                            configKeyboard.initKeyboardOnClickStart());
-                    break;
-
-                //регистрация
-                case (AllText.REGISTRATION_BUTTON):
-                    //если уже есть такой в таблице со статусом зареган, то просто сообщение что вы уже есть у нас
-                    if (adoptiveParentService
-                            .findAdoptiveParentByChatId(Long.parseLong(chatId)) != null &&
-                            adoptiveParentService
-                                    .findAdoptiveParentByChatId((Long.parseLong(chatId)))
-                                    .getState()
-                                    .equals(StatusRegistration.SUCCESS.name())) {
-                        sendMessage = new SendMessage(chatId, AllText.ALREADY_REGISTERED);
+                    case (AllText.START_TEXT):
+                        sendMessage = formReplyMessages.replyMessage(message, AllText.WELCOME_MESSAGE_TEXT,
+                                configKeyboard.initKeyboardOnClickStart());
                         break;
-                    }
-                    AdoptiveParentRecord adoptiveParentRecord = new AdoptiveParentRecord();
-                    adoptiveParentRecord.setFullName("newParent");
-                    adoptiveParentRecord.setPhone("89299292857");
 
-                    adoptiveParentRecord.setState(StatusRegistration.THE_FIRST_STATE.name());
-                    adoptiveParentRecord.setChatId(Long.parseLong(chatId));
-                    adoptiveParentService.addAdoptiveParent(adoptiveParentRecord);
-                    sendMessage = new SendMessage(chatId, AllText.REG_FULL_NAME);
-                    break;
+                    case (AllText.CALL_TO_VOLUNTEER_TEXT): //ответ на позвать волонтера, просто инфа про волонтеров
+                        sendMessage = formReplyMessages.replyMessage(message, parserToBot.parserVolunteer(volunteerService.getAllVolunteers()),
+                                configKeyboard.initKeyboardOnClickStart());
+                        break;
+
+                    case (AllText.SEND_PET_REPORT_TEXT):     // реализация логики отправить отчет
+                        sendMessage = reportAddHandler.handlerReport(message, AllText.MENU_SEND_PET_REPORT_TEXT,
+                                configKeyboard.initKeyboardOnClickSendPetReport());
+                        break;
+                    case (AllText.HOW_TAKE_DOG):
+                        sendMessage = formReplyMessages.replyMessage(message, AllText.HOW_TAKE_DOG_SHELTER,
+                                configKeyboard.initKeyboardOnClickStart());
+                        break;
+                    case (AllText.INFO_SHELTER_TEXT):
+                        sendMessage = formReplyMessages.replyMessage(message, shelterService.getOfShelterMessage(1L),
+                                configKeyboard.initKeyboardOnClickStart());
+                        break;
+
+                    //регистрация
+                    case (AllText.REGISTRATION_BUTTON):
+                        //если уже есть такой в таблице со статусом зареган, то просто сообщение что вы уже есть у нас
+                        if (adoptiveParentService
+                                .findAdoptiveParentByChatId(Long.parseLong(chatId)) != null &&
+                                adoptiveParentService
+                                        .findAdoptiveParentByChatId((Long.parseLong(chatId)))
+                                        .getState()
+                                        .equals(StatusRegistration.SUCCESS.name())) {
+                            sendMessage = new SendMessage(chatId, AllText.ALREADY_REGISTERED);
+                            break;
+                        }
+                        AdoptiveParentRecord adoptiveParentRecord = new AdoptiveParentRecord();
+                        adoptiveParentRecord.setFullName("newParent");
+                        adoptiveParentRecord.setPhone("89299292857");
+                        adoptiveParentRecord.setState(StatusRegistration.THE_FIRST_STATE.name());
+                        adoptiveParentRecord.setChatId(Long.parseLong(chatId));
+                        adoptiveParentService.addAdoptiveParent(adoptiveParentRecord);
+                        sendMessage = new SendMessage(chatId, AllText.REG_FULL_NAME);
+                        break;
 
 
-                default:
-                    sendMessage = new SendMessage(chatId, AllText.UNKNOWN_COMMAND_TEXT);
-                    break;
+                    default:
+                        sendMessage = new SendMessage(chatId, AllText.UNKNOWN_COMMAND_TEXT);
+                        break;
+                }
             }
         }
         return sendMessage;
