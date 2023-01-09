@@ -108,7 +108,8 @@ public class MessageHandler implements MainHandler {
                 adoptiveParentRecord.setChatId(adoptiveParentOld.getChatId());
                 adoptiveParentService.updateAdoptiveParent(adoptiveParentOld.getId(),
                         adoptiveParentRecord);
-                sendMessage = new SendMessage(chatId, AllText.REGISTRATION_SUCCESS + adoptiveParentOld.getId());
+                sendMessage = formReplyMessages.replyMessage(message,AllText.REGISTRATION_SUCCESS + adoptiveParentOld.getId(),configKeyboard.initKeyboardOnClickStart());
+
             } else {
                 sendMessage = new SendMessage(chatId, "Введите правильный телефон, длина больше 6 символов.");
             }
