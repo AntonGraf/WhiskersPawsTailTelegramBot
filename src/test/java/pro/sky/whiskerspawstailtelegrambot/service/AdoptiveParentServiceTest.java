@@ -23,6 +23,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOf
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
+/**
+ * Юнит тесты на сервис усыновителя
+ */
 @ExtendWith(MockitoExtension.class)
 class AdoptiveParentServiceTest {
     final String ANYSTRING = "anystring";

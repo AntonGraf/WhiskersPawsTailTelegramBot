@@ -3,6 +3,7 @@ package pro.sky.whiskerspawstailtelegrambot.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
 import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
 import pro.sky.whiskerspawstailtelegrambot.mapper.AdoptiveParentMapper;
 import pro.sky.whiskerspawstailtelegrambot.mapper.ReportMapper;
@@ -123,13 +124,19 @@ public class AdoptiveParentService {
         log.info("Was invoked method for getParentIdByNameAndPhoneAndChatId");
         long result;
         if(fullName!=null && !fullName.isEmpty()){
-            result = adoptiveParentRepo.getAdoptiveParentByFullName(fullName).getId();
+            AdoptiveParent adoptiveParent = adoptiveParentRepo.getAdoptiveParentByFullName(fullName);
+            if (adoptiveParent == null) throw new ElemNotFound();
+            result = adoptiveParent.getId();
             return result;
         } else if (phone!=null && !phone.isEmpty()) {
-            result = adoptiveParentRepo.getAdoptiveParentByPhone(phone).getId();
+            AdoptiveParent adoptiveParent = adoptiveParentRepo.getAdoptiveParentByPhone(phone);
+            if (adoptiveParent == null) throw new ElemNotFound();
+            result = adoptiveParent.getId();
             return result;
         }else if (chatId!=null && chatId > 0){
-            result = adoptiveParentRepo.getAdoptiveParentByChatId(chatId).getId();
+            AdoptiveParent adoptiveParent = adoptiveParentRepo.getAdoptiveParentByChatId(chatId);
+            if (adoptiveParent == null) throw new ElemNotFound();
+            result = adoptiveParent.getId();
             return result;
         }
         throw new ElemNotFound();
