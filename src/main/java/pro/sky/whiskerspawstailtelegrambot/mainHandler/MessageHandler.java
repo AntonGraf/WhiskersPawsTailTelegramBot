@@ -61,7 +61,9 @@ public class MessageHandler implements MainHandler {
         Message message = update.getMessage();
         String textMessage = message.getText();
         if(textMessage.equals(AllText.REGISTRATION_CANCEL)){
-            sendMessage = formReplyMessages.replyMessage(message,null,configKeyboard.initKeyboardOnClickStart());
+            adoptiveParentService.deleteAdoptiveParentByID(adoptiveParentService
+                    .findAdoptiveParentByChatId(Long.parseLong(chatId)).getId());
+            sendMessage = formReplyMessages.replyMessage(message,"Вы в главном меню",configKeyboard.initKeyboardOnClickStart());
         }
         if (adoptiveParentService
                 .findAdoptiveParentByChatId(Long.parseLong(chatId)) != null &&
