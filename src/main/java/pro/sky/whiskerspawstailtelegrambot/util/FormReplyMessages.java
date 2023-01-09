@@ -4,6 +4,7 @@ package pro.sky.whiskerspawstailtelegrambot.util;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
 /**
@@ -18,7 +19,11 @@ public class FormReplyMessages {
         String chatId = String.valueOf(message.getChatId());
         SendMessage sendMessage = new SendMessage(chatId, textReplyMessage);
         sendMessage.setReplyMarkup(keyboardMarkup);
-        sendMessage.setAllowSendingWithoutReply(false);
+        System.out.println(sendMessage.getChatId());
+        sendMessage.setReplyToMessageId(3);
+        MessageEntity messageEntity = new MessageEntity();
+        sendMessage.setChatId("1");
+        System.out.println(sendMessage.getChatId());
         return sendMessage;
     }
 
