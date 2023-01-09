@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.service.ShelterService;
@@ -61,8 +62,12 @@ public class MessageHandler implements MainHandler {
         Message message = update.getMessage();
         String textMessage = message.getText();
         if(textMessage.equals(AllText.REGISTRATION_CANCEL)){
-            adoptiveParentService.deleteAdoptiveParentByID(adoptiveParentService
-                    .findAdoptiveParentByChatId(Long.parseLong(chatId)).getId());
+            AdoptiveParentRecord adoptiveParent = adoptiveParentService
+                    .findAdoptiveParentByChatId(Long.parseLong(chatId));
+            if(adoptiveParent!=null){
+                adoptiveParentService
+                        .deleteAdoptiveParentByID(adoptiveParent.getId());
+            }
             sendMessage = formReplyMessages.replyMessage(message,"Вы в главном меню",configKeyboard.initKeyboardOnClickStart());
         }
         if (adoptiveParentService
