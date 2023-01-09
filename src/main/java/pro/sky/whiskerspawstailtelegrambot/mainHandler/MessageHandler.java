@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import pro.sky.whiskerspawstailtelegrambot.service.ShelterService;
 import pro.sky.whiskerspawstailtelegrambot.service.VolunteerService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
@@ -27,15 +28,17 @@ public class MessageHandler implements MainHandler {
   private final VolunteerService volunteerService;
 
   private final ParserToBot parserToBot;
+  private final ShelterService shelterService;
 
 
   public MessageHandler(ConfigKeyboard configKeyboard, ReportAddHandler reportAddHandler,
-                        FormReplyMessages formReplyMessages, VolunteerService volunteerService, ParserToBot parserToBot) {
+                        FormReplyMessages formReplyMessages, VolunteerService volunteerService, ParserToBot parserToBot, ShelterService shelterService) {
     this.configKeyboard = configKeyboard;
     this.reportAddHandler = reportAddHandler;
     this.formReplyMessages = formReplyMessages;
     this.volunteerService = volunteerService;
     this.parserToBot = parserToBot;
+    this.shelterService = shelterService;
   }
 
   /**
@@ -69,6 +72,14 @@ public class MessageHandler implements MainHandler {
         case (AllText.SEND_PET_REPORT_TEXT):     // реализация логики отправить отчет
           sendMessage = reportAddHandler.handlerReport(message, AllText.MENU_SEND_PET_REPORT_TEXT,
               configKeyboard.initKeyboardOnClickSendPetReport());
+          break;
+        case (AllText.HOW_TAKE_DOG):
+          sendMessage = formReplyMessages.replyMessage(message, AllText.HOW_TAKE_DOG_SHELTER,
+                  configKeyboard.initKeyboardOnClickStart());
+          break;
+        case (AllText.INFO_SHELTER_TEXT):
+                 sendMessage = formReplyMessages.replyMessage(message, shelterService.getOfShelterMessage(1L),
+                  configKeyboard.initKeyboardOnClickStart());
           break;
 
         default:
