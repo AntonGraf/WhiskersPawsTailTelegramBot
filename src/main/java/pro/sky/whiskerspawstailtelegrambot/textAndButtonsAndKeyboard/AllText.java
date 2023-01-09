@@ -19,5 +19,8 @@ public abstract class AllText {
     public static final String SHOW_ALL_YOUR_PET_TEXT = "Показать имена всех ваших животных";
     public static final String CANCEL_TEXT = "Отмена";
     public static final String MENU_SEND_PET_REPORT_TEXT = "В этом меню вы можете прислать отчет о вашем питомце";
+    public static final String REGISTRATION = "/registration";
+    public static final String REGISTRATION_IN_TEXT = "registration in service";
+    public static final String REGISTRATION_BUTTON = "Регистрация";
 
 }
