@@ -2,6 +2,8 @@ package pro.sky.whiskerspawstailtelegrambot.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
 import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
 import pro.sky.whiskerspawstailtelegrambot.mapper.AdoptiveParentMapper;
 import pro.sky.whiskerspawstailtelegrambot.mapper.ReportMapper;
@@ -76,6 +78,7 @@ public class AdoptiveParentService {
      */
     public AdoptiveParentRecord addAdoptiveParent(AdoptiveParentRecord adoptiveParentRecord) {
         log.info("Was invoked method for add AdoptiveParent to DB");
+        if(adoptiveParentRecord == null) throw new ElemNotFound();
         return adoptiveParentMapper.toRecord(
                 adoptiveParentRepo.save(adoptiveParentMapper.toEntity(adoptiveParentRecord)));
     }
@@ -87,7 +90,9 @@ public class AdoptiveParentService {
      */
     public Collection<AdoptiveParentRecord> getListOfAdoptiveParent() {
         log.info("Was invoked method for get list of AdoptiveParent from DB");
-        return adoptiveParentMapper.toRecordList(adoptiveParentRepo.findAll());
+        Collection<AdoptiveParentRecord> collection = adoptiveParentMapper.toRecordList(adoptiveParentRepo.findAll());
+        if(collection == null || collection.isEmpty()) throw new ElemNotFound();
+        return collection;
     }
 
     /**
@@ -97,6 +102,7 @@ public class AdoptiveParentService {
      */
     public AdoptiveParentRecord updateAdoptiveParent(long parentId, AdoptiveParentRecord adoptiveParentRecord) {
         log.info("Was invoked method for updateAdoptiveParent");
+        if(adoptiveParentRecord == null || parentId < 1) throw new ElemNotFound();
         AdoptiveParentRecord oldParent = getAdoptiveParentByID(parentId);
         oldParent.setFullName(adoptiveParentRecord.getFullName());
         oldParent.setPhone(adoptiveParentRecord.getPhone());
@@ -105,5 +111,34 @@ public class AdoptiveParentService {
         oldParent.setDogs(adoptiveParentRecord.getDogs());
         log.debug("check before save {}", oldParent);
         return adoptiveParentMapper.toRecord(adoptiveParentRepo.save(adoptiveParentMapper.toEntity(oldParent)));
+    }
+
+    /**
+     * Метод по поиску усыновителя по 3 параметрам, если их передали
+     * @param fullName Поспелов Дмитрий александрови (необязательный параметр)
+     * @param phone Телефон усыновителя (необязательный параметр)
+     * @param chatId chatId (необязательный параметр)
+     * @return либо id усыновителя, либо эксепш {@link pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound}
+     */
+    public Long getParentIdByNameAndPhoneAndChatId(String fullName, String phone, Long chatId) {
+        log.info("Was invoked method for getParentIdByNameAndPhoneAndChatId");
+        long result;
+        if(fullName!=null && !fullName.isEmpty()){
+            AdoptiveParent adoptiveParent = adoptiveParentRepo.getAdoptiveParentByFullName(fullName);
+            if (adoptiveParent == null) throw new ElemNotFound();
+            result = adoptiveParent.getId();
+            return result;
+        } else if (phone!=null && !phone.isEmpty()) {
+            AdoptiveParent adoptiveParent = adoptiveParentRepo.getAdoptiveParentByPhone(phone);
+            if (adoptiveParent == null) throw new ElemNotFound();
+            result = adoptiveParent.getId();
+            return result;
+        }else if (chatId!=null && chatId > 0){
+            AdoptiveParent adoptiveParent = adoptiveParentRepo.getAdoptiveParentByChatId(chatId);
+            if (adoptiveParent == null) throw new ElemNotFound();
+            result = adoptiveParent.getId();
+            return result;
+        }
+        throw new ElemNotFound();
     }
 }

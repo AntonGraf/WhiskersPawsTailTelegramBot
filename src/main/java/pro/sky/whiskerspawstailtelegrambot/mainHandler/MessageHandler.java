@@ -82,6 +82,7 @@ public class MessageHandler implements MainHandler {
                   configKeyboard.initKeyboardOnClickStart());
           break;
 
+
         default:
           sendMessage = new SendMessage(chatId, AllText.UNKNOWN_COMMAND_TEXT);
           break;
