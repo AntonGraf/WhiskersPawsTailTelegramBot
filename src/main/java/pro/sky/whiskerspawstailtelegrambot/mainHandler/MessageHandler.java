@@ -81,15 +81,14 @@ public class MessageHandler implements MainHandler {
 
           case THE_FIRST_STATE:
             return sendMessage = registrationHandler
-                .handlerWithStatusTheFirstState(adoptiveParent, message.getText(), chatId);
+                .handlerWithStatusTheFirstState(message,adoptiveParent, message.getText(), chatId);
           case ONLY_NAME:
             return sendMessage = registrationHandler
                 .handlerWithStatusOnlyName(message,adoptiveParent, message.getText(), chatId);
           case SUCCESS_REG:
-            //тут пока что ничего....
-            // он просто зареган и в этом статусе что то будет,
-            // типо будет кнопка показать айди
-            break;
+            //если уже есть такой в таблице со статусом зареган, то просто сообщение что вы уже есть у нас
+            return sendMessage = registrationHandler
+                .handlerWithStatuSuccessReg(message,adoptiveParent, message.getText(), chatId);
           case WAIT_SEND_REPORT:
             return sendMessage = reportAddHandler.sendReport(message);
         }

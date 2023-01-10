@@ -31,33 +31,52 @@ public class RegistrationHandler {
     this.configKeyboard = configKeyboard;
   }
 
-  public SendMessage handlerWithStatusTheFirstState(AdoptiveParentRecord adoptiveParent,
+  public SendMessage handlerWithStatusTheFirstState(Message message,AdoptiveParentRecord adoptiveParent,
       String text, String chatId) {
-    if (text.length() > 6) {
+    if (text.length() > 6 && !text.equals(AllText.REGISTRATION_CANCEL)) {
       //обновление имени и статуса
       updateName(adoptiveParent, text);
       return newMessage(chatId, AllText.REG_PHONE);
+    } else if (text.equals(AllText.REGISTRATION_CANCEL)) {
+      adoptiveParentService.deleteAdoptiveParentByID(adoptiveParent.getId());
+      return formReplyMessages.replyMessage(message,"/start",configKeyboard.initKeyboardOnClickStart());
     } else {
       return newMessage(chatId, "Введите правильное имя, длина больше 6 символов.");
     }
   }
 
-  public SendMessage handlerWithStatusOnlyName(Message message,AdoptiveParentRecord adoptiveParent, String text, String chatId) {
-    if (text.length() > 6) {
+  public SendMessage handlerWithStatusOnlyName(Message message, AdoptiveParentRecord adoptiveParent,
+      String text, String chatId) {
+    if (text.length() > 6 && !text.equals(AllText.REGISTRATION_CANCEL)) {
       AdoptiveParentRecord adoptiveParentOld = adoptiveParentService
           .getAdoptiveParentByChatId(Long.parseLong(chatId));
       updatePhone(adoptiveParentOld, text);
       return formReplyMessages.replyMessage(message,
-          AllText.REGISTRATION_SUCCESS + adoptiveParentOld.getId(), configKeyboard.initKeyboardOnClickStart());
+          AllText.REGISTRATION_SUCCESS + adoptiveParentOld.getId(),
+          configKeyboard.initKeyboardOnClickStart());
 
-    } else {
+    } else if (text.equals(AllText.REGISTRATION_CANCEL)) {
+      adoptiveParentService.deleteAdoptiveParentByID(adoptiveParent.getId());
+      return formReplyMessages.replyMessage(message,"/start",configKeyboard.initKeyboardOnClickStart());
+    }else {
       return newMessage(chatId, "Введите правильный телефон, длина больше 6 символов.");
     }
+  }
+
+  public SendMessage handlerWithStatuSuccessReg(Message message,
+      AdoptiveParentRecord adoptiveParent, String text, String chatId) {
+    SendMessage sendMessage = null;
+    //если уже есть такой в таблице со статусом зареган, то просто сообщение что вы уже есть у нас
+    if (text.equals(AllText.REGISTRATION_BUTTON)) {
+      sendMessage = new SendMessage(chatId, AllText.ALREADY_REGISTERED);
+    }
+    return sendMessage;
   }
 
   private SendMessage newMessage(String chatId, String textMessage) {
     return new SendMessage(chatId, textMessage);
   }
+
   //добавляет нового пользвователя в таблиц при нажатии кнопки регистрация. Меняет статус и ракладку
   //отправляет новое сообщение
   SendMessage addToTable(Message message, String chatId) {
