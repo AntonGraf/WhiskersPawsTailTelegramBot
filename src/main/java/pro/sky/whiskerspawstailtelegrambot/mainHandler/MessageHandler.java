@@ -4,6 +4,7 @@ package pro.sky.whiskerspawstailtelegrambot.mainHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import pro.sky.whiskerspawstailtelegrambot.service.ReportService;
@@ -54,8 +55,14 @@ public class MessageHandler implements MainHandler {
   @Override
   public SendMessage handler(Update update) {
 
-    String chatId = String.valueOf(update.getMessage().getChatId());
+    String chatId = update.getMessage() != null ? String.valueOf(update.getMessage().getChatId())
+        : update.getCallbackQuery().getMessage().getChatId().toString();
     SendMessage sendMessage = new SendMessage(chatId, AllText.ERROR_REPLY_TEXT);
+    if (update.getCallbackQuery() != null) {
+      return sendMessage = callbackQueryHandler(update.getCallbackQuery());
+    }
+//    String chatId = String.valueOf(update.getMessage().getChatId());
+
     try {
       boolean checkUpdate = !update.getMessage().hasText();
       if (!checkUpdate) {
@@ -84,19 +91,10 @@ public class MessageHandler implements MainHandler {
 
           //region реализация логики Отправить отчет о питомце
           case (AllText.SEND_PET_REPORT_TEXT):     // нажатие кнопки Отправить отчет о питомце
-            sendMessage = reportAddHandler.getSendMessageReport(message, AllText.MENU_SEND_PET_REPORT_TEXT,
-                configKeyboard.formReplyKeyboardInOneRow(AllText.SHOW_ALL_YOUR_PET_TEXT, AllText.SEND_REPORT_TEXT, AllText.CANCEL_TEXT));
-            break;
-
-          case (AllText.SHOW_ALL_YOUR_PET_TEXT):     // нажатие кнопки показать всех взятых животных
             sendMessage = reportAddHandler.getSendMessageReport(message,
-                reportService.showAllAdoptedPets(message),
-                configKeyboard.formReplyKeyboardInOneRow(AllText.SHOW_ALL_YOUR_PET_TEXT, AllText.SEND_REPORT_TEXT, AllText.CANCEL_TEXT));
-            break;
-
-          case (AllText.SEND_REPORT_TEXT):     // нажатие кнопки отправить отчет
-            sendMessage = reportAddHandler.sendReport(message, AllText.DESCRIPTION_SEND_REPORT_TEXT,
-                configKeyboard.formReplyKeyboardInOneRow(AllText.SEND_TEXT, AllText.CANCEL_TEXT));
+                AllText.MENU_SEND_PET_REPORT_TEXT,
+                configKeyboard.formReplyKeyboardInlineInOneRow(AllText.SHOW_ALL_YOUR_PET_TEXT,
+                    AllText.SEND_REPORT_TEXT, AllText.CANCEL_TEXT));
             break;
           //endregion
 
@@ -118,6 +116,30 @@ public class MessageHandler implements MainHandler {
     } finally {
       return sendMessage;
     }
+  }
+
+  public SendMessage callbackQueryHandler(CallbackQuery callbackQuery) {
+
+    SendMessage sendMessage = null;
+    String textMessage = callbackQuery.getData();
+    Message message = callbackQuery.getMessage();
+    switch (textMessage) {
+
+      case (AllText.CANCEL_TEXT)://реакция на кнопку отмена - возврат в главное меню
+        sendMessage = formReplyMessages.replyMessage(message,
+            AllText.CANCEL_RETURN_MAIN_MENU_TEXT,
+            configKeyboard.initKeyboardOnClickStart());
+        break;
+
+      case (AllText.SHOW_ALL_YOUR_PET_TEXT):     // нажатие кнопки показать всех взятых животных
+        sendMessage = reportAddHandler.clickButton_SHOW_ALL_YOUR_PET(message);
+        break;
+
+      case (AllText.SEND_REPORT_TEXT):     // нажатие кнопки отправить отчет
+        sendMessage = reportAddHandler.clickButton_SEND_REPORT(message);
+        break;
+    }
+    return sendMessage;
   }
 
 }
