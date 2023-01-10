@@ -1,6 +1,7 @@
 package pro.sky.whiskerspawstailtelegrambot.mainHandler;
 
 
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -98,7 +99,7 @@ public class MessageHandler implements MainHandler {
        * Обработка стандартных сообщений от пользователя,
        * если он находится в свободном состоянии (например не в состоянии регистрации или отправки отчета)
        */
-      if (update.getMessage().hasText()) {
+      if (update.getMessage().hasText() || Objects.requireNonNull(state).ordinal() > 2) {
         return sendMessage = standardReplyHandler.handler(message);
       }
 
