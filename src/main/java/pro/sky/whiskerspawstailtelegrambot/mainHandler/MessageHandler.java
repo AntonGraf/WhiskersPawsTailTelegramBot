@@ -16,9 +16,6 @@ import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
 import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
 import pro.sky.whiskerspawstailtelegrambot.util.StatusRegistration;
 
-import java.io.ObjectInputFilter;
-import java.util.Optional;
-
 
 /**
  * обработка текстового сообщения
@@ -63,50 +60,45 @@ public class MessageHandler implements MainHandler {
         boolean checkUpdate = !update.getMessage().hasText();
         Message message = update.getMessage();
         String textMessage = message.getText();
+        //усыновитель по чатайди
         AdoptiveParentRecord adoptiveParent = checkExistAdoptiveParent(chatId);
+        //строка статуса
         String statusRegistration = checkStatusAdoptiveParent(chatId);
 
+        //тут мы обрабатываем кнопку отмена регистрации. То от начала до конца регистрации мы можем ее отменить и выйти в меню
+        //удаляем из базы усыновителя, если он там есть конечно
         if (textMessage.equals(AllText.REGISTRATION_CANCEL)) {
             if (adoptiveParent != null)
-                adoptiveParentService .deleteAdoptiveParentByID(adoptiveParent.getId());
-            return formReplyMessages.replyMessage(message, "/start",
+                adoptiveParentService.deleteAdoptiveParentByID(adoptiveParent.getId());
+            return formReplyMessages.replyMessage(message, "",
                     configKeyboard.initKeyboardOnClickStart());
         }
 
+        //проврека на нал, плюс проверка на статус начало регистрации
         if (adoptiveParent != null && statusRegistration.equals(StatusRegistration.THE_FIRST_STATE.name())) {
             //проверка имени, пока только длина, а и зачем еще что то....
             if (textMessage.length() > 6) {
-                AdoptiveParentRecord newAdoptiveParent = new AdoptiveParentRecord();
-                newAdoptiveParent.setFullName(textMessage);
-                newAdoptiveParent.setPhone("somePhone");
-                newAdoptiveParent.setState(StatusRegistration.ONLY_NAME.name());
-                newAdoptiveParent.setChatId(adoptiveParent.getChatId());
-                adoptiveParentService.updateAdoptiveParent(adoptiveParent.getId(),
-                        newAdoptiveParent);
+                //обновление имени и статуса
+                updateName(adoptiveParent, textMessage);
                 return newMessage(chatId, AllText.REG_PHONE);
             } else {
                 return newMessage(chatId, "Введите правильное имя, длина больше 6 символов.");
             }
-        } else if (checkExistAdoptiveParent(chatId) != null &&
-                checkStatusAdoptiveParent(chatId)
-                        .equals(StatusRegistration.ONLY_NAME.name())) {
+            //проврека на нал, плюс проверка на статус заполнил имя
+        } else if (adoptiveParent != null && checkStatusAdoptiveParent(chatId).equals(StatusRegistration.ONLY_NAME.name())) {
+
             //проверка phone, пока только длина, а и зачем еще что то....
             if (textMessage.length() > 6) {
                 AdoptiveParentRecord adoptiveParentOld = adoptiveParentService
                         .findAdoptiveParentByChatId(Long.parseLong(chatId));
-                AdoptiveParentRecord adoptiveParentRecord = new AdoptiveParentRecord();
-                adoptiveParentRecord.setFullName(adoptiveParentOld.getFullName());
-                adoptiveParentRecord.setPhone(textMessage);
-                adoptiveParentRecord.setState(StatusRegistration.SUCCESS.name());
-                adoptiveParentRecord.setChatId(adoptiveParentOld.getChatId());
-                adoptiveParentService.updateAdoptiveParent(adoptiveParentOld.getId(),
-                        adoptiveParentRecord);
+                updatePhone(adoptiveParentOld, textMessage);
                 sendMessage = formReplyMessages.replyMessage(message,
                         AllText.REGISTRATION_SUCCESS + adoptiveParentOld.getId(), configKeyboard.initKeyboardOnClickStart());
 
             } else {
-                return new SendMessage(chatId, "Введите правильный телефон, длина больше 6 символов.");
+                return newMessage(chatId, "Введите правильный телефон, длина больше 6 символов.");
             }
+
         } else {
 
             if (!checkUpdate) {
@@ -140,15 +132,15 @@ public class MessageHandler implements MainHandler {
                     //------------------> регистрация
 
                     case (AllText.REGISTRATION_BUTTON):
-                    //если уже есть такой в таблице со статусом зареган, то просто сообщение что вы уже есть у нас
+                        //если уже есть такой в таблице со статусом зареган, то просто сообщение что вы уже есть у нас
                         if (checkExistAdoptiveParent(chatId) != null && checkStatusAdoptiveParent(chatId)
                                 .equals(StatusRegistration.SUCCESS.name())) {
                             return new SendMessage(chatId, AllText.ALREADY_REGISTERED);
                         }
-                    //если нет в таблице со статусом зареган, то добавляем и ставим статус ферст стэйт в методе addToTable,
-                    // так же там меняем клаву на кнопку отмена регистрации
-                    //при следующем сообщении регистрация будет продолжаться в методе continueRegist, пока не зарегается до конца,
-                    // либо отменет регистрацию
+                        //если нет в таблице со статусом зареган, то добавляем и ставим статус ферст стэйт в методе addToTable,
+                        // так же там меняем клаву на кнопку отмена регистрации
+                        //при следующем сообщении регистрация будет продолжаться в методе continueRegist, пока не зарегается до конца,
+                        // либо отменет регистрацию
 
                         return addToTable(message, chatId);
 
@@ -176,25 +168,44 @@ public class MessageHandler implements MainHandler {
     }
 
     //проверяет есть ли усыновитель в таблице по чат айди
-    private AdoptiveParentRecord checkExistAdoptiveParent(String chatId){
+    private AdoptiveParentRecord checkExistAdoptiveParent(String chatId) {
         return adoptiveParentService
                 .findAdoptiveParentByChatId(Long.parseLong(chatId));
     }
 
     //проверяет статус усыновителя в таблице по чат айди
-    private String checkStatusAdoptiveParent(String chatId){
+    private String checkStatusAdoptiveParent(String chatId) {
         String status = null;
         AdoptiveParentRecord adoptiveParentRecord = adoptiveParentService
                 .findAdoptiveParentByChatId(Long.parseLong(chatId));
-        if(adoptiveParentRecord == null || adoptiveParentRecord.getState() == null) status = "NOSTATUS";
+        if (adoptiveParentRecord == null || adoptiveParentRecord.getState() == null) status = "NOSTATUS";
         else status = adoptiveParentRecord.getState();
         return status;
     }
 
-    private SendMessage newMessage(String chatId,String textMessage){
-        return new SendMessage(chatId,textMessage);
+    private SendMessage newMessage(String chatId, String textMessage) {
+        return new SendMessage(chatId, textMessage);
     }
 
+    private void updateName(AdoptiveParentRecord adoptiveParent, String name) {
+        AdoptiveParentRecord newAdoptiveParent = new AdoptiveParentRecord();
+        newAdoptiveParent.setFullName(name);
+        newAdoptiveParent.setPhone("somePhone");
+        newAdoptiveParent.setState(StatusRegistration.ONLY_NAME.name());
+        newAdoptiveParent.setChatId(adoptiveParent.getChatId());
+        adoptiveParentService.updateAdoptiveParent(adoptiveParent.getId(),
+                newAdoptiveParent);
+    }
+
+    private void updatePhone(AdoptiveParentRecord adoptiveParent, String phone) {
+        AdoptiveParentRecord adoptiveParentRecord = new AdoptiveParentRecord();
+        adoptiveParentRecord.setFullName(adoptiveParent.getFullName());
+        adoptiveParentRecord.setPhone(phone);
+        adoptiveParentRecord.setState(StatusRegistration.SUCCESS.name());
+        adoptiveParentRecord.setChatId(adoptiveParent.getChatId());
+        adoptiveParentService.updateAdoptiveParent(adoptiveParent.getId(),
+                adoptiveParentRecord);
+    }
 
 }
 
