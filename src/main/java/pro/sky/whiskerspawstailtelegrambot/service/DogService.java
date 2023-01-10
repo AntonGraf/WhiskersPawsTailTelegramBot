@@ -71,29 +71,39 @@ public class DogService {
      *
      * @param dogId
      */
-    public void removeDog (long dogId) { //Delete
+    public DogRecord removeDog (long dogId) { //Delete
         log.info("Поиск собаки в БД");
         DogRecord dogRecord = findDog(dogId);
         dogRepository.deleteById(dogRecord.getId());
+        return dogRecord;
     }
 
     /**
      * Изменение собаки в БД
+     *
      * @param dogId
      * @param fullName
      * @param age
      * @param description
      * @param photo
+     * @return
      * @throws IOException
      */
-    public void editDog(Long dogId, String fullName, String age, String description, MultipartFile photo) throws IOException { //Put
+    public DogRecord editDog(Long dogId, String fullName, String age, String description, MultipartFile photo) throws IOException { //Put
         log.info("Изменение данных собаки в БД");
         Dog dog = dogMapper.toEntity(findDog(dogId));
-        dog.setFullName(fullName);
-        dog.setAge(age);
-        dog.setDescription(description);
-        dogRepository.save(dog);
-        uploadPhoto(dogId, photo);
+        if (fullName != null && !fullName.isEmpty() && !fullName.isBlank()) {
+            dog.setFullName(fullName);
+        } else if (age != null && !age.isEmpty() && !age.isBlank()) {
+            dog.setAge(age);
+        } else if (description != null && !description.isEmpty() && !description.isBlank()) {
+            dog.setDescription(description);
+        }
+        DogRecord dogRecord = dogMapper.toRecord(dogRepository.save(dog));
+        if (photo != null) {
+            uploadPhoto(dogRecord.getId(), photo);
+        }
+        return dogRecord;
     }
 
     /**
@@ -150,17 +160,27 @@ public class DogService {
      * @param age
      * @param description
      * @param photo
+     * @return
      * @throws IOException
      */
-    public void addDog(String fullName, String age, String description, MultipartFile photo) throws IOException { //Post
+    public DogRecord addDog(String fullName, String age, String description, MultipartFile photo) throws IOException { //Post
         log.info("Добавление собаки в БД");
         Dog dog = new Dog();
-        dog.setFullName(fullName);
-        dog.setAge(age);
-        dog.setDescription(description);
+        if (fullName != null && !fullName.isEmpty() && !fullName.isBlank()) {
+            dog.setFullName(fullName);
+        } else if (age != null && !age.isEmpty() && !age.isBlank()) {
+            dog.setAge(age);
+        } else if (description != null && !description.isEmpty() && !description.isBlank()) {
+            dog.setDescription(description);
+        }
         DogRecord dogRecord = dogMapper.toRecord(dogRepository.save(dog));
-        uploadPhoto(dogRecord.getId(), photo);
+        if (photo != null) {
+            uploadPhoto(dogRecord.getId(), photo);
+        }
+        return dogRecord;
     }
+
+
 
 
 

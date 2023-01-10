@@ -60,7 +60,7 @@ public class DogController {
             )
     })
     @GetMapping(value = "{id}")
-    public ResponseEntity<DogRecord> findDog(@PathVariable Long id) {
+    public ResponseEntity<?> findDog(@PathVariable Long id) {
         DogRecord dogRecord = dogService.findDog(id);
         return ResponseEntity.ok().body(dogRecord);
     }
@@ -88,7 +88,7 @@ public class DogController {
             )
     })
     @GetMapping("/all")
-    public ResponseEntity<Collection<DogRecord>> findAllDog() {
+    public ResponseEntity<?> findAllDog() {
         Collection<DogRecord> recordCollection = dogService.findAllDog();
         return ResponseEntity.ok().body(recordCollection);
     }
@@ -116,7 +116,6 @@ public class DogController {
                     }
             )
     })
-    @ResponseBody
     @GetMapping(produces = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<byte[]> getDogPhoto(@RequestParam(name = "id") Long id) {
         DogRecord dog = dogService.findDog(id);
@@ -147,7 +146,7 @@ public class DogController {
                     }
             )
     })
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<DogRecord> addDog(
             @RequestParam(required = false) String fullName,
             @RequestParam(required = false) String age,
@@ -190,35 +189,6 @@ public class DogController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "Добавление фото по id собаки")
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Добавлено фото собаки",
-                    content = {
-                            @Content(
-                                    mediaType = "multipart/form-data",
-                                    array = @ArraySchema(schema = @Schema(implementation = DogRecord.class)))
-                    }
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Либо не введены парметры, либо нет объекта по указанному идентификатору" +
-                            "и идентификаторы меньше 1",
-                    content = {
-                            @Content(
-                                    mediaType = "multipart/form-data",
-                                    array = @ArraySchema(schema = @Schema(implementation = ErrorResponse.class)))
-                    }
-            )
-    })
-    @PutMapping(value = "/{dogId}/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<DogRecord> uploadAvatar(@RequestParam MultipartFile photo, @PathVariable Long dogId) throws IOException {
-        dogService.uploadPhoto(dogId, photo);
-        return ResponseEntity.ok().build();
-    }
-
-
     @Operation(summary = "Добавление id усыновителя в БД в таблицу Dog")
     @ApiResponses({
             @ApiResponse(
@@ -246,9 +216,6 @@ public class DogController {
         dogService.addIdAdoptiveParent(dogId, adoptiveParentId);
         return ResponseEntity.ok().build();
     }
-
-
-
 
 
     @Operation(summary = "Удаление собаки по id")

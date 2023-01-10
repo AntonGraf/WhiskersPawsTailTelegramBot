@@ -5,7 +5,7 @@ CREATE TABLE dog
     age TEXT,
     description TEXT,
     file_path TEXT,
-    size BIGINT DEFAULT 1024,
+    size BIGINT DEFAULT 1,
     type TEXT,
     photo oid
 );
