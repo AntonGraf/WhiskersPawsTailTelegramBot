@@ -62,7 +62,7 @@ public class DogController {
     @GetMapping(value = "{id}")
     public ResponseEntity<DogRecord> findDog(@PathVariable Long id) {
         DogRecord dogRecord = dogService.findDog(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(dogRecord);
     }
 
     @Operation(summary = "Получение списка всех собак в приюте")
@@ -90,7 +90,7 @@ public class DogController {
     @GetMapping("/all")
     public ResponseEntity<Collection<DogRecord>> findAllDog() {
         Collection<DogRecord> recordCollection = dogService.findAllDog();
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(recordCollection);
     }
 
 
@@ -149,10 +149,10 @@ public class DogController {
     })
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<DogRecord> addDog(
-            @RequestParam String fullName,
-            @RequestParam int age,
-            @RequestParam String description,
-            @RequestParam MultipartFile photo) throws IOException {
+            @RequestParam(required = false) String fullName,
+            @RequestParam(required = false) String age,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false) MultipartFile photo) throws IOException {
         dogService.addDog(fullName, age, description, photo);
         return ResponseEntity.ok().build();
     }
@@ -182,10 +182,10 @@ public class DogController {
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<DogRecord> editDog(
             @RequestParam Long id,
-            @RequestParam String fullName,
-            @RequestParam int age,
-            @RequestParam String description,
-            @RequestParam MultipartFile photo) throws IOException {
+            @RequestParam(required = false) String fullName,
+            @RequestParam(required = false) String age,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false) MultipartFile photo) throws IOException {
         dogService.editDog(id, fullName, age, description, photo);
         return ResponseEntity.ok().build();
     }

@@ -61,7 +61,7 @@ public class DogService {
      * Коллекция всех собак в БД
      * @return список всех собак хранящиеся в БД
      */
-    public Collection<DogRecord> findAllDog() { //Get
+    public Collection<DogRecord> findAllDog() { //GetAll
         log.info("Поиск всех собак в БД");
         return dogMapper.toRecordList(dogRepository.findAll());
     }
@@ -86,7 +86,7 @@ public class DogService {
      * @param photo
      * @throws IOException
      */
-    public void editDog(Long dogId, String fullName, int age, String description, MultipartFile photo) throws IOException { //Put
+    public void editDog(Long dogId, String fullName, String age, String description, MultipartFile photo) throws IOException { //Put
         log.info("Изменение данных собаки в БД");
         Dog dog = dogMapper.toEntity(findDog(dogId));
         dog.setFullName(fullName);
@@ -152,7 +152,7 @@ public class DogService {
      * @param photo
      * @throws IOException
      */
-    public void addDog(String fullName, int age, String description, MultipartFile photo) throws IOException { //Post
+    public void addDog(String fullName, String age, String description, MultipartFile photo) throws IOException { //Post
         log.info("Добавление собаки в БД");
         Dog dog = new Dog();
         dog.setFullName(fullName);

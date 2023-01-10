@@ -49,8 +49,6 @@ class Lupaev_TelegramBotApplicationTests_Dog {
                 .isNotNull();
         assertThat(this.restTemplate.getForEntity("http://localhost:" + port + "/dogs/1", DogRecord.class))
                 .isNotNull();
-        assertThat(this.restTemplate.getForEntity("http://localhost:" + port + "/dogs", HttpServletResponse.class))
-                .isNotNull();
     }
 
     @Test
@@ -64,23 +62,22 @@ class Lupaev_TelegramBotApplicationTests_Dog {
                 .isNotNull();
     }
 
-//    @Test
-//    public void putTest() throws  Exception {
-//        DogRecord dogRecord = dogService.findDog(4);
-//        Dog dog = new Dog();
-////        dog.setId(1);
-////        dog.setFullName("testName");
-////        dog.setAge(1);
-////        dog.setDescription("testDog");
-//        dog = dogMapper.toEntity(dogRecord);
-//
-////        dog.setFileSize(1024);
-////        DogRecord dogRecord = DogMapper.class.
-//        assertThat(this.restTemplate.exchange("http://localhost:" + port + "/dogs", HttpMethod.PUT,new HttpEntity<>(dog), Dog.class))
-//                .isNotNull();
-//
-//
-//    }
+
+    @Test
+    public void putTest() throws  Exception {
+        DogRecord dogRecord = dogService.findDog(1);
+        Dog dog = new Dog();
+//        dog.setId(1);
+//        dog.setFullName("testName");
+//        dog.setAge(1);
+
+        dog = dogMapper.toEntity(dogRecord);
+        dog.setFullName("testName");
+        dog.setDescription("testDog");
+//        dog.setFileSize(1024);
+        assertThat(this.restTemplate.exchange("http://localhost:" + port + "/dogs", HttpMethod.PUT,new HttpEntity<>(dog), Dog.class))
+                .isNotNull();
+    }
 
 
 

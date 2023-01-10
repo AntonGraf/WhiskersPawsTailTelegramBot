@@ -21,13 +21,13 @@ import java.util.List;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class DogRecord implements Serializable {
     long id;
-    @NotNull
+//    @NotNull
     String fullName;
 
-    @NotNull
-    int age;
+//    @NotNull
+    String age;
 
-    @NotNull
+//    @NotNull
     String description;
 
     String filePath;
