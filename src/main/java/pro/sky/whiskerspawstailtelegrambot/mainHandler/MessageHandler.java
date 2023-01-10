@@ -70,7 +70,7 @@ public class MessageHandler implements MainHandler {
         if (textMessage.equals(AllText.REGISTRATION_CANCEL)) {
             if (adoptiveParent != null)
                 adoptiveParentService.deleteAdoptiveParentByID(adoptiveParent.getId());
-            return formReplyMessages.replyMessage(message, "",
+            return formReplyMessages.replyMessage(message, "/start",
                     configKeyboard.initKeyboardOnClickStart());
         }
 
