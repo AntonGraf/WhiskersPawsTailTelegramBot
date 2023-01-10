@@ -16,6 +16,8 @@ import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
 import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
 import pro.sky.whiskerspawstailtelegrambot.util.StatusRegistration;
 
+import java.util.Optional;
+
 
 /**
  * обработка текстового сообщения
@@ -180,9 +182,10 @@ public class MessageHandler implements MainHandler {
 
     //проверяет статус усыновителя в таблице по чат айди
     private String checkStatusAdoptiveParent(String chatId){
-        return adoptiveParentService
+        Optional<String> status = Optional.of(adoptiveParentService
                 .findAdoptiveParentByChatId((Long.parseLong(chatId)))
-                .getState();
+                .getState());
+        return status.orElse("");
     }
 
     private SendMessage newMessage(String chatId,String textMessage){
