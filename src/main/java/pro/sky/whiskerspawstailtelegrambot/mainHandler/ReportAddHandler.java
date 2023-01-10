@@ -19,15 +19,29 @@ public class ReportAddHandler implements MainHandler {
   public ReportAddHandler(FormReplyMessages formReplyMessages) {
     this.formReplyMessages = formReplyMessages;
   }
+
   @Override
   public SendMessage handler(Update update) {
     return null;
   }
-  public SendMessage handlerReport(
+
+  public SendMessage getSendMessageReport(
       Message message, String textReplyMessage, ReplyKeyboardMarkup keyboardMarkup) {
     SendMessage sendMessage = formReplyMessages.replyMessage(message, textReplyMessage,
         keyboardMarkup);
     return sendMessage;
+  }
+
+  public SendMessage sendReport(
+      Message message, String textReplyMessage, ReplyKeyboardMarkup keyboardMarkup) {
+
+
+
+
+
+    return getSendMessageReport(message, textReplyMessage,
+        keyboardMarkup);
+
   }
 
 
