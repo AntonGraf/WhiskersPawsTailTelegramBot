@@ -13,10 +13,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pro.sky.whiskerspawstailtelegrambot.exception.ErrorResponse;
 import pro.sky.whiskerspawstailtelegrambot.record.VolunteerRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.VolunteerService;
@@ -29,6 +26,7 @@ import java.util.Collection;
  * Контроллер для волонтеров
  */
 @RestController
+@RequestMapping("/volunteer")
 @Getter
 @Setter
 @Slf4j
@@ -64,12 +62,12 @@ public class VolunteerController {
                     }
             )
     })
-    @GetMapping(value = "/getVolunteerById")
-    public ResponseEntity<VolunteerRecord> getAdoptiveParentByID
+    @GetMapping("{volunteerId}")
+    public ResponseEntity<VolunteerRecord> getVolunteer
             (
                     @NotBlank(message = "volunteerId пустой")
                     @Min(value = 1, message = "Идентификатор волонтера должен быть больше 0")
-                    @RequestParam(name = "volunteerId")
+                    @PathVariable(name = "volunteerId")
                     @Parameter(description = "Идентификатор волонтера",
                             example = "1")
                     long volunteerId
@@ -99,12 +97,12 @@ public class VolunteerController {
                     }
             )
     })
-    @DeleteMapping(value = "/deleteVolunteerId")
+    @DeleteMapping("{volunteerId}")
     public ResponseEntity<VolunteerRecord> deleteVolunteerById
             (
                     @NotBlank(message = "volunteerId пустой")
                     @Min(value = 1, message = "Идентификатор волонтера должен быть больше 0")
-                    @RequestParam(name = "volunteerId")
+                    @PathVariable(name = "volunteerId")
                     @Parameter(description = "Идентификатор волонтера",
                             example = "1")
                     long volunteerId
@@ -138,6 +136,106 @@ public class VolunteerController {
     @GetMapping(value = "/getListOfVolunteer")
     public ResponseEntity<Collection<VolunteerRecord>> getListOfVolunteerRecord(){
         return ResponseEntity.ok(volunteerService.getAllVolunteers());
+    }
+
+    @Operation(summary = "Добавление нового волонтера в БД")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Добавлен новый волонтер",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = VolunteerRecord.class)))
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Не введены параметры",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ErrorResponse.class)))
+                    }
+            )
+    })
+    @PostMapping("/addVolunteer")
+    public ResponseEntity<VolunteerRecord> addVolunteer(@RequestParam(required = false)
+                                                            @NotBlank(message = "Полное имя пустое")
+                                                            @Parameter(description = "Полное имя волонтера",
+                                                                    example = "Иванов Иван Иванович")
+                                                            String fullName,
+                                                        @RequestParam(required = false)
+                                                            @NotBlank(message = "Номер телефона пуст")
+                                                            @Parameter(description = "Номер телефона волонтера",
+                                                                    example = "+79876543210")
+                                                            String phone,
+                                                        @RequestParam(required = false)
+                                                            @NotBlank(message = "Отсутствует информация о волонтере")
+                                                            @Parameter(description = "Информация о волонтере",
+                                                                    example = "Это волонтер... Я занимаюсь...")
+                                                            String info,
+                                                        @RequestParam(required = false)
+                                                            @NotBlank(message = "Отсутствует время работы волонтера")
+                                                            @Parameter(description = "Время работы волонтера",
+                                                                    example = "пн-пт с 9:00 до 17:00")
+                                                            String schedule) {
+
+        return ResponseEntity.ok(volunteerService.addVolunteer(fullName, phone, info, schedule));
+    }
+
+    @Operation(summary = "Обновление волонтера в БД")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Данные волонтера обновлены",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = VolunteerRecord.class)))
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Не введены параметры",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ErrorResponse.class)))
+                    }
+            )
+    })
+    @PostMapping("{volunteerId}")
+    public ResponseEntity<VolunteerRecord> updateVolunteer(@NotBlank(message = "volunteerId пустой")
+                                                               @Min(value = 1, message = "Идентификатор волонтера " +
+                                                                       "должен быть больше 0")
+                                                               @PathVariable(name = "volunteerId")
+                                                               @Parameter(description = "Идентификатор волонтера",
+                                                                       example = "1")
+                                                               Long volunteerId,
+                                                           @RequestParam(required = false)
+                                                                @Parameter(description = "Полное имя волонтера",
+                                                                       example = "Иванов Иван Иванович")
+                                                                String fullName,
+                                                           @RequestParam(required = false)
+                                                               @Parameter(description = "Номер телефона волонтера",
+                                                                       example = "+79876543210")
+                                                               String phone,
+                                                           @RequestParam(required = false)
+                                                               @Parameter(description = "Информация о волонтере",
+                                                                       example = "Это волонтер... Я занимаюсь...")
+                                                               String info,
+                                                           @RequestParam(required = false)
+                                                               @Parameter(description = "Время работы волонтера",
+                                                                       example = "пн-пт с 9:00 до 17:00")
+                                                               String schedule,
+                                                           @RequestParam(required = false)
+                                                               @Parameter(description = "ID приюта, в котором " +
+                                                                       "работает волонтер",
+                                                                       example = "1")
+                                                               Long shelterId) {
+
+        return ResponseEntity.ok(volunteerService.updateVolunteer(volunteerId, fullName, phone, info, schedule, shelterId));
     }
 
 }
