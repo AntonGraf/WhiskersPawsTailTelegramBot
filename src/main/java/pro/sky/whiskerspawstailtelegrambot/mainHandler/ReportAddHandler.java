@@ -1,23 +1,27 @@
 package pro.sky.whiskerspawstailtelegrambot.mainHandler;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import pro.sky.whiskerspawstailtelegrambot.service.ReportService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
+import pro.sky.whiskerspawstailtelegrambot.util.StateSendReport;
 
 /**
  * обработка репорт на будующее
  */
+@Slf4j
 @Component
-public class ReportAddHandler implements MainHandler {
+public class ReportAddHandler  {
 
   private final FormReplyMessages formReplyMessages;
   private final ReportService reportService;
@@ -31,13 +35,13 @@ public class ReportAddHandler implements MainHandler {
     this.configKeyboard = configKeyboard;
   }
 
-  @Override
-  public SendMessage handler(Update update) {
-    return null;
-  }
+
 
   public SendMessage getSendMessageReport(
       Message message, String textReplyMessage, ReplyKeyboardMarkup keyboardMarkup) {
+    log.info("Вызов метода " + new Throwable()
+        .getStackTrace()[0]
+        .getMethodName() + " класса " + this.getClass().getName());
     SendMessage sendMessage = formReplyMessages.replyMessage(message, textReplyMessage,
         keyboardMarkup);
     return sendMessage;
@@ -54,7 +58,32 @@ public class ReportAddHandler implements MainHandler {
    */
   public SendMessage getSendMessageReport(
       Message message, String textReplyMessage, InlineKeyboardMarkup inlineKeyboardMarkup) {
-
+    log.info("Вызов метода " + new Throwable()
+        .getStackTrace()[0]
+        .getMethodName() + " класса " + this.getClass().getName());
+    return formReplyMessages.replyMessage(message, textReplyMessage,
+        inlineKeyboardMarkup);
+  }
+  /**
+   * Перегрузка. Метод вызывается из других методов, получает параметры формирует и возвращает SendMessage
+   * или SendMessage с сообщение об ошибке,нужен для сокращения кода
+   *
+   * @param message              сообщение из update
+   * @param textReplyMessage     текс сообщения для вывода на экранпользователю, в ответ на его
+   *                             действие
+   * @param inlineKeyboardMarkup инлайн клавиатура, котора выводится пользователю   *
+   * @param isSuccessful если false, то будет отправлено сообщение об ошибке и возврат в главное меню   *
+   */
+  public SendMessage getSendMessageReport(
+      Message message, String textReplyMessage, InlineKeyboardMarkup inlineKeyboardMarkup,
+      boolean isSuccessful) {
+    log.info("Вызов метода " + new Throwable()
+        .getStackTrace()[0]
+        .getMethodName() + " класса " + this.getClass().getName());
+    if (!isSuccessful) {
+      return formReplyMessages.replyMessageError(message, AllText.ERROR_REPLY_TEXT,
+          configKeyboard.formReplyKeyboardInOneRow(AllText.INFO_SHELTER_TEXT, AllText.SEND_REPORT_TEXT));
+    }
     return formReplyMessages.replyMessage(message, textReplyMessage,
         inlineKeyboardMarkup);
   }
@@ -67,9 +96,11 @@ public class ReportAddHandler implements MainHandler {
    * @param message сообщение из update
    */
   public SendMessage clickButton_SHOW_ALL_YOUR_PET(Message message) {
-
+    log.info("Вызов метода " + new Throwable()
+        .getStackTrace()[0]
+        .getMethodName() + " класса " + this.getClass().getName());
     String allPetByChatId = reportService.showAllAdoptedPets(message);
-    InlineKeyboardMarkup inlineKeyboardMarkup = configKeyboard.formReplyKeyboardInlineInOneRow(
+    InlineKeyboardMarkup inlineKeyboardMarkup = configKeyboard.formReplyKeyboardInOneRowInline(
         AllText.SHOW_ALL_YOUR_PET_TEXT,
         AllText.SEND_REPORT_TEXT, AllText.CANCEL_TEXT);
 
@@ -84,14 +115,17 @@ public class ReportAddHandler implements MainHandler {
    * @param message сообщение из update
    */
   public SendMessage clickButton_SEND_REPORT(Message message) {
-
-    InlineKeyboardMarkup inlineKeyboardMarkup = configKeyboard.formReplyKeyboardInlineInOneRow(
+    log.info("Вызов метода " + new Throwable()
+        .getStackTrace()[0]
+        .getMethodName() + " класса " + this.getClass().getName());
+    InlineKeyboardMarkup inlineKeyboardMarkup = configKeyboard.formReplyKeyboardInOneRowInline(
         AllText.CANCEL_TEXT);
 
-    reportService.changeStateAdoptiveParent(message);
+    boolean isChangeState = reportService.changeStateAdoptiveParent(message,
+        StateSendReport.WAIT_SEND_REPORT);
 
     return sendMessage = getSendMessageReport(message, AllText.DESCRIPTION_SEND_REPORT_TEXT,
-        inlineKeyboardMarkup);
+        inlineKeyboardMarkup, isChangeState);
   }
 
   //endregion
@@ -101,7 +135,33 @@ public class ReportAddHandler implements MainHandler {
    *
    * @param
    */
-  public void sendReport() {
+  public SendMessage sendReport(Message message) {
+    log.info("Вызов метода " + new Throwable()
+        .getStackTrace()[0]
+        .getMethodName() + " класса " + this.getClass().getName());
+    InlineKeyboardMarkup inlineKeyboardMarkup = configKeyboard.formReplyKeyboardInOneRowInline(
+        AllText.CANCEL_TEXT);
+
+    String textMessage = message.getText();
+    checkTextInSentReport(textMessage);
+
+    boolean isChangeState = reportService.changeStateAdoptiveParent(message, StateSendReport.FREE);
+
+    return sendMessage = getSendMessageReport(message, AllText.DESCRIPTION_SEND_REPORT_TEXT,
+        inlineKeyboardMarkup, isChangeState);
+  }
+
+  public  void checkTextInSentReport(String textMessage){
+
+    String text = "Егор Алла Александр";
+    Pattern pattern = Pattern.compile("(([\\w]{2})([\\s]{2}))");
+    Matcher matcher = pattern.matcher(text);
+
+
+  }
+  public  void checkPhotoInSentReport(){
+
+
 
   }
 

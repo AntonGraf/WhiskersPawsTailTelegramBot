@@ -79,7 +79,7 @@ public class ConfigKeyboard extends Button {
     return keyboardMarkup;
   }
 
-  public InlineKeyboardMarkup formReplyKeyboardInlineInOneRow(String... textButtons) {
+  public InlineKeyboardMarkup formReplyKeyboardInOneRowInline(String... textButtons) {
 
     InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
     List<List<InlineKeyboardButton>> listRow = new ArrayList<>();

@@ -5,10 +5,12 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.record.DogRecord;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
+import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
 import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
 import pro.sky.whiskerspawstailtelegrambot.util.StateSendReport;
 
@@ -19,18 +21,22 @@ public class ReportService {
 
   private final DogService dogService;
   private final ParserToBot parserToBot;
+  private final FormReplyMessages formReplyMessages;
 
   private final AdoptiveParentService adoptiveParentService;
 
   public ReportService(DogService dogService, ParserToBot parserToBot,
-      AdoptiveParentService adoptiveParentService) {
+      FormReplyMessages formReplyMessages, AdoptiveParentService adoptiveParentService) {
     this.dogService = dogService;
     this.parserToBot = parserToBot;
+    this.formReplyMessages = formReplyMessages;
     this.adoptiveParentService = adoptiveParentService;
   }
 
   public String showAllAdoptedPets(Message message) {
-    log.debug("Вызов метода showAllAdoptedPets");
+    log.info("Вызов метода " + new Throwable()
+        .getStackTrace()[0]
+        .getMethodName() + " класса " + this.getClass().getName());
     long chatId = message.getChatId();
     Collection<DogRecord> dogRecordsFilter = dogService.findAllDog()
         .stream()
@@ -41,12 +47,20 @@ public class ReportService {
     return allAdoptedPets == null ? AllText.YOU_HAVE_NO_ADOPTED_PETS_TEXT : allAdoptedPets;
   }
 
-  public void changeStateAdoptiveParent(Message message) {
+  public boolean changeStateAdoptiveParent(Message message, StateSendReport state) {
+    log.info("Вызов метода " + new Throwable()
+        .getStackTrace()[0]
+        .getMethodName() + " класса " + this.getClass().getName());
     long chatId = message.getChatId();
-    long id = adoptiveParentService.getParentIdByNameAndPhoneAndChatId(null, null, chatId);
-    AdoptiveParentRecord adoptiveParentRecord = adoptiveParentService.getAdoptiveParentByID(id);
-    adoptiveParentRecord.setState(StateSendReport.WAIT_SEND_REPORT.getText());
-    adoptiveParentService.updateAdoptiveParent(id, adoptiveParentRecord);
+
+    AdoptiveParentRecord adoptiveParentRecord = adoptiveParentService.getAdoptiveParentByChatId(
+        chatId);
+    if (adoptiveParentRecord != null) {
+      adoptiveParentRecord.setState(state.getText());
+      adoptiveParentService.updateAdoptiveParent(adoptiveParentRecord.getId(), adoptiveParentRecord);
+      return true;
+    }
+    return false;
 
   }
 }

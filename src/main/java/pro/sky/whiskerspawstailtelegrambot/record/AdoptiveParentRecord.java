@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
@@ -21,9 +22,10 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Getter
 public class AdoptiveParentRecord implements Serializable {
 
-    @JsonIgnore
+//    @JsonIgnore
     long id;
 
     @NotNull(message = "Обязательно нужно заполнить поле")
@@ -33,14 +35,14 @@ public class AdoptiveParentRecord implements Serializable {
     @Size(message = "Длина не должна быть меньше 5 знаков и не больше 30", min = 5, max = 30)
     String phone;
 
-    @JsonIgnore
+//    @JsonIgnore
     boolean isParent;
 
     @JsonIgnore
     String state;
 
 
-    @JsonIgnore
+//    @JsonIgnore
     long chatId;
     @JsonIgnore
     List<DogRecord> dogs;

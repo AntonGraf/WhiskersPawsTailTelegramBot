@@ -32,4 +32,17 @@ public class FormReplyMessages {
         return sendMessage;
     }
 
+    public SendMessage replyMessageError(Message message, String textReplyMessage, InlineKeyboardMarkup inlineKeyboardMarkup) {
+        String chatId = String.valueOf(message.getChatId());
+        SendMessage sendMessage = new SendMessage(chatId, textReplyMessage);
+        sendMessage.setReplyMarkup(inlineKeyboardMarkup);
+        return sendMessage;
+    }
+    public SendMessage replyMessageError(Message message, String textReplyMessage, ReplyKeyboardMarkup inlineKeyboardMarkup) {
+        String chatId = String.valueOf(message.getChatId());
+        SendMessage sendMessage = new SendMessage(chatId, textReplyMessage);
+        sendMessage.setReplyMarkup(inlineKeyboardMarkup);
+        return sendMessage;
+    }
+
 }
