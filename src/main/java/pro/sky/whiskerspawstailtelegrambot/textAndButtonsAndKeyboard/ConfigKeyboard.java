@@ -22,49 +22,59 @@ import java.util.List;
 @Configuration
 @Slf4j
 public class ConfigKeyboard extends Button {
-    /**
-     * Метод установки клавиатуры на нажатие start
-     */
-    public ReplyKeyboardMarkup initKeyboardOnClickStart(){
 
-        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-        List<KeyboardRow> KEYBOARD_BUTTONS_ROW_INFO_REPORT = new ArrayList<>();
-        KeyboardRow row = new KeyboardRow();
-        row.add(INFO_SHELTER_BUTTON);
-        row.add(SEND_PET_REPORT_BUTTON);
-        row.add(REGISTRATION_BUT);
-        KEYBOARD_BUTTONS_ROW_INFO_REPORT.add(row);
-        keyboardMarkup.setResizeKeyboard(true);
-        keyboardMarkup.setKeyboard(KEYBOARD_BUTTONS_ROW_INFO_REPORT);
-        return keyboardMarkup;
+  /**
+   * Метод установки клавиатуры на нажатие start
+   */
+  public ReplyKeyboardMarkup initKeyboardOnClickStart() {
+
+    ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+    List<KeyboardRow> KEYBOARD_BUTTONS_ROW_INFO_REPORT = new ArrayList<>();
+    KeyboardRow row = new KeyboardRow();
+    row.add(INFO_SHELTER_BUTTON);
+    row.add(SEND_PET_REPORT_BUTTON);
+    KEYBOARD_BUTTONS_ROW_INFO_REPORT.add(row);
+    keyboardMarkup.setResizeKeyboard(true);
+    keyboardMarkup.setKeyboard(KEYBOARD_BUTTONS_ROW_INFO_REPORT);
+    return keyboardMarkup;
+  }
+
+  /**
+   * Метод установки клавиатуры на нажатие отправить отчет
+   */
+//  public ReplyKeyboardMarkup initKeyboardOnClickSendPetReport() {
+//
+//    ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+//    List<KeyboardRow> KEYBOARD_BUTTONS_ROW_INFO_REPORT = new ArrayList<>();
+//    KeyboardRow row = new KeyboardRow();
+//    row.add(SHOW_ALL_YOUR_PET_BUTTON);
+//    row.add(SEND_REPORT_BUTTON);
+//    row.add(CANCEL_BUTTON);
+//    KEYBOARD_BUTTONS_ROW_INFO_REPORT.add(row);
+//    keyboardMarkup.setResizeKeyboard(true);
+//    keyboardMarkup.setKeyboard(KEYBOARD_BUTTONS_ROW_INFO_REPORT);
+//    return keyboardMarkup;
+//  }
+
+  /**
+   * Метод формирует клавиатуры из переданного текста
+   * @param textButtons текст кнопок, список может быть любой длинны
+   * @return клавиатуру с текстом кнопок из textButtons
+   */
+  public ReplyKeyboardMarkup formReplyKeyboardInOneRow(String... textButtons) {
+
+    ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+    List<KeyboardRow> KEYBOARD_BUTTONS = new ArrayList<>();
+    KeyboardRow row = new KeyboardRow();
+
+    for (String textButton : textButtons) {
+      row.add(new KeyboardButton(textButton));
     }
-    /**
-     * Метод установки клавиатуры на нажатие отправить отчет
-     */
-    public ReplyKeyboardMarkup initKeyboardOnClickSendPetReport(){
+    KEYBOARD_BUTTONS.add(row);
+    keyboardMarkup.setResizeKeyboard(true);
+    keyboardMarkup.setKeyboard(KEYBOARD_BUTTONS);
+    return keyboardMarkup;
+  }
 
-        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-        List<KeyboardRow> KEYBOARD_BUTTONS_ROW_INFO_REPORT = new ArrayList<>();
-        KeyboardRow row = new KeyboardRow();
-        row.add(SHOW_ALL_YOUR_PET_BUTTON);
-        row.add(SEND_REPORT_BUTTON);
-        row.add(CANCEL_BUTTON);
-        KEYBOARD_BUTTONS_ROW_INFO_REPORT.add(row);
-        keyboardMarkup.setResizeKeyboard(true);
-        keyboardMarkup.setKeyboard(KEYBOARD_BUTTONS_ROW_INFO_REPORT);
-        return keyboardMarkup;
-    }
 
-    public ReplyKeyboardMarkup initKeyboardOnClickRegistration(){
-
-        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-        List<KeyboardRow> KEYBOARD_BUTTONS_ROW_INFO_REPORT = new ArrayList<>();
-        KeyboardRow row = new KeyboardRow();
-        row.add(REGISTRATION_CANCEL);
-        KEYBOARD_BUTTONS_ROW_INFO_REPORT.add(row);
-        keyboardMarkup.setResizeKeyboard(true);
-        keyboardMarkup.setKeyboard(KEYBOARD_BUTTONS_ROW_INFO_REPORT);
-        return keyboardMarkup;
-
-    }
 }

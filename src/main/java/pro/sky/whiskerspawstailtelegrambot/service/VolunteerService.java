@@ -25,19 +25,32 @@ public class VolunteerService {
         this.volunteerMapper = volunteerMapper;
     }
 
-
+    /**
+     * Возвращает всех волонтеров из БД
+     * @return  - список всех волонтеров
+     */
     public Collection<VolunteerRecord> getAllVolunteers() {
         log.info("Получаем список всех волонтеров");
         return volunteerMapper.toRecordList(volunteerRepo.findAll());
     }
+
     /**
-     * Добавление волонтера вБД
-     * @param volunteerRecord   - сущность для сохранения
-     * @return                  - сохраненную сущность
+     * Добавление волонтера в БД
+     * @param fullName  - новое полное имя
+     * @param phone     - новый номер телефона
+     * @param info      - новая информация
+     * @param schedule  - новый режим работы
+     * @return          - сохраненную в БД запись волонтера
      */
-    public VolunteerRecord addVolunteer(VolunteerRecord volunteerRecord) {
-        log.info("Добавляем волонтера" + volunteerRecord);
-        return volunteerMapper.toRecord(volunteerRepo.save(volunteerMapper.toEntity(volunteerRecord)));
+    public VolunteerRecord addVolunteer(String fullName, String phone, String info, String schedule) {
+        log.info("Добавляем волонтера" + fullName);
+
+        Volunteer volunteer = new Volunteer();
+        volunteer.setInfoVolunteer(info);
+        volunteer.setSchedule(schedule);
+        volunteer.setPhone(phone);
+        volunteer.setFullName(fullName);
+        return volunteerMapper.toRecord(volunteerRepo.save(volunteer));
     }
 
     /**
@@ -74,18 +87,35 @@ public class VolunteerService {
 
     /**
      * Обновляет волонтера по Id
-     * @param volunteerId       - id волонтера, которого необходимо обновить
-     * @param volunteerRecord   - данные волонтера для обновления
-     * @return                  - обновленного волонтера
+     * @param volunteerId   - id волонтера, которого необходимо обновить
+     * @param fullName      - новое имя
+     * @param phone         - новый номер телефона
+     * @param info          - новая информация
+     * @param schedule      - новое время работы
+     * @return              - обновленную запись волонтера
      */
-    public VolunteerRecord updateVolunteer(long volunteerId, VolunteerRecord volunteerRecord) {
-        log.info("Обновление волонтера" + volunteerId);
+    public VolunteerRecord updateVolunteer(long volunteerId, String fullName, String phone, String info,
+                                           String schedule, Long shelterId) {
 
+        log.info("Обновление волонтера" + volunteerId);
         Volunteer oldVolunteer = volunteerMapper.toEntity(getVolunteerById(volunteerId));
-        oldVolunteer.setInfo_volunteer(volunteerRecord.getInfo_volunteer());
-        oldVolunteer.setFullName(volunteerRecord.getFullName());
-        oldVolunteer.setPhone(volunteerRecord.getPhone());
-        oldVolunteer.setSchedule(volunteerRecord.getSchedule());
+
+        if (fullName != null) {
+            oldVolunteer.setFullName(fullName);
+        }
+        if (phone != null) {
+            oldVolunteer.setPhone(phone);
+        }
+        if (info != null) {
+            oldVolunteer.setInfoVolunteer(info);
+        }
+        if (schedule != null) {
+            oldVolunteer.setSchedule(schedule);
+        }
+        if (shelterId != null) {
+            //TODO: Добавить установку приюта, когда добавиться поиск по id в ShelterService
+        }
+
         return volunteerMapper.toRecord(volunteerRepo.save(oldVolunteer));
     }
 }
