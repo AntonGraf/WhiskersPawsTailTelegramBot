@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pro.sky.whiskerspawstailtelegrambot.entity.Shelter;
 import pro.sky.whiskerspawstailtelegrambot.entity.Volunteer;
 import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
 import pro.sky.whiskerspawstailtelegrambot.mapper.VolunteerMapper;
@@ -38,6 +39,7 @@ class VolunteerServiceTest {
     @InjectMocks
     private VolunteerService out;
 
+
     /**
      * Параметры для проверки добавления в репозиторий
      * @return  - аргументы для с различными VolunteerRecord для теста
@@ -47,18 +49,17 @@ class VolunteerServiceTest {
                 Arguments.of(new VolunteerRecord(1, "Ивченко Валентин Генадьевич", "89146667454",
                         "Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
                                 "предложен списокнаших волонтеров и их номера. Пожалуста уитывайте их расписание и они" +
-                                " будут рады вам помочь.", "рабочие дни 14-22ч")),
+                                " будут рады вам помочь.", "рабочие дни 14-22ч", getTestShelter())),
                 Arguments.of(new VolunteerRecord(2, "Селезнева Лариса Игоревна", "89246554324",
                         "Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
                                 "предложен списокнаших волонтеров и их номера. Пожалуста уитывайте их расписание и они" +
-                                " будут рады вам помочь.", "каждый день 8-16ч")),
+                                " будут рады вам помочь.", "каждый день 8-16ч", getTestShelter())),
                 Arguments.of(new VolunteerRecord(3, "Фаер Людмила Анатольевна", "89045647676",
                         "Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
                                 "предложен списокнаших волонтеров и их номера. Пожалуста уитывайте их расписание и они" +
-                                " будут рады вам помочь.", "с четверга по воскресенье 8-18ч"))
+                                " будут рады вам помочь.", "с четверга по воскресенье 8-18ч", getTestShelter()))
         );
     }
-
 
     /**
      * Тест возврата всех волонтеров из пустого репозитория
@@ -97,26 +98,21 @@ class VolunteerServiceTest {
         assertTrue(out.getAllVolunteers().isEmpty());
 
         Volunteer volunteer = new Volunteer();
-        volunteer.setId(volunteerRecord.getId());
+        volunteer.setId(0);
         volunteer.setPhone(volunteerRecord.getPhone());
         volunteer.setFullName(volunteerRecord.getFullName());
-        volunteer.setInfo_volunteer(volunteerRecord.getInfo_volunteer());
+        volunteer.setInfoVolunteer(volunteerRecord.getInfoVolunteer());
         volunteer.setSchedule(volunteerRecord.getSchedule());
+        volunteer.setShelter(null);
 
         lenient().when(volunteerMapper.toEntity(volunteerRecord)).thenReturn(volunteer);
-        lenient().when(volunteerRepo.save(volunteer)).thenReturn(volunteer);
+        //TODO: Graf - заменить any на volunteer, когда появится EqualsHashCode в Shelter
+        lenient().when(volunteerRepo.save(any(Volunteer.class))).thenReturn(volunteer);
         lenient().when(volunteerMapper.toRecord(volunteer)).thenReturn(volunteerRecord);
-        assertEquals(out.addVolunteer(volunteerRecord), volunteerRecord);
-    }
+        VolunteerRecord checkedRecord = out.addVolunteer(volunteerRecord.getFullName(), volunteerRecord.getPhone(),
+                volunteerRecord.getInfoVolunteer(), volunteerRecord.getSchedule());
 
-    /**
-     * Тест на некорректное добавление волонтера, добавление null
-     */
-    @Test
-    void addVolunteerNegativeTest() {
-        lenient().when(volunteerMapper.toEntity(null)).thenReturn(null);
-        lenient().when(volunteerRepo.save(null)).thenThrow(new IllegalArgumentException());
-        assertThrows(IllegalArgumentException.class, () -> out.addVolunteer(null));
+        assertEquals(checkedRecord, volunteerRecord);
     }
 
     /**
@@ -127,14 +123,15 @@ class VolunteerServiceTest {
         VolunteerRecord volunteerRecord = new VolunteerRecord(1, "Ивченко Валентин Генадьевич", "89146667454",
                 "Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
                         "предложен списокнаших волонтеров и их номера. Пожалуста уитывайте их расписание и они" +
-                        " будут рады вам помочь.", "рабочие дни 14-22ч");
+                        " будут рады вам помочь.", "рабочие дни 14-22ч", getTestShelter());
 
         Volunteer volunteer = new Volunteer();
         volunteer.setId(volunteerRecord.getId());
         volunteer.setFullName(volunteerRecord.getFullName());
         volunteer.setPhone(volunteerRecord.getPhone());
-        volunteer.setInfo_volunteer(volunteerRecord.getInfo_volunteer());
+        volunteer.setInfoVolunteer(volunteerRecord.getInfoVolunteer());
         volunteer.setSchedule(volunteerRecord.getSchedule());
+        volunteer.setShelter(volunteerRecord.getShelter());
 
         lenient().when(volunteerRepo.findById(1L)).thenReturn(Optional.of(volunteer));
         lenient().when(volunteerMapper.toRecord(volunteer)).thenReturn(volunteerRecord);
@@ -158,13 +155,13 @@ class VolunteerServiceTest {
         VolunteerRecord volunteerRecord = new VolunteerRecord(1, "Ивченко Валентин Генадьевич", "89146667454",
                 "Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
                         "предложен списокнаших волонтеров и их номера. Пожалуста уитывайте их расписание и они" +
-                        " будут рады вам помочь.", "рабочие дни 14-22ч");
+                        " будут рады вам помочь.", "рабочие дни 14-22ч", getTestShelter());
 
         Volunteer volunteer = new Volunteer();
         volunteer.setId(volunteerRecord.getId());
         volunteer.setFullName(volunteerRecord.getFullName());
         volunteer.setPhone(volunteerRecord.getPhone());
-        volunteer.setInfo_volunteer(volunteerRecord.getInfo_volunteer());
+        volunteer.setInfoVolunteer(volunteerRecord.getInfoVolunteer());
         volunteer.setSchedule(volunteerRecord.getSchedule());
 
         lenient().when(volunteerRepo.findVolunteerByFullName("Ивченко Валентин Генадьевич"))
@@ -191,39 +188,47 @@ class VolunteerServiceTest {
         VolunteerRecord volunteerRecord = new VolunteerRecord(1, "Ивченко Валентин Генадьевич", "89146667454",
                 "Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
                         "предложен списокнаших волонтеров и их номера. Пожалуста уитывайте их расписание и они" +
-                        " будут рады вам помочь.", "рабочие дни 14-22ч");
+                        " будут рады вам помочь.", "рабочие дни 14-22ч", getTestShelter());
 
         Volunteer volunteer = new Volunteer();
         volunteer.setId(1);
         volunteer.setFullName("Ивченко Валентин Генадьевич");
         volunteer.setPhone("89146667454");
-        volunteer.setInfo_volunteer("Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
+        volunteer.setInfoVolunteer("Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
                 "предложен списокнаших волонтеров и их номера. Пожалуста уитывайте их расписание и они" +
                 " будут рады вам помочь.");
         volunteer.setSchedule("рабочие дни 14-22ч");
+        volunteer.setShelter(getTestShelter());
 
         lenient().when(volunteerRepo.findById(1L)).thenReturn(Optional.of(volunteer));
         lenient().when(volunteerMapper.toRecord(volunteer)).thenReturn(volunteerRecord);
         lenient().when(volunteerMapper.toEntity(volunteerRecord)).thenReturn(volunteer);
 
         Volunteer newVolunteer = new Volunteer();
-        newVolunteer.setId(1);
-        newVolunteer.setFullName("Селезнева Лариса Игоревна");
-        newVolunteer.setPhone("89146667454");
-        newVolunteer.setInfo_volunteer("Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
+        long id = 1;
+        String fullName = "Селезнева Лариса Игоревна";
+        String phone = "89146667454";
+        String info = "Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
                 "предложен списокнаших волонтеров и их номера. Пожалуста уитывайте их расписание и они" +
-                " будут рады вам помочь.");
-        newVolunteer.setSchedule("рабочие дни 14-22ч");
+                " будут рады вам помочь.";
+        String schedule = "рабочие дни 14-22ч";
+        Shelter shelter = getTestShelter();
+        newVolunteer.setId(id);
+        newVolunteer.setFullName(fullName);
+        newVolunteer.setPhone(phone);
+        newVolunteer.setInfoVolunteer(info);
+        newVolunteer.setSchedule(schedule);
+        newVolunteer.setShelter(shelter);
 
         VolunteerRecord newVolunteerRecord = new VolunteerRecord(1, "Селезнева Лариса Игоревна", "89146667454",
                 "Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
                         "предложен списокнаших волонтеров и их номера. Пожалуста уитывайте их расписание и они" +
-                        " будут рады вам помочь.", "рабочие дни 14-22ч");
+                        " будут рады вам помочь.", "рабочие дни 14-22ч", getTestShelter());
 
         lenient().when(volunteerRepo.save(any(Volunteer.class))).thenReturn(newVolunteer);
         lenient().when(volunteerMapper.toRecord(newVolunteer)).thenReturn(newVolunteerRecord);
 
-        VolunteerRecord exceptet = out.updateVolunteer(1L, newVolunteerRecord);
+        VolunteerRecord exceptet = out.updateVolunteer(1L, fullName, phone, info, schedule, shelter.getId());
         assertEquals(exceptet, newVolunteerRecord);
     }
 
@@ -232,13 +237,19 @@ class VolunteerServiceTest {
      */
     @Test
     void updateVolunteerNegativeTest() {
-        VolunteerRecord volunteerRecord = new VolunteerRecord(1, "Ивченко Валентин Генадьевич", "89146667454",
-                "Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
-                        "предложен списокнаших волонтеров и их номера. Пожалуста уитывайте их расписание и они" +
-                        " будут рады вам помочь.", "рабочие дни 14-22ч");
+
+        long failedId = 2;
+        String fullName = "Ивченко Валентин Генадьевич";
+        String phone = "89146667454";
+        String info = "Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
+                "предложен списокнаших волонтеров и их номера. Пожалуста уитывайте их расписание и они" +
+                " будут рады вам помочь.";
+        String schedule = "рабочие дни 14-22ч";
+        long shelterId = getTestShelter().getId();
 
         lenient().when(volunteerRepo.findById(anyLong())).thenThrow(ElemNotFound.class);
-        assertThrows(ElemNotFound.class, () -> out.updateVolunteer(2L, volunteerRecord));
+        assertThrows(ElemNotFound.class, () -> out.updateVolunteer(failedId, fullName, phone, info, schedule,
+                shelterId));
     }
 
     /**
@@ -252,7 +263,7 @@ class VolunteerServiceTest {
 
         volunteers.forEach(volunteer -> {
             VolunteerRecord record = new VolunteerRecord(volunteer.getId(),volunteer.getFullName(),volunteer.getPhone(),
-                    volunteer.getInfo_volunteer(), volunteer.getSchedule());
+                    volunteer.getInfoVolunteer(), volunteer.getSchedule(), volunteer.getShelter());
             volunteerRecords.add(record);
         });
 
@@ -272,9 +283,10 @@ class VolunteerServiceTest {
         volunteer.setFullName("Ивченко Валентин Генадьевич");
         volunteer.setSchedule("рабочие дни 14-22ч");
         volunteer.setId(1);
-        volunteer.setInfo_volunteer("Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
+        volunteer.setInfoVolunteer("Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
                 "предложен списокнаших волонтеров и их номера. Пожалуста уитывайте их расписание и они будут рады вам " +
                 "помочь.");
+        volunteer.setShelter(getTestShelter());
 
         volunteerList.add(volunteer);
 
@@ -283,9 +295,10 @@ class VolunteerServiceTest {
         volunteer1.setFullName("Селезнева Лариса Игоревна");
         volunteer1.setSchedule("каждый день 8-16ч");
         volunteer1.setId(2);
-        volunteer1.setInfo_volunteer("Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
+        volunteer1.setInfoVolunteer("Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
                 "предложен списокнаших волонтеров и их номера. Пожалуста уитывайте их расписание и они будут рады вам " +
                 "помочь.");
+        volunteer1.setShelter(getTestShelter());
 
         volunteerList.add(volunteer1);
 
@@ -294,12 +307,19 @@ class VolunteerServiceTest {
         volunteer2.setFullName("Фаер Людмила Анатольевна");
         volunteer2.setSchedule("с четверга по воскресенье 8-18ч");
         volunteer2.setId(3);
-        volunteer2.setInfo_volunteer("Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
+        volunteer2.setInfoVolunteer("Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
                 "предложен списокнаших волонтеров и их номера. Пожалуста уитывайте их расписание и они будут рады вам " +
                 "помочь.");
+        volunteer2.setShelter(getTestShelter());
 
         volunteerList.add(volunteer2);
 
         return volunteerList;
+    }
+
+    private static Shelter getTestShelter() {
+        Shelter shelter = new Shelter();
+        shelter.setId(1L);
+        return shelter;
     }
 }
