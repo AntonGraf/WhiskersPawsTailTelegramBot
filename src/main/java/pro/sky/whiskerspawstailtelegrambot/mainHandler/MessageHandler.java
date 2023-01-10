@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.service.ShelterService;
@@ -61,41 +60,32 @@ public class MessageHandler implements MainHandler {
         boolean checkUpdate = !update.getMessage().hasText();
         Message message = update.getMessage();
         String textMessage = message.getText();
-        if(textMessage.equals(AllText.REGISTRATION_CANCEL)){
-            AdoptiveParentRecord adoptiveParent = adoptiveParentService
-                    .findAdoptiveParentByChatId(Long.parseLong(chatId));
-            if(adoptiveParent!=null){
-                adoptiveParentService
-                        .deleteAdoptiveParentByID(adoptiveParent.getId());
-            }
-            sendMessage = formReplyMessages.replyMessage(message,"/start",configKeyboard.initKeyboardOnClickStart());
+        AdoptiveParentRecord adoptiveParent = checkExistAdoptiveParent(chatId);
+        String statusRegistration = checkStatusAdoptiveParent(chatId);
+
+        if (textMessage.equals(AllText.REGISTRATION_CANCEL)) {
+            if (adoptiveParent != null)
+                adoptiveParentService .deleteAdoptiveParentByID(adoptiveParent.getId());
+            return formReplyMessages.replyMessage(message, "/start",
+                    configKeyboard.initKeyboardOnClickStart());
         }
-        if (adoptiveParentService
-                .findAdoptiveParentByChatId(Long.parseLong(chatId)) != null &&
-                adoptiveParentService
-                        .findAdoptiveParentByChatId((Long.parseLong(chatId)))
-                        .getState()
-                        .equals(StatusRegistration.THE_FIRST_STATE.name())) {
+
+        if (adoptiveParent != null && statusRegistration.equals(StatusRegistration.THE_FIRST_STATE.name())) {
             //проверка имени, пока только длина, а и зачем еще что то....
             if (textMessage.length() > 6) {
-                AdoptiveParentRecord adoptiveParentOld = adoptiveParentService
-                        .findAdoptiveParentByChatId(Long.parseLong(chatId));
-                AdoptiveParentRecord adoptiveParentRecord = new AdoptiveParentRecord();
-                adoptiveParentRecord.setFullName(textMessage);
-                adoptiveParentRecord.setPhone("somePhone");
-                adoptiveParentRecord.setState(StatusRegistration.ONLY_NAME.name());
-                adoptiveParentRecord.setChatId(adoptiveParentOld.getChatId());
-                adoptiveParentService.updateAdoptiveParent(adoptiveParentOld.getId(),
-                        adoptiveParentRecord);
-                sendMessage = new SendMessage(chatId, AllText.REG_PHONE);
+                AdoptiveParentRecord newAdoptiveParent = new AdoptiveParentRecord();
+                newAdoptiveParent.setFullName(textMessage);
+                newAdoptiveParent.setPhone("somePhone");
+                newAdoptiveParent.setState(StatusRegistration.ONLY_NAME.name());
+                newAdoptiveParent.setChatId(adoptiveParent.getChatId());
+                adoptiveParentService.updateAdoptiveParent(adoptiveParent.getId(),
+                        newAdoptiveParent);
+                return newMessage(chatId, AllText.REG_PHONE);
             } else {
-                sendMessage = new SendMessage(chatId, "Введите правильное имя, длина больше 6 символов.");
+                return newMessage(chatId, "Введите правильное имя, длина больше 6 символов.");
             }
-        } else if (adoptiveParentService
-                .findAdoptiveParentByChatId(Long.parseLong(chatId)) != null &&
-                adoptiveParentService
-                        .findAdoptiveParentByChatId((Long.parseLong(chatId)))
-                        .getState()
+        } else if (checkExistAdoptiveParent(chatId) != null &&
+                checkStatusAdoptiveParent(chatId)
                         .equals(StatusRegistration.ONLY_NAME.name())) {
             //проверка phone, пока только длина, а и зачем еще что то....
             if (textMessage.length() > 6) {
@@ -108,10 +98,11 @@ public class MessageHandler implements MainHandler {
                 adoptiveParentRecord.setChatId(adoptiveParentOld.getChatId());
                 adoptiveParentService.updateAdoptiveParent(adoptiveParentOld.getId(),
                         adoptiveParentRecord);
-                sendMessage = formReplyMessages.replyMessage(message,AllText.REGISTRATION_SUCCESS + adoptiveParentOld.getId(),configKeyboard.initKeyboardOnClickStart());
+                sendMessage = formReplyMessages.replyMessage(message,
+                        AllText.REGISTRATION_SUCCESS + adoptiveParentOld.getId(), configKeyboard.initKeyboardOnClickStart());
 
             } else {
-                sendMessage = new SendMessage(chatId, "Введите правильный телефон, длина больше 6 символов.");
+                return new SendMessage(chatId, "Введите правильный телефон, длина больше 6 символов.");
             }
         } else {
 
@@ -143,27 +134,22 @@ public class MessageHandler implements MainHandler {
                                 configKeyboard.initKeyboardOnClickStart());
                         break;
 
-                    //регистрация
-                    case (AllText.REGISTRATION_BUTTON):
-                        //если уже есть такой в таблице со статусом зареган, то просто сообщение что вы уже есть у нас
-                        if (adoptiveParentService
-                                .findAdoptiveParentByChatId(Long.parseLong(chatId)) != null &&
-                                adoptiveParentService
-                                        .findAdoptiveParentByChatId((Long.parseLong(chatId)))
-                                        .getState()
-                                        .equals(StatusRegistration.SUCCESS.name())) {
-                            sendMessage = new SendMessage(chatId, AllText.ALREADY_REGISTERED);
-                            break;
-                        }
-                        AdoptiveParentRecord adoptiveParentRecord = new AdoptiveParentRecord();
-                        adoptiveParentRecord.setFullName("newParent");
-                        adoptiveParentRecord.setPhone("somePhone");
-                        adoptiveParentRecord.setState(StatusRegistration.THE_FIRST_STATE.name());
-                        adoptiveParentRecord.setChatId(Long.parseLong(chatId));
-                        adoptiveParentService.addAdoptiveParent(adoptiveParentRecord);
-                        sendMessage = formReplyMessages.replyMessage(message,AllText.REG_FULL_NAME,configKeyboard.initKeyboardOnClickRegistration());
+                    //------------------> регистрация
 
-                        break;
+                    case (AllText.REGISTRATION_BUTTON):
+                    //если уже есть такой в таблице со статусом зареган, то просто сообщение что вы уже есть у нас
+                        if (checkExistAdoptiveParent(chatId) != null && checkStatusAdoptiveParent(chatId)
+                                .equals(StatusRegistration.SUCCESS.name())) {
+                            return new SendMessage(chatId, AllText.ALREADY_REGISTERED);
+                        }
+                    //если нет в таблице со статусом зареган, то добавляем и ставим статус ферст стэйт в методе addToTable,
+                    // так же там меняем клаву на кнопку отмена регистрации
+                    //при следующем сообщении регистрация будет продолжаться в методе continueRegist, пока не зарегается до конца,
+                    // либо отменет регистрацию
+
+                        return addToTable(message, chatId);
+
+                    //------------------> регистрация
 
                     default:
                         sendMessage = new SendMessage(chatId, AllText.UNKNOWN_COMMAND_TEXT);
@@ -172,6 +158,35 @@ public class MessageHandler implements MainHandler {
             }
         }
         return sendMessage;
+    }
+
+    //добавляет нового пользвователя в таблиц при нажатии кнопки регистрация. Меняет статус и ракладку
+    //отправляет новое сообщение
+    private SendMessage addToTable(Message message, String chatId) {
+        AdoptiveParentRecord adoptiveParentRecord = new AdoptiveParentRecord();
+        adoptiveParentRecord.setFullName("newParent");
+        adoptiveParentRecord.setPhone("somePhone");
+        adoptiveParentRecord.setState(StatusRegistration.THE_FIRST_STATE.name());
+        adoptiveParentRecord.setChatId(Long.parseLong(chatId));
+        adoptiveParentService.addAdoptiveParent(adoptiveParentRecord);
+        return formReplyMessages.replyMessage(message, AllText.REG_FULL_NAME, configKeyboard.initKeyboardOnClickRegistration());
+    }
+
+    //проверяет есть ли усыновитель в таблице по чат айди
+    private AdoptiveParentRecord checkExistAdoptiveParent(String chatId){
+        return adoptiveParentService
+                .findAdoptiveParentByChatId(Long.parseLong(chatId));
+    }
+
+    //проверяет статус усыновителя в таблице по чат айди
+    private String checkStatusAdoptiveParent(String chatId){
+        return adoptiveParentService
+                .findAdoptiveParentByChatId((Long.parseLong(chatId)))
+                .getState();
+    }
+
+    private SendMessage newMessage(String chatId,String textMessage){
+        return new SendMessage(chatId,textMessage);
     }
 
 
