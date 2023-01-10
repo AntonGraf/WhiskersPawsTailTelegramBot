@@ -6,8 +6,9 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
@@ -40,22 +41,6 @@ public class ConfigKeyboard extends Button {
     return keyboardMarkup;
   }
 
-//  /**
-//   * Метод установки клавиатуры на нажатие отправить отчет
-//  */
-//  public ReplyKeyboardMarkup initKeyboardOnClickSendPetReport() {
-//
-//    ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-//    List<KeyboardRow> KEYBOARD_BUTTONS_ROW_INFO_REPORT = new ArrayList<>();
-//    KeyboardRow row = new KeyboardRow();
-//    row.add(SHOW_ALL_YOUR_PET_BUTTON);
-//    row.add(SEND_REPORT_BUTTON);
-//    row.add(CANCEL_BUTTON);
-//    KEYBOARD_BUTTONS_ROW_INFO_REPORT.add(row);
-//    keyboardMarkup.setResizeKeyboard(true);
-//    keyboardMarkup.setKeyboard(KEYBOARD_BUTTONS_ROW_INFO_REPORT);
-//    return keyboardMarkup;
-//  }
 
   /**
    * Метод формирует клавиатуры из переданного текста
@@ -88,6 +73,24 @@ public class ConfigKeyboard extends Button {
     keyboardMarkup.setKeyboard(KEYBOARD_BUTTONS_ROW_INFO_REPORT);
     return keyboardMarkup;
 
+  }
+
+  public InlineKeyboardMarkup formReplyKeyboardInOneRowInline(String... textButtons) {
+
+    InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+    List<List<InlineKeyboardButton>> listRow = new ArrayList<>();
+    List<InlineKeyboardButton> row = new ArrayList<>();
+//    inlineKeyboardButton row = new inlineKeyboardButton();
+
+    for (String textButton : textButtons) {
+      InlineKeyboardButton button = new InlineKeyboardButton(textButton);
+      button.setCallbackData(textButton);
+      row.add(button);
+    }
+    listRow.add(row);
+    inlineKeyboardMarkup.setKeyboard(listRow);
+
+    return inlineKeyboardMarkup;
   }
 
 
