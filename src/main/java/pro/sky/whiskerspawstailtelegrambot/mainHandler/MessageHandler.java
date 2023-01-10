@@ -186,7 +186,8 @@ public class MessageHandler implements MainHandler {
         String status = null;
         AdoptiveParentRecord adoptiveParentRecord = adoptiveParentService
                 .findAdoptiveParentByChatId(Long.parseLong(chatId));
-        if(adoptiveParentRecord.getState() != null) status = adoptiveParentRecord.getState();
+        if(adoptiveParentRecord == null || adoptiveParentRecord.getState() == null) status = "NOSTATUS";
+        else status = adoptiveParentRecord.getState();
         return status;
     }
 
