@@ -99,7 +99,7 @@ public class MessageHandler implements MainHandler {
        * Обработка стандартных сообщений от пользователя,
        * если он находится в свободном состоянии (например не в состоянии регистрации или отправки отчета)
        */
-      if (update.getMessage().hasText() || Objects.requireNonNull(state).ordinal() > 2) {
+      if (update.getMessage().hasText() || state != null && state.ordinal() >= 1) {
         return sendMessage = standardReplyHandler.handler(message);
       }
 
