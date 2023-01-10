@@ -3,13 +3,8 @@ package pro.sky.whiskerspawstailtelegrambot.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pro.sky.whiskerspawstailtelegrambot.entity.Shelter;
 import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
-import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
-import pro.sky.whiskerspawstailtelegrambot.record.ShelterRecord;
 import pro.sky.whiskerspawstailtelegrambot.repository.ShelterRepo;
-
-import java.util.Collection;
 
 /**
  * Сервис слой для приюта
@@ -19,6 +14,11 @@ import java.util.Collection;
 public class ShelterService {
 
     private ShelterRepo shelterRepo;
+
+    public ShelterService(ShelterRepo shelterRepo) {
+        this.shelterRepo = shelterRepo;
+    }
+
     /**
      * Метод, который показывает все сообщения приюта
      *
