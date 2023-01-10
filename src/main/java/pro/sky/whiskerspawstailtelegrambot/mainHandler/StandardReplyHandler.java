@@ -86,19 +86,11 @@ public class StandardReplyHandler {
       //------------------> регистрация
 
       case (AllText.REGISTRATION_BUTTON):
-        StateAdoptiveParent state = adoptiveParentService.getStateAdoptiveParentByChatId(
-            Long.parseLong(chatId));
-        //если уже есть такой в таблице со статусом зареган, то просто сообщение что вы уже есть у нас
-        if (state != null && state.ordinal() > 3) {
-          return new SendMessage(chatId, AllText.ALREADY_REGISTERED);
-        }
-        //если нет в таблице со статусом зареган, то добавляем и ставим статус ферст стэйт в методе addToTable,
-        // так же там меняем клаву на кнопку отмена регистрации
+        //добавляем в бд и ставим статус ферст стэйт в методе addToTable,
+        //так же там меняем клаву на кнопку отмена регистрации
         //при следующем сообщении регистрация будет продолжаться в методе messengerHandler, пока не зарегается до конца,
-        // либо отменет регистрацию
-
+        //либо отменет регистрацию
         return registrationHandler.addToTable(message, chatId);
-
       //------------------> регистрация
 
       case (AllText.HOW_TAKE_DOG):
