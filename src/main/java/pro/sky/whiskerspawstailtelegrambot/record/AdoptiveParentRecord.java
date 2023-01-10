@@ -39,7 +39,6 @@ public class AdoptiveParentRecord implements Serializable {
     @JsonIgnore
     String state;
 
-
     @JsonIgnore
     long chatId;
     @JsonIgnore
