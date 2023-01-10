@@ -34,7 +34,7 @@ import pro.sky.whiskerspawstailtelegrambot.service.ShelterService;
 import pro.sky.whiskerspawstailtelegrambot.service.VolunteerService;
 
 @WebMvcTest
-class LupaevTelegramBotApplicationTests_Dog2 {
+class lupaevTelegramBotApplicationTestsDogWebMvcTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -119,12 +119,7 @@ class LupaevTelegramBotApplicationTests_Dog2 {
             .andExpect(jsonPath("$.fullName").value(fullName))
             .andExpect(jsonPath("$.age").value(age))
             .andExpect(jsonPath("$.description").value(description));
-//        mockMvc.perform(MockMvcRequestBuilders
-//                .get("/students/1")
-//                .accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-//            .andExpect(jsonPath("$.id").value(id))
-//            .andExpect(jsonPath("$.name").value(name))
-//            .andExpect(jsonPath("$.age").value(age));
+
 
     }
 

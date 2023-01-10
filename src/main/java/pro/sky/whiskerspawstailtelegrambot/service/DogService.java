@@ -166,18 +166,41 @@ public class DogService {
     public DogRecord addDog(String fullName, String age, String description, MultipartFile photo) throws IOException { //Post
         log.info("Добавление собаки в БД");
         Dog dog = new Dog();
-        if (fullName != null && !fullName.isEmpty() && !fullName.isBlank()) {
-            dog.setFullName(fullName);
-        } else if (age != null && !age.isEmpty() && !age.isBlank()) {
-            dog.setAge(age);
-        } else if (description != null && !description.isEmpty() && !description.isBlank()) {
-            dog.setDescription(description);
+//        if (fullName != null && !fullName.isEmpty() && !fullName.isBlank()) {
+//            dog.setFullName(fullName);
+////            dogRepository.save(dog);
+//        }
+//        if (age != null && !age.isEmpty() && !age.isBlank()) {
+//            dog.setAge(age);
+////            dogRepository.save(dog);
+//        }
+//        if (description != null && !description.isEmpty() && !description.isBlank()) {
+//            dog.setDescription(description);
+////            dogRepository.save(dog);
+//        }
+//        dogRepository.save(dog);
+//        DogRecord dogRecord = dogMapper.toRecord(dog);
+//        if (photo != null) {
+//            uploadPhoto(dogRecord.getId(), photo);
+//        }
+//        return dogRecord;
+        final String NAME = fullName;
+        final String AGE = age;
+        final String DES = description;
+        final MultipartFile PHOTO = photo;
+
+        switch (NAME, AGE, DES, PHOTO) {
+            case(NAME):
+                dog.setFullName(NAME);
+            case (age):
+                dog.setAge(age);
+            case (description):
+                dog.setDescription(description);
+            default:
+                dogRepository.save(dog);
+                break;
         }
-        DogRecord dogRecord = dogMapper.toRecord(dogRepository.save(dog));
-        if (photo != null) {
-            uploadPhoto(dogRecord.getId(), photo);
-        }
-        return dogRecord;
+
     }
 
 

@@ -14,17 +14,13 @@ import pro.sky.whiskerspawstailtelegrambot.record.DogRecord;
 import pro.sky.whiskerspawstailtelegrambot.repository.DogRepository;
 import pro.sky.whiskerspawstailtelegrambot.service.DogService;
 
-import javax.servlet.http.HttpServletResponse;
-
-import static jdk.dynalink.linker.support.Guards.isNull;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.InstanceOfAssertFactories.COLLECTION;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.http.HttpMethod.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class Lupaev_TelegramBotApplicationTests_Dog {
+class lupaevTelegramBotApplicationTestsDogSpringBootTest {
 
     @LocalServerPort
     private int port;
