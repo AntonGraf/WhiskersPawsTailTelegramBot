@@ -44,9 +44,12 @@ public class ReportAddHandler implements MainHandler {
   }
 
   /**
-   * Метод вызывается из других методов, получает параметры формирует и возвращает SendMessage, нужен для сокращения кода
-   * @param message сообщение из update
-   * @param textReplyMessage текс сообщения для вывода на экранпользователю, в ответ на его действие
+   * Метод вызывается из других методов, получает параметры формирует и возвращает SendMessage,
+   * нужен для сокращения кода
+   *
+   * @param message              сообщение из update
+   * @param textReplyMessage     текс сообщения для вывода на экранпользователю, в ответ на его
+   *                             действие
    * @param inlineKeyboardMarkup инлайн клавиатура, котора выводится пользователю   *
    */
   public SendMessage getSendMessageReport(
@@ -60,8 +63,8 @@ public class ReportAddHandler implements MainHandler {
 
   /**
    * Метод обрабатывает нажатие на кнопку показать всех ваших животных
-   * @param message сообщение из update
    *
+   * @param message сообщение из update
    */
   public SendMessage clickButton_SHOW_ALL_YOUR_PET(Message message) {
 
@@ -73,15 +76,19 @@ public class ReportAddHandler implements MainHandler {
     return sendMessage = getSendMessageReport(message,
         allPetByChatId, inlineKeyboardMarkup);
   }
+
   /**
-   * Метод обрабатывает нажатие на кнопку показать всех отправить отчет
-   * @param message сообщение из update
+   * Метод обрабатывает нажатие на кнопку показать всех отправить отчет и изменят статус
+   * пользователя на ожидание отправки отчета
    *
+   * @param message сообщение из update
    */
   public SendMessage clickButton_SEND_REPORT(Message message) {
 
     InlineKeyboardMarkup inlineKeyboardMarkup = configKeyboard.formReplyKeyboardInlineInOneRow(
-        AllText.SEND_TEXT, AllText.CANCEL_TEXT);
+        AllText.CANCEL_TEXT);
+
+    reportService.changeStateAdoptiveParent(message);
 
     return sendMessage = getSendMessageReport(message, AllText.DESCRIPTION_SEND_REPORT_TEXT,
         inlineKeyboardMarkup);
@@ -91,12 +98,10 @@ public class ReportAddHandler implements MainHandler {
 
   /**
    * Метод пытается сохранить отчет о животном в БД
-   * @param
    *
+   * @param
    */
   public void sendReport() {
-
-
 
   }
 

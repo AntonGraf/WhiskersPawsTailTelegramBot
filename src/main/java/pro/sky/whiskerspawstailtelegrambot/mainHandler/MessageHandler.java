@@ -61,6 +61,7 @@ public class MessageHandler implements MainHandler {
     if (update.getCallbackQuery() != null) {
       return sendMessage = callbackQueryHandler(update.getCallbackQuery());
     }
+
 //    String chatId = String.valueOf(update.getMessage().getChatId());
 
     try {
@@ -116,6 +117,10 @@ public class MessageHandler implements MainHandler {
     } finally {
       return sendMessage;
     }
+  }
+
+  public void getAdoptiveParentByChatId(){
+
   }
 
   public SendMessage callbackQueryHandler(CallbackQuery callbackQuery) {
