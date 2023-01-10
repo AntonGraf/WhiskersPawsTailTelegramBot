@@ -101,7 +101,7 @@ public class DogService {
      * @param dogId
      * @param adoptiveParentId
      */
-    public void addIdAdoptiveParent(Long dogId, Long adoptiveParentId) {
+    public void addIdAdoptiveParent(Long dogId, Long adoptiveParentId) {//Put
         log.info("Изменение данных собаки в БД");
         Dog dog = dogMapper.toEntity(findDog(dogId));
         dogRepository.addIdAdoptiveParent(dogId, adoptiveParentId);

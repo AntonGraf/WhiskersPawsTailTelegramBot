@@ -10,10 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pro.sky.whiskerspawstailtelegrambot.exception.ErrorResponse;
@@ -64,7 +61,8 @@ public class DogController {
     })
     @GetMapping(value = "{id}")
     public ResponseEntity<DogRecord> findDog(@PathVariable Long id) {
-        return ResponseEntity.ok(dogService.findDog(id));
+        DogRecord dogRecord = dogService.findDog(id);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "Получение списка всех собак в приюте")
@@ -91,7 +89,8 @@ public class DogController {
     })
     @GetMapping("/all")
     public ResponseEntity<Collection<DogRecord>> findAllDog() {
-        return ResponseEntity.ok(dogService.findAllDog());
+        Collection<DogRecord> recordCollection = dogService.findAllDog();
+        return ResponseEntity.ok().build();
     }
 
 
@@ -117,6 +116,7 @@ public class DogController {
                     }
             )
     })
+    @ResponseBody
     @GetMapping(produces = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<byte[]> getDogPhoto(@RequestParam(name = "id") Long id) {
         DogRecord dog = dogService.findDog(id);
