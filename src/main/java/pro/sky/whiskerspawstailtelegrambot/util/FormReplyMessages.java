@@ -6,6 +6,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import pro.sky.whiskerspawstailtelegrambot.configuration.ConfigMenu;
+import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 
 /**
  * сервис для формирования сообщений
@@ -48,7 +51,7 @@ public class FormReplyMessages {
     public SendMessage replyMessageSetAllKeyBoardNull(Message message, String textReplyMessage, InlineKeyboardMarkup inlineKeyboardMarkup) {
         String chatId = String.valueOf(message.getChatId());
         SendMessage sendMessage = new SendMessage(chatId, textReplyMessage);
-        sendMessage.setReplyMarkup(null);
+        sendMessage.setReplyMarkup(new ConfigKeyboard().formReplyKeyboardInOneRow(""));
         sendMessage.setReplyMarkup(inlineKeyboardMarkup);
         return sendMessage;
     }
