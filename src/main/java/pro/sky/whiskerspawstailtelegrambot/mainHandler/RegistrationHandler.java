@@ -39,7 +39,8 @@ public class RegistrationHandler {
       return newMessage(chatId, AllText.REG_PHONE);
     } else if (text.equals(AllText.REGISTRATION_CANCEL)) {
       adoptiveParentService.deleteAdoptiveParentByID(adoptiveParent.getId());
-      return newMessage(chatId, AllText.START_TEXT);
+      return formReplyMessages.replyMessage(message, AllText.REGISTRATION_INIT,
+          configKeyboard.formReplyKeyboardInOneRowInline(AllText.REGISTRATION_BUTTON));
     } else {
       return newMessage(chatId, "Введите правильное имя, длина больше 6 символов.");
     }
@@ -58,7 +59,8 @@ public class RegistrationHandler {
 
     } else if (text.equals(AllText.REGISTRATION_CANCEL)) {
       adoptiveParentService.deleteAdoptiveParentByID(adoptiveParent.getId());
-      return newMessage(chatId, AllText.START_TEXT);
+      return formReplyMessages.replyMessage(message, AllText.REGISTRATION_INIT,
+          configKeyboard.formReplyKeyboardInOneRowInline(AllText.REGISTRATION_BUTTON));
     } else {
       return newMessage(chatId, "Введите правильный телефон, длина больше 6 символов.");
     }
