@@ -13,6 +13,7 @@ public class Button extends AllText {
             SEND_PET_REPORT_TEXT);
     protected static final KeyboardButton SEND_REPORT_BUTTON = new KeyboardButton(SEND_REPORT_TEXT);
     protected static final KeyboardButton CANCEL_BUTTON = new KeyboardButton(CANCEL_TEXT);
+    protected static final KeyboardButton SEND_BUTTON = new KeyboardButton(SEND_TEXT);
 
 
 }
