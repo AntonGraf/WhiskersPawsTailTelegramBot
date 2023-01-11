@@ -32,16 +32,31 @@ public class FormReplyMessages {
         return sendMessage;
     }
 
+    /**
+     * сформировать ответное сообщение с сообщение об ошибке, с указаным текстом и inline клавиатурой
+     * @param message
+     * @param textReplyMessage
+     * @param inlineKeyboardMarkup
+     * @return
+     */
     public SendMessage replyMessageError(Message message, String textReplyMessage, InlineKeyboardMarkup inlineKeyboardMarkup) {
         String chatId = String.valueOf(message.getChatId());
         SendMessage sendMessage = new SendMessage(chatId, textReplyMessage);
         sendMessage.setReplyMarkup(inlineKeyboardMarkup);
         return sendMessage;
     }
-    public SendMessage replyMessageError(Message message, String textReplyMessage, ReplyKeyboardMarkup inlineKeyboardMarkup) {
+
+    /**
+     * сформировать ответное сообщение с сообщение об ошибке, с указаным текстом и обычной клавиатурой
+     * @param message
+     * @param textReplyMessage
+     * @param replyKeyboardMarkup
+     * @return
+     */
+    public SendMessage replyMessageError(Message message, String textReplyMessage, ReplyKeyboardMarkup replyKeyboardMarkup) {
         String chatId = String.valueOf(message.getChatId());
         SendMessage sendMessage = new SendMessage(chatId, textReplyMessage);
-        sendMessage.setReplyMarkup(inlineKeyboardMarkup);
+        sendMessage.setReplyMarkup(replyKeyboardMarkup);
         return sendMessage;
     }
 

@@ -32,6 +32,11 @@ public class ReportService {
     this.adoptiveParentService = adoptiveParentService;
   }
 
+  /**
+   * Показать всех животных принадлежащих пользователю
+   * @param message Message из Update
+   * @return Список животных в  текстовом формате для отправки пользователю.
+   */
   public String showAllAdoptedPets(Message message) {
     log.info("Вызов метода " + new Throwable()
         .getStackTrace()[0]
@@ -46,6 +51,12 @@ public class ReportService {
     return allAdoptedPets == null ? AllText.YOU_HAVE_NO_ADOPTED_PETS_TEXT : allAdoptedPets;
   }
 
+  /**
+   * Изменениние состояния пользователя
+   * @param message Message из Update
+   * @param state Список состояний пользвателя
+   * @return true если получилось изменить состояние пользователя
+   */
   public boolean changeStateAdoptiveParent(Message message, StateAdoptiveParent state) {
     log.info("Вызов метода " + new Throwable()
         .getStackTrace()[0]

@@ -92,6 +92,7 @@ public class MessageHandler implements MainHandler {
             //если уже есть такой в таблице со статусом зареган, то просто сообщение что вы уже есть у нас
            /* return sendMessage = registrationHandler
                 .handlerWithStatuSuccessReg(message,adoptiveParent, message.getText(), chatId);*/
+            break;
           case WAIT_SEND_REPORT:
             return sendMessage = reportAddHandler.sendReport(message);
         }

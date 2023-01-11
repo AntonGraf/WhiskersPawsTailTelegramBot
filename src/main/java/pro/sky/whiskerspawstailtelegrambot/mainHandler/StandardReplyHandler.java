@@ -76,7 +76,7 @@ public class StandardReplyHandler {
 
       //region реализация логики Отправить отчет о питомце
       case (AllText.SEND_PET_REPORT_TEXT):     // нажатие кнопки Отправить отчет о питомце
-        return sendMessage = reportAddHandler.getSendMessageReport(message,
+        return sendMessage = formReplyMessages.replyMessage(message,
             AllText.MENU_SEND_PET_REPORT_TEXT,
             configKeyboard.formReplyKeyboardInOneRowInline(AllText.SHOW_ALL_YOUR_PET_TEXT,
                 AllText.SEND_REPORT_TEXT, AllText.CANCEL_TEXT));
