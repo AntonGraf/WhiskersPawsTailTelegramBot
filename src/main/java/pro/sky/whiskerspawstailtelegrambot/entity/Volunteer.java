@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Setter
 @ToString
 @RequiredArgsConstructor
+@EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Volunteer {

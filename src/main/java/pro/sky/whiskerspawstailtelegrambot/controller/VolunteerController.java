@@ -8,8 +8,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -27,8 +25,6 @@ import java.util.Collection;
  */
 @RestController
 @RequestMapping("/volunteer")
-@Getter
-@Setter
 @Slf4j
 @Tag(name = "VolunteerController",
         description = "The Admin API")
@@ -160,12 +156,12 @@ public class  VolunteerController {
             )
     })
     @PostMapping("/addVolunteer")
-    public ResponseEntity<VolunteerRecord> addVolunteer(@RequestParam(required = false)
+    public ResponseEntity<VolunteerRecord> addVolunteer(@RequestParam
                                                             @NotBlank(message = "Полное имя пустое")
                                                             @Parameter(description = "Полное имя волонтера",
                                                                     example = "Иванов Иван Иванович")
                                                             String fullName,
-                                                        @RequestParam(required = false)
+                                                        @RequestParam
                                                             @NotBlank(message = "Номер телефона пуст")
                                                             @Parameter(description = "Номер телефона волонтера",
                                                                     example = "+79876543210")
