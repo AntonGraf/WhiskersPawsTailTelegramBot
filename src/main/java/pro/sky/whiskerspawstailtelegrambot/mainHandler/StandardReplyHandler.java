@@ -11,7 +11,6 @@ import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
 import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
-import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
 
 /**
  * Обработчик стандартных сообщений от пользователя, в том числе и из обычной клавиатуры
@@ -90,6 +89,10 @@ public class StandardReplyHandler {
         //так же там меняем клаву на кнопку отмена регистрации
         //при следующем сообщении регистрация будет продолжаться в методе messengerHandler, пока не зарегается до конца,
         //либо отменет регистрацию
+        if (adoptiveParentService.getStateAdoptiveParentByChatId(Long.parseLong(chatId)) != null) {
+          return new SendMessage(chatId, AllText.ALREADY_REGISTERED);
+
+        }
         return registrationHandler.addToTable(message, chatId);
       //------------------> регистрация
 

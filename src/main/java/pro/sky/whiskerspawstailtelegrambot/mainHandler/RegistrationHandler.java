@@ -59,20 +59,11 @@ public class RegistrationHandler {
     } else if (text.equals(AllText.REGISTRATION_CANCEL)) {
       adoptiveParentService.deleteAdoptiveParentByID(adoptiveParent.getId());
       return formReplyMessages.replyMessage(message,"/start",configKeyboard.initKeyboardOnClickStart());
-    }else {
+    } else {
       return newMessage(chatId, "Введите правильный телефон, длина больше 6 символов.");
     }
   }
 
-  public SendMessage handlerWithStatuSuccessReg(Message message,
-      AdoptiveParentRecord adoptiveParent, String text, String chatId) {
-    SendMessage sendMessage = null;
-    //если уже есть такой в таблице со статусом зареган, то просто сообщение что вы уже есть у нас
-    if (text.equals(AllText.REGISTRATION_BUTTON)) {
-      sendMessage = new SendMessage(chatId, AllText.ALREADY_REGISTERED);
-    }
-    return sendMessage;
-  }
 
   private SendMessage newMessage(String chatId, String textMessage) {
     return new SendMessage(chatId, textMessage);
