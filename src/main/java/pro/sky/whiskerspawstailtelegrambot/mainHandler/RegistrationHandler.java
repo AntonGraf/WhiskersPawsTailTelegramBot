@@ -60,7 +60,7 @@ public class RegistrationHandler {
     } else if (text.equals(AllText.REGISTRATION_CANCEL)) {
       adoptiveParentService.deleteAdoptiveParentByID(adoptiveParent.getId());
       return formReplyMessages.replyMessage(message, AllText.REGISTRATION_INIT,
-          configKeyboard.formReplyKeyboardInOneRowInline(AllText.REGISTRATION_BUTTON));
+          configKeyboard.formReplyKeyboardInOneRow("Регистрация"));
     } else {
       return newMessage(chatId, "Введите правильный телефон, длина больше 6 символов.");
     }
