@@ -61,8 +61,6 @@ public class StandardReplyHandler {
     switch (textMessage) {
 
       case (AllText.START_TEXT):
-      /*  return sendMessage = formReplyMessages.replyMessage(message, AllText.WELCOME_MESSAGE_TEXT,
-            configKeyboard.initKeyboardOnClickStart());*/
         return sendMessage = formReplyMessages.replyMessage(message, AllText.REGISTRATION_INIT,
             configKeyboard.formReplyKeyboardInOneRowInline(AllText.REGISTRATION_BUTTON));
 

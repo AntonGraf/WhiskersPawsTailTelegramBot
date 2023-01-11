@@ -20,10 +20,14 @@ public class CallbackQueryHandler {
   private final ConfigKeyboard configKeyboard;
   private final ReportAddHandler reportAddHandler;
 
-  public CallbackQueryHandler(FormReplyMessages formReplyMessages, ConfigKeyboard configKeyboard, ReportAddHandler reportAddHandler) {
+  private final RegistrationHandler registrationHandler;
+
+  public CallbackQueryHandler(FormReplyMessages formReplyMessages, ConfigKeyboard configKeyboard, ReportAddHandler reportAddHandler,
+      RegistrationHandler registrationHandler) {
     this.formReplyMessages = formReplyMessages;
     this.configKeyboard = configKeyboard;
     this.reportAddHandler = reportAddHandler;
+    this.registrationHandler = registrationHandler;
   }
 
   /** обработка CallbackQuery ответа от пользователя
@@ -51,6 +55,10 @@ public class CallbackQueryHandler {
 
       case (AllText.SEND_REPORT_TEXT):     // нажатие кнопки отправить отчет
         sendMessage = reportAddHandler.clickButton_SEND_REPORT(message);
+        break;
+
+      case (AllText.REGISTRATION_BUTTON):     // нажатие кнопки регистрация
+        sendMessage = registrationHandler.addToTable(message,String.valueOf(message.getChatId()));
         break;
     }
     return sendMessage;
