@@ -22,7 +22,7 @@ import java.util.List;
 public class Dog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    Long id;
 
 
     /**
@@ -55,7 +55,7 @@ public class Dog {
      */
     @Column(name = "size")
     @JsonIgnore
-    long fileSize;
+    Long fileSize;
 
     /**
      * Медиатип

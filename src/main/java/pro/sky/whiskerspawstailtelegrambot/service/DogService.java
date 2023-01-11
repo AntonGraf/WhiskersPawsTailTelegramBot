@@ -101,7 +101,8 @@ public class DogService {
         if (description != null && !description.isEmpty() && !description.isBlank()) {
             dog.setDescription(description);
         }
-        DogRecord dogRecord = dogMapper.toRecord(dogRepository.save(dog));
+        dogRepository.save(dog);
+        DogRecord dogRecord = dogMapper.toRecord(dog);
         if (photo != null) {
             uploadPhoto(dogRecord.getId(), photo);
         }

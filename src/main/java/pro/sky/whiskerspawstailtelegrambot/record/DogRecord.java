@@ -12,12 +12,11 @@ import java.util.List;
  * A DTO for the {@link pro.sky.whiskerspawstailtelegrambot.entity.Dog} entity
  */
 @AllArgsConstructor
-@NoArgsConstructor
-@Data
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@Getter
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class DogRecord implements Serializable {
 
-    long id;
+    Long id;
 
 
     String fullName;
