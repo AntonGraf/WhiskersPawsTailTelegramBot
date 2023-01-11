@@ -12,7 +12,10 @@ import java.util.List;
  * A DTO for the {@link pro.sky.whiskerspawstailtelegrambot.entity.Dog} entity
  */
 @AllArgsConstructor
+//@NoArgsConstructor
+@Setter
 @Getter
+@EqualsAndHashCode
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class DogRecord implements Serializable {
 

@@ -49,14 +49,15 @@ class lupaevTelegramBotApplicationTestsDogSpringBootTest {
                 .isNotNull();
         assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/dogs/1", String.class))
                 .isNotNull();
-        assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/dogs?id=14", String.class))
+        assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/dogs?id=3", String.class))
                 .isNotNull();
     }
 
     @Test
     public void testPost () {
-        DogRecord dogRecord = dogService.findDog(3);
-        Dog dog = dogMapper.toEntity(dogRecord);
+        Dog dog = new Dog();
+        dog.setFullName("testName");
+        dog.setDescription("testDog");
         assertThat(this.restTemplate.postForEntity("http://localhost:" + port + "/dogs/add", new HttpEntity<>(dog), Dog.class))
                 .isNotNull();
     }
@@ -64,7 +65,7 @@ class lupaevTelegramBotApplicationTestsDogSpringBootTest {
 
     @Test
     public void putTest() {
-        DogRecord dogRecord = dogService.findDog(3);
+        DogRecord dogRecord = dogService.findDog(2);
         Dog dog = dogMapper.toEntity(dogRecord);
         dog.setFullName("testName");
         dog.setDescription("testDog");
@@ -77,9 +78,9 @@ class lupaevTelegramBotApplicationTestsDogSpringBootTest {
 
     @Test
     public void delTest() {
-        DogRecord dogRecord = dogService.findDog(2);
+        DogRecord dogRecord = dogService.findDog(15);
         Dog dog = dogMapper.toEntity(dogRecord);
-        assertThat(this.restTemplate.exchange("http://localhost:" + port + "/dogs/1", DELETE,new HttpEntity<>(dog), Dog.class))
+        assertThat(this.restTemplate.exchange("http://localhost:" + port + "/dogs/15", DELETE,new HttpEntity<>(dog), Dog.class))
             .isNotNull();
     }
 
