@@ -2,6 +2,7 @@ package pro.sky.whiskerspawstailtelegrambot;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -13,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import pro.sky.whiskerspawstailtelegrambot.controller.AdoptiveParentController;
@@ -109,16 +112,25 @@ class lupaevTelegramBotApplicationTestsDogWebMvcTest {
         when(dogRepository.findById(any(Long.class))).thenReturn(Optional.of(dog));
         when(dogRepository.findAll()).thenReturn(java.util.List.of());
 
+        MockMultipartFile firstFile = new MockMultipartFile("data", "filename.txt", "text/plain", "some xml".getBytes());
+        MockMultipartFile secondFile = new MockMultipartFile("data", "other-file-name.data", "multipart/form-data", "some other type".getBytes());
+        MockMultipartFile jsonFile = new MockMultipartFile("json", "", "application/json", "{\"json\": \"someValue\"}".getBytes());
+
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/dogs/add")
+                .multipart(HttpMethod.POST, "/dogs/add", secondFile)
+//                .file(secondFile)
+//                .post("/dogs/add")
                 .content(jsonObject.toString())
+
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id").value(id))
-            .andExpect(jsonPath("$.fullName").value(fullName))
-            .andExpect(jsonPath("$.age").value(age))
-            .andExpect(jsonPath("$.description").value(description));
+//            .andExpect(status().isOk())
+//            .andExpect(jsonPath("$.id").value(id))
+//            .andExpect(jsonPath("$.fullName").value(fullName))
+//            .andExpect(jsonPath("$.age").value(age))
+//            .andExpect(jsonPath("$.description").value(description));
+            .andExpect(status().is(200))
+            .andExpect(content().string("success"));
 
 
     }

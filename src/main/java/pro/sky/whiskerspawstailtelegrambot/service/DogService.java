@@ -94,9 +94,11 @@ public class DogService {
         Dog dog = dogMapper.toEntity(findDog(dogId));
         if (fullName != null && !fullName.isEmpty() && !fullName.isBlank()) {
             dog.setFullName(fullName);
-        } else if (age != null && !age.isEmpty() && !age.isBlank()) {
+        }
+        if (age != null && !age.isEmpty() && !age.isBlank()) {
             dog.setAge(age);
-        } else if (description != null && !description.isEmpty() && !description.isBlank()) {
+        }
+        if (description != null && !description.isEmpty() && !description.isBlank()) {
             dog.setDescription(description);
         }
         DogRecord dogRecord = dogMapper.toRecord(dogRepository.save(dog));

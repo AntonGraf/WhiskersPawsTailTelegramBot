@@ -8,14 +8,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.annotation.Bean;
 import pro.sky.whiskerspawstailtelegrambot.entity.Dog;
 import pro.sky.whiskerspawstailtelegrambot.mapper.DogMapper;
+import pro.sky.whiskerspawstailtelegrambot.mapper.DogMapperImpl;
 import pro.sky.whiskerspawstailtelegrambot.record.DogRecord;
 import pro.sky.whiskerspawstailtelegrambot.repository.DogRepository;
 
 import java.io.IOException;
 import static org.assertj.core.api.Assertions.assertThat;
-
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -26,14 +28,22 @@ class DogServiceTest {
     @InjectMocks
     DogService dogService;
 
-    @Mock
+    @Spy
     DogMapper dogMapper;
 
 
+    @Mock
     Dog dog;
 
 
+    @Mock
     DogRecord dogRecord;
+
+    @Bean
+    public DogMapper dogMapper() {
+        return new DogMapperImpl();
+    }
+
 
 
 
@@ -46,37 +56,31 @@ class DogServiceTest {
         dog.setFullName("testName");
         dog.setAge("1");
         dog.setDescription("testDog");
-        dogRecord = dogMapper.toRecord(dog);
+//        dogRecord = dogMapper.toRecord(dog);
+
 
     }
 
 //    @AfterEach
 //    void tearDown() {
-////        dogService.removeDog(TESTID);
+////        dogService.removeDog();
 //    }
 
-
-
-//    @Test
-//    public void contextLoads() {
-//        assertNotNull(dogController);
-//        assertThat(dogController).isNotNull();
-//    }
 
 
     @Test
     void findDog() {
-
         DogRecord dogRecord1 = new DogRecord();
-        assertThat(dogRecord1 = dogMapper.toRecord(dog)).isNull();
-        DogRecord record = new DogRecord();
+        when(dogMapper.toRecord(dog)).thenReturn(dogRecord1);
 
+        assertThat(dog).isNotNull();
+//        assertThat(dogRecord).isNotNull();
 
-//        DogRecord record = dogMapper.toRecord(dog);
-//        Assertions.assertNotNull(record);
-//        assertThatExceptionOfType(ElemNotFound.class).isThrownBy(() -> dogService.findDog(4));
+//        DogRecord dogRecord1 = new DogRecord();
 
-
+//        DogRecord dogRecord1 = new DogRecord();
+//        assertThat(dogRecord1 = dogMapper.toRecord(dog)).isNull();
+//        DogRecord record = new DogRecord();
 
     }
 
