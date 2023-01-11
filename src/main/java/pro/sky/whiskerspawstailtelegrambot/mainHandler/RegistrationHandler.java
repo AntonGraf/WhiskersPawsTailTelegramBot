@@ -51,6 +51,7 @@ public class RegistrationHandler {
       AdoptiveParentRecord adoptiveParentOld = adoptiveParentService
           .getAdoptiveParentByChatId(Long.parseLong(chatId));
       updatePhone(adoptiveParentOld, text);
+      updateState(adoptiveParent);
       return formReplyMessages.replyMessage(message,
           AllText.REGISTRATION_SUCCESS + adoptiveParentOld.getId(),
           configKeyboard.initKeyboardOnClickStart());
@@ -106,6 +107,16 @@ public class RegistrationHandler {
     adoptiveParentRecord.setFullName(adoptiveParent.getFullName());
     adoptiveParentRecord.setPhone(phone);
     adoptiveParentRecord.setState(StateAdoptiveParent.SUCCESS_REG.name());
+    adoptiveParentRecord.setChatId(adoptiveParent.getChatId());
+    adoptiveParentService.updateAdoptiveParent(adoptiveParent.getId(),
+        adoptiveParentRecord);
+  }
+
+  private void updateState(AdoptiveParentRecord adoptiveParent) {
+    AdoptiveParentRecord adoptiveParentRecord = new AdoptiveParentRecord();
+    adoptiveParentRecord.setFullName(adoptiveParent.getFullName());
+    adoptiveParentRecord.setPhone(adoptiveParent.getPhone());
+    adoptiveParentRecord.setState(StateAdoptiveParent.FREE.name());
     adoptiveParentRecord.setChatId(adoptiveParent.getChatId());
     adoptiveParentService.updateAdoptiveParent(adoptiveParent.getId(),
         adoptiveParentRecord);
