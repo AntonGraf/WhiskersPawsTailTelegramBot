@@ -1,15 +1,10 @@
 package pro.sky.whiskerspawstailtelegrambot.record;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NonNull;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
-import pro.sky.whiskerspawstailtelegrambot.entity.Report;
 import pro.sky.whiskerspawstailtelegrambot.entity.Shelter;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,31 +12,36 @@ import java.util.List;
  * A DTO for the {@link pro.sky.whiskerspawstailtelegrambot.entity.Dog} entity
  */
 @AllArgsConstructor
-@Getter
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class DogRecord implements Serializable {
+
     long id;
-//    @NotNull
+
+
     String fullName;
 
-//    @NotNull
     String age;
 
-//    @NotNull
+
     String description;
 
+
+    @JsonIgnore
     String filePath;
 
+    @JsonIgnore
     long fileSize;
 
+    @JsonIgnore
     String mediaType;
 
+    @JsonIgnore
     byte[] photo;
 
     @JsonIgnore
     Shelter shelter;
-
-
     @JsonIgnore
     AdoptiveParent adoptiveParent;
 

@@ -45,9 +45,11 @@ class lupaevTelegramBotApplicationTestsDogSpringBootTest {
 
     @Test
     public void testGet() {
-        assertThat(this.restTemplate.getForEntity("http://localhost:" + port + "/dogs/all", String.class))
+        assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/dogs/all", String.class))
                 .isNotNull();
-        assertThat(this.restTemplate.getForEntity("http://localhost:" + port + "/dogs/1", String.class))
+        assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/dogs/1", String.class))
+                .isNotNull();
+        assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/dogs?id=14", String.class))
                 .isNotNull();
     }
 
@@ -68,6 +70,9 @@ class lupaevTelegramBotApplicationTestsDogSpringBootTest {
         dog.setDescription("testDog");
         assertThat(this.restTemplate.exchange("http://localhost:" + port + "/dogs", PUT,new HttpEntity<>(dog), Dog.class))
                 .isNotNull();
+        assertThat(this.restTemplate.exchange("http://localhost:" + port + "/dogs/2?id=2", PUT,new HttpEntity<>(dog), Dog.class))
+                .isNotNull();
+
     }
 
     @Test

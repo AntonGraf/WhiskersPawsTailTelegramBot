@@ -212,7 +212,7 @@ public class DogController {
             )
     })
     @PutMapping(value = "/{dogId}")
-    public ResponseEntity<DogRecord> addIdAdoptiveParent(@PathVariable Long dogId, @RequestParam Long adoptiveParentId) {
+    public ResponseEntity<DogRecord> addIdAdoptiveParent(@PathVariable Long dogId, @RequestParam(name = "id") Long adoptiveParentId) {
         dogService.addIdAdoptiveParent(dogId, adoptiveParentId);
         return ResponseEntity.ok().build();
     }

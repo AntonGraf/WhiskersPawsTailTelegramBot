@@ -47,18 +47,21 @@ public class Dog {
      * Путь по которому будеть храниться фото
      */
     @Column(name = "file_path")
+    @JsonIgnore
     String filePath;
 
     /**
      * Указывается размер файлов
      */
     @Column(name = "size")
+    @JsonIgnore
     long fileSize;
 
     /**
      * Медиатип
      */
     @Column(name = "type")
+    @JsonIgnore
     String mediaType;
 
     /**
@@ -66,6 +69,7 @@ public class Dog {
      */
     @Lob
     @Column(name = "photo")
+    @JsonIgnore
     byte[] photo;
 
 
