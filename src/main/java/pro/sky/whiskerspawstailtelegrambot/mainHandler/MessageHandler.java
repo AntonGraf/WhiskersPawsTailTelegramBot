@@ -90,8 +90,8 @@ public class MessageHandler implements MainHandler {
                 .handlerWithStatusOnlyName(message,adoptiveParent, message.getText(), chatId);
           case SUCCESS_REG:
             //если уже есть такой в таблице со статусом зареган, то просто сообщение что вы уже есть у нас
-            return sendMessage = registrationHandler
-                .handlerWithStatuSuccessReg(message,adoptiveParent, message.getText(), chatId);
+           /* return sendMessage = registrationHandler
+                .handlerWithStatuSuccessReg(message,adoptiveParent, message.getText(), chatId);*/
           case WAIT_SEND_REPORT:
             return sendMessage = reportAddHandler.sendReport(message);
         }
