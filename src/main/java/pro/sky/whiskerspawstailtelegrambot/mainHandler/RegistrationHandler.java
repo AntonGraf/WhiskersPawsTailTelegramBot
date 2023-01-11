@@ -19,16 +19,18 @@ import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
 @Component
 public class RegistrationHandler {
 
-  AdoptiveParentService adoptiveParentService;
-  FormReplyMessages formReplyMessages;
-  ConfigKeyboard configKeyboard;
+  private final AdoptiveParentService adoptiveParentService;
+  private final FormReplyMessages formReplyMessages;
+  private final ConfigKeyboard configKeyboard;
+  private final StandardReplyHandler standardReplyHandler;
 
   public RegistrationHandler(
       AdoptiveParentService adoptiveParentService, FormReplyMessages formReplyMessages,
-      ConfigKeyboard configKeyboard) {
+      ConfigKeyboard configKeyboard, StandardReplyHandler standardReplyHandler) {
     this.adoptiveParentService = adoptiveParentService;
     this.formReplyMessages = formReplyMessages;
     this.configKeyboard = configKeyboard;
+    this.standardReplyHandler = standardReplyHandler;
   }
 
   public SendMessage handlerWithStatusTheFirstState(Message message,AdoptiveParentRecord adoptiveParent,
@@ -69,6 +71,8 @@ public class RegistrationHandler {
     //если уже есть такой в таблице со статусом зареган, то просто сообщение что вы уже есть у нас
     if (text.equals(AllText.REGISTRATION_BUTTON)) {
       sendMessage = new SendMessage(chatId, AllText.ALREADY_REGISTERED);
+    }else {
+      sendMessage = standardReplyHandler.handler(message);
     }
     return sendMessage;
   }
