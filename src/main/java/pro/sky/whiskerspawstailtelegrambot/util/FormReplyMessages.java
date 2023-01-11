@@ -48,13 +48,5 @@ public class FormReplyMessages {
         return sendMessage;
     }
 
-    public SendMessage replyMessageSetAllKeyBoardNull(Message message, String textReplyMessage, InlineKeyboardMarkup inlineKeyboardMarkup) {
-        String chatId = String.valueOf(message.getChatId());
-        SendMessage sendMessage = new SendMessage(chatId, textReplyMessage);
-        sendMessage.setReplyMarkup(inlineKeyboardMarkup);
-        sendMessage.setReplyMarkup(new ConfigKeyboard().formReplyKeyboardInOneRow(""));
-
-        return sendMessage;
-    }
 
 }
