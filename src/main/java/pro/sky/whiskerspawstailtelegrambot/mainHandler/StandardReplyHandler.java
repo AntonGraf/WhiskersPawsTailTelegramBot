@@ -72,7 +72,7 @@ public class StandardReplyHandler {
       case (AllText.CALL_TO_VOLUNTEER_TEXT): //ответ на позвать волонтера, просто инфа про волонтеров
         return sendMessage = formReplyMessages.replyMessage(message,
             parserToBot.parserVolunteer(volunteerService.getAllVolunteers()),
-            configKeyboard.initKeyboardOnClickStart());
+            configKeyboard.formReplyKeyboardInOneRowInline(AllText.REGISTRATION_BUTTON));
 
       //region реализация логики Отправить отчет о питомце
       case (AllText.SEND_PET_REPORT_TEXT):     // нажатие кнопки Отправить отчет о питомце
