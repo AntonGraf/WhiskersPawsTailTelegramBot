@@ -2,6 +2,7 @@ package pro.sky.whiskerspawstailtelegrambot.mainHandler;
 
 
 import java.util.Objects;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -18,6 +19,7 @@ import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
  */
 @Slf4j
 @Component("MessageHandler")
+@Data
 public class MessageHandler implements MainHandler {
 
   private final ReportAddHandler reportAddHandler;
