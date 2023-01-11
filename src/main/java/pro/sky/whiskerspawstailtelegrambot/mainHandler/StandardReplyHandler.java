@@ -70,9 +70,9 @@ public class StandardReplyHandler {
             configKeyboard.initKeyboardOnClickStart());
 
       case (AllText.CALL_TO_VOLUNTEER_TEXT): //ответ на позвать волонтера, просто инфа про волонтеров
-        return sendMessage = formReplyMessages.replyMessage(message,
-            parserToBot.parserVolunteer(volunteerService.getAllVolunteers()),
-            configKeyboard.formReplyKeyboardInOneRowInline(AllText.REGISTRATION_BUTTON));
+
+        return new SendMessage(chatId,
+            parserToBot.parserVolunteer(volunteerService.getAllVolunteers()));
 
       //region реализация логики Отправить отчет о питомце
       case (AllText.SEND_PET_REPORT_TEXT):     // нажатие кнопки Отправить отчет о питомце
