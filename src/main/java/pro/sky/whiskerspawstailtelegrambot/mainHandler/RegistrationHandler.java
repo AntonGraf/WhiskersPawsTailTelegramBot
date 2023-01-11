@@ -25,7 +25,7 @@ public class RegistrationHandler {
 
   public RegistrationHandler(
       AdoptiveParentService adoptiveParentService, FormReplyMessages formReplyMessages,
-      ConfigKeyboard configKeyboard, StandardReplyHandler standardReplyHandler) {
+      ConfigKeyboard configKeyboard) {
     this.adoptiveParentService = adoptiveParentService;
     this.formReplyMessages = formReplyMessages;
     this.configKeyboard = configKeyboard;
