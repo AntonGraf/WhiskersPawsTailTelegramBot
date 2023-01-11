@@ -61,8 +61,10 @@ public class StandardReplyHandler {
     switch (textMessage) {
 
       case (AllText.START_TEXT):
-        return sendMessage = formReplyMessages.replyMessage(message, AllText.WELCOME_MESSAGE_TEXT,
-            configKeyboard.initKeyboardOnClickStart());
+      /*  return sendMessage = formReplyMessages.replyMessage(message, AllText.WELCOME_MESSAGE_TEXT,
+            configKeyboard.initKeyboardOnClickStart());*/
+        return sendMessage = formReplyMessages.replyMessage(message, AllText.REGISTRATION_INIT,
+            configKeyboard.formReplyKeyboardInOneRowInline(AllText.REGISTRATION_BUTTON));
 
       case (AllText.CANCEL_TEXT)://реакция на кнопку отмена - возврат в главное меню
         return sendMessage = formReplyMessages.replyMessage(message,
@@ -91,7 +93,6 @@ public class StandardReplyHandler {
         //либо отменет регистрацию
         if (adoptiveParentService.getStateAdoptiveParentByChatId(Long.parseLong(chatId)) != null) {
           return new SendMessage(chatId, AllText.ALREADY_REGISTERED);
-
         }
         return registrationHandler.addToTable(message, chatId);
       //------------------> регистрация

@@ -22,7 +22,6 @@ import java.util.List;
 public class ConfigMenu {
     public void initMenu(TelegramBotUpdatesListener bot){
         List<BotCommand> listofCommands = new ArrayList<>();
-        listofCommands.add(new BotCommand(AllText.START_TEXT, AllText.START_MENU_TEXT));
         listofCommands.add(new BotCommand(AllText.CALL_TO_VOLUNTEER_TEXT, AllText.CALL_VOLUNTEER_TEXT));
         try {
             bot.execute(new SetMyCommands(listofCommands, new BotCommandScopeDefault(), null));
