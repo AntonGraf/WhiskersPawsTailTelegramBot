@@ -61,5 +61,11 @@ public class Report {
     @JsonBackReference
     Dog dog;
 
+    /**
+     * Этапы заполнения отчета
+     */
+    @Column(name = "state_report")
+    String stateReport;
+
 }
 

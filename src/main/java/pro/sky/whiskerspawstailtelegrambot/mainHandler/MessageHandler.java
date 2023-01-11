@@ -52,6 +52,7 @@ public class MessageHandler implements MainHandler {
     String chatId = null;
     SendMessage sendMessage = null;
     Message message = null;
+    String textMessage = null;
     StateAdoptiveParent state;
     AdoptiveParentRecord adoptiveParent;
     try {
@@ -66,6 +67,7 @@ public class MessageHandler implements MainHandler {
         return sendMessage = callbackQueryHandler.handler(update.getCallbackQuery());
       } else {
         message = update.getMessage();
+        textMessage = message.getText();
         chatId = message.getChatId().toString();
         state = adoptiveParentService.getStateAdoptiveParentByChatId(
             Long.parseLong(chatId));
@@ -84,15 +86,15 @@ public class MessageHandler implements MainHandler {
 
           case THE_FIRST_STATE:
             return sendMessage = registrationHandler
-                .handlerWithStatusTheFirstState(message,adoptiveParent, message.getText(), chatId);
+                .handlerWithStatusTheFirstState(message, adoptiveParent, message.getText(), chatId);
           case ONLY_NAME:
             return sendMessage = registrationHandler
-                .handlerWithStatusOnlyName(message,adoptiveParent, message.getText(), chatId);
+                .handlerWithStatusOnlyName(message, adoptiveParent, message.getText(), chatId);
           case SUCCESS_REG:
             //
             break;
-          case WAIT_SEND_REPORT:
-            return sendMessage = reportAddHandler.sendReport(message);
+          case START_SEND_REPORT:
+            return sendMessage = reportAddHandler.handler(message);
         }
       }
 
@@ -104,12 +106,14 @@ public class MessageHandler implements MainHandler {
         return sendMessage = standardReplyHandler.handler(message);
       }
 
-    } finally {
-      if (sendMessage == null) {
-        sendMessage = new SendMessage(chatId, AllText.ERROR_REPLY_TEXT);
-      }
+    } catch (
+        Exception e) {
+      return sendMessage = new SendMessage(chatId, AllText.ERROR_REPLY_TEXT);
+
     }
-    return sendMessage;
+    return sendMessage = new
+
+        SendMessage(chatId, AllText.ERROR_REPLY_TEXT);
   }
 
 }

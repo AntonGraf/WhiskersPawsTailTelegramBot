@@ -1,11 +1,14 @@
 package pro.sky.whiskerspawstailtelegrambot.mainHandler;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Document;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import pro.sky.whiskerspawstailtelegrambot.service.ReportService;
@@ -33,55 +36,46 @@ public class ReportAddHandler {
     this.configKeyboard = configKeyboard;
   }
 
-//  public SendMessage getSendMessageReport(
-//      Message message, String textReplyMessage, ReplyKeyboardMarkup keyboardMarkup) {
-//    log.info("Вызов метода " + new Throwable()
-//        .getStackTrace()[0]
-//        .getMethodName() + " класса " + this.getClass().getName());
-//    SendMessage sendMessage = formReplyMessages.replyMessage(message, textReplyMessage,
-//        keyboardMarkup);
-//    return sendMessage;
-//  }
+  public SendMessage handler(Message message) {
 
-  /**
-   * Метод вызывается из других методов, получает параметры формирует и возвращает SendMessage,
-   * нужен для сокращения кода
-   *
-   * @param message              сообщение из update
-   * @param textReplyMessage     текс сообщения для вывода на экранпользователю, в ответ на его
-   *                             действие
-   * @param inlineKeyboardMarkup инлайн клавиатура, котора выводится пользователю   *
-   */
-//  public SendMessage getSendMessageReport(
-//      Message message, String textReplyMessage, InlineKeyboardMarkup inlineKeyboardMarkup) {
-//    log.info("Вызов метода " + new Throwable()
-//        .getStackTrace()[0]
-//        .getMethodName() + " класса " + this.getClass().getName());
-//    return formReplyMessages.replyMessage(message, textReplyMessage,
-//        inlineKeyboardMarkup);
-//  }
-  /**
-   * Перегрузка. Метод вызывается из других методов, получает параметры формирует и возвращает SendMessage
-   * или SendMessage с сообщение об ошибке,нужен для сокращения кода   *
-   * @param message              сообщение из update
-   * @param textReplyMessage     текс сообщения для вывода на экранпользователю, в ответ на его
-   *                             действие
-   * @param inlineKeyboardMarkup инлайн клавиатура, котора выводится пользователю   *
-   * @param isSuccessful если false, то будет отправлено сообщение об ошибке и возврат в главное меню   *
-   */
-//  public SendMessage getSendMessageReport(
-//      Message message, String textReplyMessage, InlineKeyboardMarkup inlineKeyboardMarkup,
-//      boolean isSuccessful) {
-//    log.info("Вызов метода " + new Throwable()
-//        .getStackTrace()[0]
-//        .getMethodName() + " класса " + this.getClass().getName());
-//    if (!isSuccessful) {
-//      return formReplyMessages.replyMessageError(message, AllText.ERROR_REPLY_TEXT,
-//          configKeyboard.formReplyKeyboardInOneRow(AllText.INFO_SHELTER_TEXT, AllText.SEND_REPORT_TEXT));
-//    }
-//    return formReplyMessages.replyMessage(message, textReplyMessage,
-//        inlineKeyboardMarkup);
-//  }
+    SendMessage sendMessage = null;
+    String textMessage = message.getText();
+    String chatId = message.getChatId().toString();
+    StateAdoptiveParent state = reportService.getStateAdoptiveParentByChatId(
+        Long.parseLong(chatId));
+
+    switch (textMessage) {
+
+      case (AllText.CANCEL_TEXT)://реакция на кнопку отмена - возврат в главное меню, изменение всех статусов на FREE
+        return sendMessage = reportService.changeStateAdoptiveParent(message,
+            AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
+    }
+
+      switch (state) {
+
+        case START_SEND_REPORT:
+          return sendMessage = reportService.changeStateAdoptiveParent(message,
+              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
+
+        case WAIT_PHOTO_REPORT:
+          return sendMessage = reportService.changeStateAdoptiveParent(message,
+              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
+
+        case WAIT_HEALTH_REPORT:
+          return sendMessage = reportService.changeStateAdoptiveParent(message,
+              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
+
+        case WAIT_DIET_REPORT:
+          return sendMessage = reportService.changeStateAdoptiveParent(message,
+              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
+
+        case WAIT_HABITS_REPORT:
+          return sendMessage = reportService.changeStateAdoptiveParent(message,
+              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
+      }
+
+    return sendMessage;
+  }
 
   //region clickButton
 
@@ -118,12 +112,8 @@ public class ReportAddHandler {
     ReplyKeyboardMarkup replyKeyboardMarkup = configKeyboard.formReplyKeyboardInOneRow(
         AllText.CANCEL_TEXT);
 
-    boolean isChangeState = reportService.changeStateAdoptiveParent(message,
-        StateAdoptiveParent.WAIT_SEND_REPORT);//
-
-    return sendMessage = formReplyMessages.replyMessage(message,
-        AllText.DESCRIPTION_SEND_REPORT_TEXT,
-        replyKeyboardMarkup);
+    return sendMessage = reportService.changeStateAdoptiveParent(message,
+        AllText.DESCRIPTION_SEND_REPORT_TEXT, StateAdoptiveParent.WAIT_SEND_REPORT);
   }
 
   //endregion
@@ -142,55 +132,48 @@ public class ReportAddHandler {
         AllText.CANCEL_TEXT);
 
     String textMessage = message.getText();
-    checkTextInSentReport(textMessage);
+    List<PhotoSize> photoSizes = message.getPhoto();
+    Document messageDocument = message.getDocument();
 
     boolean isTextOk = checkTextInSentReport(textMessage);
     boolean isPhotoOk = true;
-    boolean isChangeState;
 
     if (!isTextOk) {
-      isChangeState = reportService.changeStateAdoptiveParent(message,
-          StateAdoptiveParent.FREE);
       return sendMessage = formReplyMessages.replyMessage(message,
           AllText.NO_TEXT_SEND_REPORT_TEXT,
           configKeyboard.initKeyboardOnClickStart());
     }
     if (!isPhotoOk) {
-      isChangeState = reportService.changeStateAdoptiveParent(message,
-          StateAdoptiveParent.FREE);
       return sendMessage = formReplyMessages.replyMessage(message,
           AllText.NO_PHOTO_SEND_REPORT_TEXT,
           configKeyboard.initKeyboardOnClickStart());
     }
 
-    isChangeState = reportService.changeStateAdoptiveParent(message,
-        StateAdoptiveParent.FREE);
-
-    if (!isChangeState) {
-      return sendMessage = formReplyMessages.replyMessage(message,
-          AllText.ERROR_REPLY_TEXT,
-          configKeyboard.initKeyboardOnClickStart());
-    }
-
-    return sendMessage = formReplyMessages.replyMessage(message,
-        AllText.RESULT_MESSAGE_SEND_REPORT_TEXT,
-        replyKeyboardMarkup);
+    return sendMessage = saveReportInDb(message);
   }
 
   public boolean checkTextInSentReport(String textMessage) {
 
-    String text = "Егор Алла Александр";
     Pattern pattern = Pattern.compile("^(\\d+)(?:\\s+\\w+|\\s+[а-яА-Я]+){15,}");
-    Matcher matcher = pattern.matcher(text);
+    Matcher matcher = pattern.matcher(textMessage);
 
     if (matcher.matches()) {
       return true;
     }
-    return false;
+    return true;//true для теста
 
   }
 
   public void checkPhotoInSentReport() {
+
+  }
+
+  public SendMessage saveReportInDb(Message message) {
+
+    reportService.addReport();
+
+    return sendMessage = reportService.changeStateAdoptiveParent(message,
+        AllText.SUCCESSFUL_MESSAGE_SEND_REPORT_TEXT, StateAdoptiveParent.FREE);
 
   }
 

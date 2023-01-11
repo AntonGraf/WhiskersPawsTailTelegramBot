@@ -6,7 +6,12 @@ public enum StateAdoptiveParent {
     THE_FIRST_STATE("только начал"),
     ONLY_NAME("ввел только имя"),
     SUCCESS_REG("зареган"),
-    WAIT_SEND_REPORT("WAIT_SEND_REPORT"),
+
+    START_SEND_REPORT("WAIT_SEND_REPORT"),
+    WAIT_PHOTO_REPORT("WAIT_PHOTO_REPORT"),
+    WAIT_DIET_REPORT("WAIT_DIET_REPORT"),
+    WAIT_HEALTH_REPORT("WAIT_HEALTH_REPORT"),
+    WAIT_HABITS_REPORT("WAIT_HABITS_REPORT"),
     NO_SEND_REPORT("NO_SEND_REPORT");
 
     StateAdoptiveParent(String name) {
