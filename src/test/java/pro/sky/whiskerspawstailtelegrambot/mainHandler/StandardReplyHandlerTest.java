@@ -60,11 +60,33 @@ class StandardReplyHandlerTest {
     }
 
     @Test
-    public void startTextTest() {
+    public void startTextIfNotRegistertTest() {
         Message testMessage = new Message();
         long chatId = 3399;
         testMessage.setText(AllText.START_TEXT);
         testMessage.setChat(new Chat(chatId, "private"));
+
+        lenient().when(adoptiveParentService.getStateAdoptiveParentByChatId(any(Long.class))).thenReturn(null);
+        SendMessage excepted = new SendMessage(String.valueOf(chatId), AllText.REGISTRATION_INIT);
+        InlineKeyboardMarkup inlineKeyboardMarkup = configKeyboard.formReplyKeyboardInOneRowInline(
+                AllText.REGISTRATION_BUTTON);
+
+        excepted.setReplyMarkup(inlineKeyboardMarkup);
+
+        SendMessage outMessage = out.handler(testMessage);
+
+        assertEquals(excepted, outMessage);
+
+    }
+
+    @Test
+    public void startTextIfRegisterTest() {
+        Message testMessage = new Message();
+        long chatId = 3399;
+        testMessage.setText(AllText.START_TEXT);
+        testMessage.setChat(new Chat(chatId, "private"));
+        lenient().when(adoptiveParentService.getStateAdoptiveParentByChatId(any(Long.class))).thenReturn(
+                StateAdoptiveParent.SUCCESS_REG);
 
         SendMessage excepted = new SendMessage(String.valueOf(chatId), AllText.WELCOME_MESSAGE_TEXT);
         ReplyKeyboardMarkup replyKeyboardMarkup = configKeyboard.initKeyboardOnClickStart();
@@ -76,7 +98,6 @@ class StandardReplyHandlerTest {
         assertEquals(excepted, outMessage);
 
     }
-
     @Test
     public void cancelTextTest() {
         Message testMessage = new Message();
@@ -105,9 +126,6 @@ class StandardReplyHandlerTest {
         lenient().when(volunteerService.getAllVolunteers()).thenReturn(getTestVolunteerRecordList());
         SendMessage excepted = new SendMessage(String.valueOf(chatId),
                 parserToBot.parserVolunteer(getTestVolunteerRecordList()));
-        ReplyKeyboardMarkup replyKeyboardMarkup = configKeyboard.initKeyboardOnClickStart();
-
-        excepted.setReplyMarkup(replyKeyboardMarkup);
 
         SendMessage outMessage = out.handler(testMessage);
 
@@ -127,19 +145,10 @@ class StandardReplyHandlerTest {
                 AllText.SHOW_ALL_YOUR_PET_TEXT, AllText.SEND_REPORT_TEXT, AllText.CANCEL_TEXT);
 
         excepted.setReplyMarkup(replyKeyboardMarkup);
-        lenient().when(reportAddHandler.getSendMessageReport(testMessage,
-                AllText.MENU_SEND_PET_REPORT_TEXT,
-                configKeyboard.formReplyKeyboardInOneRowInline(AllText.SHOW_ALL_YOUR_PET_TEXT,
-                        AllText.SEND_REPORT_TEXT, AllText.CANCEL_TEXT))).thenReturn(formReplyMessages.replyMessage(
-                testMessage,
-                AllText.MENU_SEND_PET_REPORT_TEXT,
-                configKeyboard.formReplyKeyboardInOneRowInline(AllText.SHOW_ALL_YOUR_PET_TEXT,
-                        AllText.SEND_REPORT_TEXT, AllText.CANCEL_TEXT)
-        ));
+
         SendMessage outMessage = out.handler(testMessage);
 
         assertEquals(excepted, outMessage);
-
     }
 
     @Test
@@ -150,7 +159,7 @@ class StandardReplyHandlerTest {
         testMessage.setChat(new Chat(chatId, "private"));
 
         lenient().when(adoptiveParentService.getStateAdoptiveParentByChatId(any(Long.class)))
-                .thenReturn(StateAdoptiveParent.WAIT_SEND_REPORT);
+                .thenReturn(StateAdoptiveParent.IN_PROCESS_SEND_REPORT);
 
         SendMessage excepted = new SendMessage(String.valueOf(chatId),AllText.ALREADY_REGISTERED);
 
@@ -206,9 +215,8 @@ class StandardReplyHandlerTest {
         long chatId = 3399;
         testMessage.setText(AllText.INFO_SHELTER_TEXT);
         testMessage.setChat(new Chat(chatId, "private"));
-        lenient().when(shelterService.getOfShelterMessage(any(Long.class))).thenReturn("Информация о приюте");
 
-        SendMessage excepted = new SendMessage(String.valueOf(chatId), "Информация о приюте");
+        SendMessage excepted = new SendMessage(String.valueOf(chatId), AllText.INFO);
         ReplyKeyboardMarkup replyKeyboardMarkup = configKeyboard.initKeyboardOnClickStart();
         excepted.setReplyMarkup(replyKeyboardMarkup);
 
@@ -240,11 +248,11 @@ class StandardReplyHandlerTest {
         Shelter shelter = getTestShelter();
 
         volunteerRecords.add(
-                new VolunteerRecord(1, "Иванов Иван Иванович", "+79876543210",
+                new VolunteerRecord(1L, "Иванов Иван Иванович", "+79876543210",
                         "это волонтер", "будни с 9:00 до 17:00",shelter)
         );
         volunteerRecords.add(
-                new VolunteerRecord(2, "Петров Петр Петрович", "+79876543211",
+                new VolunteerRecord(2L, "Петров Петр Петрович", "+79876543211",
                         "это тоже волонтер", "будни с 9:00 до 18:00",shelter)
         );
 
