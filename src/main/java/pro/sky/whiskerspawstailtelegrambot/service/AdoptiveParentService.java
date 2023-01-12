@@ -93,6 +93,9 @@ public class AdoptiveParentService {
    */
   public Collection<AdoptiveParentRecord> getListOfAdoptiveParent() {
     log.info("Was invoked method for get list of AdoptiveParent from DB");
+    var q = adoptiveParentMapper.toRecordList(
+        adoptiveParentRepo.findAll());
+    var w = adoptiveParentRepo.findAll();
     Collection<AdoptiveParentRecord> collection = adoptiveParentMapper.toRecordList(
         adoptiveParentRepo.findAll());
     if (collection == null || collection.isEmpty()) {

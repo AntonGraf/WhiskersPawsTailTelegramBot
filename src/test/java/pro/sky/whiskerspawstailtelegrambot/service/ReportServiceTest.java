@@ -54,32 +54,32 @@ class ReportServiceTest {
       ImageIO.write(bImage, "png", bos);
       data = bos.toByteArray();
     }
-    reportRecord.setId(1);
-    reportRecord.setDog_id(1);
+    reportRecord.setId(1l);
+    reportRecord.setDog_id(1l);
 //    reportRecord.setPhotoDog(data);
     reportRecord.setDiet("test diet");
     reportRecord.setReportAboutFeelings("test AboutFeelings");
     reportRecord.setReportAboutHabits("test AboutHabits");
     reportRecord.setStateReport("FINISHED");
 
-    newReportRecord.setId(2);
-    newReportRecord.setDog_id(2);
+    newReportRecord.setId(2l);
+    newReportRecord.setDog_id(2l);
 //    newReportRecord.setPhotoDog(data);
     newReportRecord.setDiet("test new diet");
     newReportRecord.setReportAboutFeelings("test new AboutFeelings");
     newReportRecord.setReportAboutHabits("test new AboutHabits");
     newReportRecord.setStateReport("NOT_STARTED");
 
-    report.setId(1);
-    report.setDog_id(1);
+    report.setId(1l);
+    report.setDog_id(1l);
 //    report.setPhotoDog(data);
     report.setDiet("test diet");
     report.setReportAboutFeelings("test AboutFeelings");
     report.setReportAboutHabits("test AboutHabits");
     report.setStateReport("FINISHED");
 
-    newReport.setId(2);
-    newReport.setDog_id(2);
+    newReport.setId(2l);
+    newReport.setDog_id(2l);
 //    newReport.setPhotoDog(data);
     newReportRecord.setDiet("test new diet");
     newReportRecord.setReportAboutFeelings("test new AboutFeelings");

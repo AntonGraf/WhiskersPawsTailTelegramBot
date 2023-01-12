@@ -94,7 +94,7 @@ class VolunteerControllerTest {
         volunteerList.add(getTestVolunteer());
 
         Volunteer volunteer = new Volunteer();
-        volunteer.setId(2);
+        volunteer.setId(2l);
         volunteer.setFullName("Иванов Иван Иванович");
         volunteer.setPhone("89146667454");
         volunteer.setInfoVolunteer("Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
@@ -190,7 +190,7 @@ class VolunteerControllerTest {
 
     private Volunteer getTestVolunteer() {
         Volunteer volunteer = new Volunteer();
-        volunteer.setId(1);
+        volunteer.setId(1l);
         volunteer.setFullName("Ивченко Валентин Генадьевич");
         volunteer.setPhone("89146667454");
         volunteer.setInfoVolunteer("Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
