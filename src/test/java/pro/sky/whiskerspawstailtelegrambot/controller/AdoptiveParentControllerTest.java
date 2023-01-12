@@ -76,7 +76,7 @@ class AdoptiveParentControllerTest {
     adoptiveParentPositive = new AdoptiveParentRecord();
     listdogs = new ArrayList<>();
     adoptiveParentWithEmptyName = new AdoptiveParentRecord(anyLong,"","89139131233",false,"Empty",12312L,listdogs);
-    adoptiveParent = new AdoptiveParent(1, "fullName", "phone", true, "start", 0, listOfdog);
+    adoptiveParent = new AdoptiveParent(1l, "fullName", "phone", true, "start", 0l, listOfdog);
     parentObject = new JSONObject();
     parentObject.put("id",1L);
     parentObject.put("fullName","fullName");

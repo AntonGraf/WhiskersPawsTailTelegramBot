@@ -15,11 +15,11 @@ import java.io.Serializable;
 /**
  * A DTO for the {@link pro.sky.whiskerspawstailtelegrambot.entity.Report} entity
  */
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ReportRecord implements Serializable {

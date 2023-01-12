@@ -50,8 +50,8 @@ class AdoptiveParentServiceTest {
         ANYLONG = 1L;
         dogs = new ArrayList<>();
         dogRecords = new ArrayList<>();
-        adoptiveParentTestPositive = new AdoptiveParentRecord(1, "fullName", "phone", true, "start", 0, dogRecords);
-        adoptiveParent = new AdoptiveParent(1, "fullName", "phone", true, "start", 0, dogs);
+        adoptiveParentTestPositive = new AdoptiveParentRecord(1l, "fullName", "phone", true, "start", 0l, dogRecords);
+        adoptiveParent = new AdoptiveParent(1l, "fullName", "phone", true, "start", 0l, dogs);
     }
 
     @AfterEach

@@ -2,6 +2,7 @@ package pro.sky.whiskerspawstailtelegrambot.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.google.common.base.Objects;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -14,58 +15,79 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Report {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
 
-    /**
-     * Рацион животного
-     */
-    @Column(name = "diet")
-    String diet;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  Long id;
 
-    /**
-     * Общее самочувствие и привыкание к новому месту
-     */
-    @Column(name = "report_about_feelings")
-    String reportAboutFeelings;
+  /**
+   * Рацион животного
+   */
+  @Column(name = "diet")
+  String diet;
 
-    /**
-     * Изменение в поведении: отказ от старых привычек, приобретение новых
-     */
-    @Column(name = "report_about_habits")
-    String reportAboutHabits;
+  /**
+   * Общее самочувствие и привыкание к новому месту
+   */
+  @Column(name = "report_about_feelings")
+  String reportAboutFeelings;
 
-    /**
-     * Фото животного
-     */
-    @Column(name = "photo_dog")
-    byte[] photoDog;
+  /**
+   * Изменение в поведении: отказ от старых привычек, приобретение новых
+   */
+  @Column(name = "report_about_habits")
+  String reportAboutHabits;
 
-    /**
-     * id собаки
-     */
-    @Column(name = "dog_id")
-    Long dog_id;
+  /**
+   * Фото животного
+   */
+  @Column(name = "photo_dog")
+  byte[] photoDog;
 
-    /**
-     * Присоединение к собаке
-     */
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "dog_id", referencedColumnName = "id", insertable = false, updatable = false)
-    @JsonBackReference
-    Dog dog;
+  /**
+   * id собаки
+   */
+  @Column(name = "dog_id")
+  Long dog_id;
 
-    /**
-     * Этапы заполнения отчета
-     */
-    @Column(name = "state_report")
-    String stateReport;
+  /**
+   * Присоединение к собаке
+   */
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "dog_id", referencedColumnName = "id", insertable = false, updatable = false)
+  @JsonBackReference
+  Dog dog;
 
+  /**
+   * Этапы заполнения отчета
+   */
+  @Column(name = "state_report")
+  String stateReport;
+
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Report report = (Report) o;
+    return Objects.equal(id, report.id)
+        && Objects.equal(diet, report.diet)
+        && Objects.equal(reportAboutFeelings, report.reportAboutFeelings)
+        && Objects.equal(reportAboutHabits, report.reportAboutHabits);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(id, diet, reportAboutFeelings, reportAboutHabits);
+  }
 }
 
