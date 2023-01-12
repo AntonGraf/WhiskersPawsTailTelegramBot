@@ -150,7 +150,7 @@ public class DogController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<DogRecord> addDog(
             @RequestParam String fullName,
-            @RequestParam int age,
+            @RequestParam String age,
             @RequestParam String description,
             @RequestParam MultipartFile photo) throws IOException {
         dogService.addDog(fullName, age, description, photo);
@@ -183,7 +183,7 @@ public class DogController {
     public ResponseEntity<DogRecord> editDog(
             @RequestParam Long id,
             @RequestParam String fullName,
-            @RequestParam int age,
+            @RequestParam String age,
             @RequestParam String description,
             @RequestParam MultipartFile photo) throws IOException {
         dogService.editDog(id, fullName, age, description, photo);

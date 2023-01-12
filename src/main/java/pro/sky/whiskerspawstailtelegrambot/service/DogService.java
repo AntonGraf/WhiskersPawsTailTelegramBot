@@ -83,7 +83,7 @@ public class DogService {
      * @param photo
      * @throws IOException
      */
-    public void editDog(Long dogId, String fullName, int age, String description, MultipartFile photo) throws IOException { //Put
+    public void editDog(Long dogId, String fullName, String age, String description, MultipartFile photo) throws IOException { //Put
         log.info("Изменение данных собаки в БД");
         DogRecord dogRecord = findDog(dogId);
         Dog dog = dogMapper.toEntity(dogRecord);
@@ -138,7 +138,7 @@ public class DogService {
      * @param photo
      * @throws IOException
      */
-    public void addDog(String fullName, int age, String description, MultipartFile photo) throws IOException { //Post
+    public void addDog(String fullName, String age, String description, MultipartFile photo) throws IOException { //Post
         log.info("Добавление собаки в БД");
         Dog dog = new Dog();
         dog.setFullName(fullName);
