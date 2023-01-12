@@ -61,8 +61,13 @@ public class StandardReplyHandler {
     switch (textMessage) {
 
       case (AllText.START_TEXT):
-        return sendMessage = formReplyMessages.replyMessage(message, AllText.WELCOME_MESSAGE_TEXT,
-            configKeyboard.initKeyboardOnClickStart());
+        if (adoptiveParentService.getStateAdoptiveParentByChatId(Long.parseLong(chatId)) != null) {
+          return sendMessage = formReplyMessages.replyMessage(message,
+              AllText.WELCOME_MESSAGE_TEXT,
+              configKeyboard.initKeyboardOnClickStart());
+        }
+        return sendMessage = formReplyMessages.replyMessage(message, AllText.REGISTRATION_INIT,
+            configKeyboard.formReplyKeyboardInOneRowInline(AllText.REGISTRATION_BUTTON));
 
       case (AllText.CANCEL_TEXT)://реакция на кнопку отмена - возврат в главное меню
         return sendMessage = formReplyMessages.replyMessage(message,
@@ -70,9 +75,9 @@ public class StandardReplyHandler {
             configKeyboard.initKeyboardOnClickStart());
 
       case (AllText.CALL_TO_VOLUNTEER_TEXT): //ответ на позвать волонтера, просто инфа про волонтеров
-        return sendMessage = formReplyMessages.replyMessage(message,
-            parserToBot.parserVolunteer(volunteerService.getAllVolunteers()),
-            configKeyboard.initKeyboardOnClickStart());
+
+        return new SendMessage(chatId,
+            parserToBot.parserVolunteer(volunteerService.getAllVolunteers()));
 
       //region реализация логики Отправить отчет о питомце
       case (AllText.SEND_PET_REPORT_TEXT):     // нажатие кнопки Отправить отчет о питомце
@@ -91,7 +96,6 @@ public class StandardReplyHandler {
         //либо отменет регистрацию
         if (adoptiveParentService.getStateAdoptiveParentByChatId(Long.parseLong(chatId)) != null) {
           return new SendMessage(chatId, AllText.ALREADY_REGISTERED);
-
         }
         return registrationHandler.addToTable(message, chatId);
       //------------------> регистрация
