@@ -30,5 +30,5 @@ public class ShelterRecord implements Serializable {
     List<String> listOfReasonForRejection;
     Set<DogRecord> dogs;
     Set<VolunteerRecord> volunteers;
-    Byte[] locationMap;
+    byte[] locationMap;
 }

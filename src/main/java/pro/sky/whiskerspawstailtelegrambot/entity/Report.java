@@ -21,7 +21,7 @@ import javax.persistence.*;
 public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    Long id;
 
     /**
      * Рацион животного
@@ -51,7 +51,7 @@ public class Report {
      * id собаки
      */
     @Column(name = "dog_id")
-    long dog_id;
+    Long dog_id;
 
     /**
      * Присоединение к собаке

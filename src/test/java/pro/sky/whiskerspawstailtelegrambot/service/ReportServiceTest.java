@@ -4,7 +4,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -14,13 +13,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 import javax.imageio.ImageIO;
-import liquibase.pro.packaged.M;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pro.sky.whiskerspawstailtelegrambot.entity.Report;
 import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
@@ -109,7 +106,7 @@ class ReportServiceTest {
 
   @Test
   void getReportByPetId() {
-    when(reportRepository.getReportByPetId(anyLong())).thenReturn(report);
+    when(reportRepository.getReportByDog_id(anyLong())).thenReturn(report);
     when(reportMapper.toRecord(any(Report.class))).thenReturn(reportRecord);
     assertThat(reportService.getReportByPetId(1l)).isEqualTo(reportRecord);
   }
@@ -121,7 +118,7 @@ class ReportServiceTest {
 
   @Test
   void addNewReportInDbForPetByPetId() {
-    when(reportRepository.getReportByPetId(anyLong())).thenReturn(report);
+    when(reportRepository.getReportByDog_id(anyLong())).thenReturn(report);
     when(reportMapper.toRecord(any(Report.class))).thenReturn(reportRecord);
     assertThat(reportService.getReportByPetId(1l)).isEqualTo(reportRecord);
   }

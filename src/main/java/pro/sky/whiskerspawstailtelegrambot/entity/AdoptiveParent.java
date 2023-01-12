@@ -27,7 +27,7 @@ public class AdoptiveParent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    long id;
+    Long id;
     /**
      * Поле полного имени
      */
@@ -54,7 +54,7 @@ public class AdoptiveParent {
      * chat id для отправки обратного сообщения
      */
     @Column(name = "chat_id")
-    long chatId;
+    Long chatId;
 
     /**
      * Список собак

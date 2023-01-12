@@ -23,8 +23,8 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ReportRecord implements Serializable {
-    long id;
-    long dog_id;
+    Long id;
+    Long dog_id;
     byte[] photoDog;
     String diet;
     String reportAboutFeelings;
