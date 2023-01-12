@@ -1,25 +1,14 @@
 package pro.sky.whiskerspawstailtelegrambot.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.List;
-import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.google.common.base.Objects;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.Hibernate;
+
+import javax.persistence.*;
+import java.util.List;
 
 
 /**
@@ -28,7 +17,8 @@ import org.hibernate.Hibernate;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Dog {
@@ -46,7 +36,7 @@ public class Dog {
     /**
      * При создании таблицы будет установлено ограничение: age > 0
      */
-    String age;
+    int age;
 
 
     /**
@@ -59,21 +49,18 @@ public class Dog {
      * Путь по которому будеть храниться фото
      */
     @Column(name = "file_path")
-    @JsonIgnore
     String filePath;
 
     /**
      * Указывается размер файлов
      */
     @Column(name = "size")
-    @JsonIgnore
-    Long fileSize;
+    long fileSize;
 
     /**
      * Медиатип
      */
     @Column(name = "type")
-    @JsonIgnore
     String mediaType;
 
     /**
@@ -81,7 +68,6 @@ public class Dog {
      */
     @Lob
     @Column(name = "photo")
-    @JsonIgnore
     byte[] photo;
 
 
@@ -112,21 +98,22 @@ public class Dog {
     @JsonIgnore
     List<Report> reports;
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
         Dog dog = (Dog) o;
-        return id != null && Objects.equals(id, dog.id);
+        return age == dog.age && Objects.equal(id, dog.id)
+            && Objects.equal(fullName, dog.fullName)
+            && Objects.equal(description, dog.description);
     }
 
     @Override
     public int hashCode() {
-        return getClass().hashCode();
+        return Objects.hashCode(id, fullName, age, description);
     }
 }

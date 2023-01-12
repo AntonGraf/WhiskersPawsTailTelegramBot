@@ -14,11 +14,11 @@ import java.util.List;
 /**
  * A DTO for the {@link AdoptiveParent} entity
  */
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AdoptiveParentRecord implements Serializable {
