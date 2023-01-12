@@ -4,10 +4,8 @@ import org.springframework.stereotype.Component;
 import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
 import pro.sky.whiskerspawstailtelegrambot.record.DogRecord;
 import pro.sky.whiskerspawstailtelegrambot.record.VolunteerRecord;
-import pro.sky.whiskerspawstailtelegrambot.service.VolunteerService;
 
 import java.util.Collection;
-import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 
 /**
  * Класс для парсинга из бд.
@@ -38,7 +36,7 @@ public class ParserToBot {
     return stringBuilder.toString();
   }
 
-  public String parserDog(Collection<DogRecord> dogRecords) {
+  public String parserPet(Collection<DogRecord> dogRecords) {
     if (dogRecords.isEmpty()) {
       return null;
     }

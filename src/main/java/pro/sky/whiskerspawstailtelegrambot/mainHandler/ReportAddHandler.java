@@ -40,15 +40,16 @@ public class ReportAddHandler {
 
     SendMessage sendMessage = null;
     String textMessage = message.getText();
-    String chatId = message.getChatId().toString();
+    long chatId = message.getChatId();
 //    StateAdoptiveParent state = reportService.getStateReportAdoptiveParentByChatId(
 //        Long.parseLong(chatId));
 
     switch (textMessage) {
 
       case (AllText.CANCEL_TEXT)://реакция на кнопку отмена - возврат в главное меню, изменение всех статусов на FREE
-        return sendMessage = reportService.changeStateAdoptiveParent(message,
-            AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
+        reportService.updateStateAdoptiveParentByChatId(chatId, StateAdoptiveParent.FREE);
+        return sendMessage = formReplyMessages.replyMessage(message,
+            AllText.CANCEL_RETURN_MAIN_MENU_TEXT, configKeyboard.initKeyboardOnClickStart());
     }
 
 //      switch (state) {
@@ -89,7 +90,7 @@ public class ReportAddHandler {
     log.info("Вызов метода " + new Throwable()
         .getStackTrace()[0]
         .getMethodName() + " класса " + this.getClass().getName());
-    String allPetByChatId = reportService.showAllAdoptedPets(message);
+    String allPetByChatId = reportService.showAllAdoptedPets(message.getChatId());
     InlineKeyboardMarkup inlineKeyboardMarkup = configKeyboard.formReplyKeyboardInOneRowInline(
         AllText.SHOW_ALL_YOUR_PET_TEXT,
         AllText.SEND_REPORT_TEXT, AllText.CANCEL_TEXT);
@@ -108,13 +109,15 @@ public class ReportAddHandler {
     log.info("Вызов метода " + new Throwable()
         .getStackTrace()[0]
         .getMethodName() + " класса " + this.getClass().getName());
-    InlineKeyboardMarkup inlineKeyboardMarkup = configKeyboard.formReplyKeyboardInOneRowInline(
-        AllText.CANCEL_TEXT);
+
+    long chatId = message.getChatId();
+
     ReplyKeyboardMarkup replyKeyboardMarkup = configKeyboard.formReplyKeyboardInOneRow(
         AllText.CANCEL_TEXT);
 
-    return sendMessage = reportService.changeStateAdoptiveParent(message,
-        AllText.DESCRIPTION_SEND_REPORT_TEXT, StateAdoptiveParent.START_SEND_REPORT);
+    reportService.updateStateAdoptiveParentByChatId(chatId, StateAdoptiveParent.START_SEND_REPORT);
+    return sendMessage = formReplyMessages.replyMessage(message,
+        AllText.DESCRIPTION_SEND_REPORT_TEXT, replyKeyboardMarkup);
   }
 
   //endregion
@@ -122,7 +125,7 @@ public class ReportAddHandler {
   /**
    * Метод пытается сохранить отчет о животном в БД
    *
-   * @param
+   * @param message сообщение из update
    */
   public SendMessage sendReport(Message message) {
     log.info("Вызов метода " + new Throwable()
@@ -169,12 +172,23 @@ public class ReportAddHandler {
 
   }
 
+  public boolean isStatusUpdate() {
+
+    return true;
+  }
+
+  /**
+   * метод сохраняет отчет в БД
+   * @param message сообщение из update
+   */
   public SendMessage saveReportInDb(Message message) {
 
+    long chatId = message.getChatId();
 //    reportService.addReport();
 
-    return sendMessage = reportService.changeStateAdoptiveParent(message,
-        AllText.SUCCESSFUL_MESSAGE_SEND_REPORT_TEXT, StateAdoptiveParent.FREE);
+    reportService.updateStateAdoptiveParentByChatId(chatId, StateAdoptiveParent.FREE);
+    return sendMessage = formReplyMessages.replyMessage(message,
+        AllText.CANCEL_RETURN_MAIN_MENU_TEXT, configKeyboard.initKeyboardOnClickStart());
 
   }
 
