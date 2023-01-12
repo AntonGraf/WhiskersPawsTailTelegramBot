@@ -35,7 +35,6 @@ public class ConfigKeyboard extends Button {
     KeyboardRow row = new KeyboardRow();
     row.add(INFO_SHELTER_BUTTON);
     row.add(SEND_PET_REPORT_BUTTON);
-    row.add(REGISTRATION_BUT);
     KEYBOARD_BUTTONS_ROW_INFO_REPORT.add(row);
     keyboardMarkup.setResizeKeyboard(true);
     keyboardMarkup.setKeyboard(KEYBOARD_BUTTONS_ROW_INFO_REPORT);

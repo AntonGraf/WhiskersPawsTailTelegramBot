@@ -33,6 +33,7 @@ public abstract class AllText {
   public static final String NO_TEXT_AND_PHOTO_SEND_REPORT_TEXT = "В отчете нехватает текста и фото, попробуйте снова.";
 
     //кнопки для регистрации
+   public static final String REGISTRATION_INIT = "Пройдите регистрацию";
     public static final String REGISTRATION_BUTTON = "Регистрация";
     public static final String REGISTRATION_CANCEL = "Отмена регистрации и выход в меню";
     public static final String REGISTRATION_SUCCESS = "Регистрация прошла успешно, ваш Id : \n";
