@@ -22,7 +22,7 @@ import java.util.List;
 public class Dog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    Long id;
 
 
     /**

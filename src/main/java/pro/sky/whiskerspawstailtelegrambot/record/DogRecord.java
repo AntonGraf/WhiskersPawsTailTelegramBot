@@ -20,7 +20,7 @@ import java.util.List;
 @Getter
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class DogRecord implements Serializable {
-    long id;
+    Long id;
     @NotNull
     String fullName;
 

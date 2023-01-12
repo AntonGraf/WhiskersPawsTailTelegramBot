@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Getter
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class VolunteerRecord implements Serializable {
-    long id;
+    Long id;
     String fullName;
     String phone;
     String infoVolunteer;

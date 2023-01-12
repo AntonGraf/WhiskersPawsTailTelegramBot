@@ -19,7 +19,7 @@ import javax.persistence.*;
 public class Volunteer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    Long id;
 
     /** Информация о волонтерах */
     @Column(name = "info_volunteer")
