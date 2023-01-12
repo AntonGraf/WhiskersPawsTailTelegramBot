@@ -15,7 +15,6 @@ import pro.sky.whiskerspawstailtelegrambot.repository.DogRepository;
 import pro.sky.whiskerspawstailtelegrambot.service.DogService;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.http.HttpMethod.*;
 
@@ -78,9 +77,9 @@ class lupaevTelegramBotApplicationTestsDogSpringBootTest {
 
     @Test
     public void delTest() {
-        DogRecord dogRecord = dogService.findDog(15);
+        DogRecord dogRecord = dogService.findDog(4);
         Dog dog = dogMapper.toEntity(dogRecord);
-        assertThat(this.restTemplate.exchange("http://localhost:" + port + "/dogs/15", DELETE,new HttpEntity<>(dog), Dog.class))
+        assertThat(this.restTemplate.exchange("http://localhost:" + port + "/dogs/4", DELETE,new HttpEntity<>(dog), Dog.class))
             .isNotNull();
     }
 

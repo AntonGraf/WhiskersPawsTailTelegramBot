@@ -11,7 +11,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.annotation.Bean;
 import pro.sky.whiskerspawstailtelegrambot.entity.Dog;
 import pro.sky.whiskerspawstailtelegrambot.mapper.DogMapper;
-import pro.sky.whiskerspawstailtelegrambot.mapper.DogMapperImpl;
 import pro.sky.whiskerspawstailtelegrambot.record.DogRecord;
 import pro.sky.whiskerspawstailtelegrambot.repository.DogRepository;
 
@@ -39,10 +38,7 @@ class DogServiceTest {
     @Mock
     DogRecord dogRecord;
 
-    @Bean
-    public DogMapper dogMapper() {
-        return new DogMapperImpl();
-    }
+
 
 
 

@@ -9,7 +9,7 @@ import java.util.Collection;
 
 /**
  * маппер для {@link AdoptiveParent}
- * готовый рекорд {@link pro.sky.whiskerspawstailtelegrambot.mapper.DogMapperImpl}
+ * готовый рекорд {@link pro.sky.whiskerspawstailtelegrambot.mapper.DogMapper}
  */
 @Mapper(componentModel = "spring")
 public interface DogMapper {
