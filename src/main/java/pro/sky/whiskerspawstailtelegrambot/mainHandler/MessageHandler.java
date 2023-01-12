@@ -1,13 +1,13 @@
 package pro.sky.whiskerspawstailtelegrambot.mainHandler;
 
 
-import java.util.Objects;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import pro.sky.whiskerspawstailtelegrambot.mainHandler.reportHandler.ReportAddHandler;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
@@ -53,8 +53,8 @@ public class MessageHandler implements MainHandler {
     SendMessage sendMessage = null;
     Message message = null;
     String textMessage = null;
-    StateAdoptiveParent state;
-    AdoptiveParentRecord adoptiveParent;
+    StateAdoptiveParent state = StateAdoptiveParent.FREE;
+    AdoptiveParentRecord adoptiveParent = null;
     try {
       /*
        Проверям CallbackQuery от inline клавиатуры,

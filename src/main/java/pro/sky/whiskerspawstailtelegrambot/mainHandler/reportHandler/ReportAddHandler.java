@@ -1,4 +1,4 @@
-package pro.sky.whiskerspawstailtelegrambot.mainHandler;
+package pro.sky.whiskerspawstailtelegrambot.mainHandler.reportHandler;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -16,6 +16,7 @@ import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
 import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.util.StateReport;
 
 /**
  * обработка репорт на будующее
@@ -41,8 +42,6 @@ public class ReportAddHandler {
     SendMessage sendMessage = null;
     String textMessage = message.getText();
     long chatId = message.getChatId();
-//    StateAdoptiveParent state = reportService.getStateReportAdoptiveParentByChatId(
-//        Long.parseLong(chatId));
 
     switch (textMessage) {
 
@@ -52,28 +51,30 @@ public class ReportAddHandler {
             AllText.CANCEL_RETURN_MAIN_MENU_TEXT, configKeyboard.initKeyboardOnClickStart());
     }
 
-//      switch (state) {
-//
-//        case START_SEND_REPORT:
-//          return sendMessage = reportService.changeStateAdoptiveParent(message,
-//              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
-//
-//        case WAIT_PHOTO_REPORT:
-//          return sendMessage = reportService.changeStateAdoptiveParent(message,
-//              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
-//
-//        case WAIT_HEALTH_REPORT:
-//          return sendMessage = reportService.changeStateAdoptiveParent(message,
-//              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
-//
-//        case WAIT_DIET_REPORT:
-//          return sendMessage = reportService.changeStateAdoptiveParent(message,
-//              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
-//
-//        case WAIT_HABITS_REPORT:
-//          return sendMessage = reportService.changeStateAdoptiveParent(message,
-//              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
-//      }
+    StateReport stateReport = reportService.getStateReportByPetId(chatId);
+
+      switch (stateReport) {
+
+        case START_SEND_REPORT:
+          return sendMessage = formReplyMessages.replyMessage(message,
+              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, configKeyboard.formReplyKeyboardInOneRow(AllText.CANCEL_TEXT));
+
+        case WAIT_PHOTO_REPORT:
+          return sendMessage = reportService.changeStateAdoptiveParent(message,
+              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
+
+        case WAIT_HEALTH_REPORT:
+          return sendMessage = reportService.changeStateAdoptiveParent(message,
+              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
+
+        case WAIT_DIET_REPORT:
+          return sendMessage = reportService.changeStateAdoptiveParent(message,
+              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
+
+        case WAIT_HABITS_REPORT:
+          return sendMessage = reportService.changeStateAdoptiveParent(message,
+              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
+      }
 
     return sendMessage;
 
@@ -179,6 +180,7 @@ public class ReportAddHandler {
 
   /**
    * метод сохраняет отчет в БД
+   *
    * @param message сообщение из update
    */
   public SendMessage saveReportInDb(Message message) {
