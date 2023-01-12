@@ -41,8 +41,8 @@ public class ReportAddHandler {
     SendMessage sendMessage = null;
     String textMessage = message.getText();
     String chatId = message.getChatId().toString();
-    StateAdoptiveParent state = reportService.getStateAdoptiveParentByChatId(
-        Long.parseLong(chatId));
+//    StateAdoptiveParent state = reportService.getStateReportAdoptiveParentByChatId(
+//        Long.parseLong(chatId));
 
     switch (textMessage) {
 
@@ -51,30 +51,31 @@ public class ReportAddHandler {
             AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
     }
 
-      switch (state) {
-
-        case START_SEND_REPORT:
-          return sendMessage = reportService.changeStateAdoptiveParent(message,
-              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
-
-        case WAIT_PHOTO_REPORT:
-          return sendMessage = reportService.changeStateAdoptiveParent(message,
-              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
-
-        case WAIT_HEALTH_REPORT:
-          return sendMessage = reportService.changeStateAdoptiveParent(message,
-              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
-
-        case WAIT_DIET_REPORT:
-          return sendMessage = reportService.changeStateAdoptiveParent(message,
-              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
-
-        case WAIT_HABITS_REPORT:
-          return sendMessage = reportService.changeStateAdoptiveParent(message,
-              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
-      }
+//      switch (state) {
+//
+//        case START_SEND_REPORT:
+//          return sendMessage = reportService.changeStateAdoptiveParent(message,
+//              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
+//
+//        case WAIT_PHOTO_REPORT:
+//          return sendMessage = reportService.changeStateAdoptiveParent(message,
+//              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
+//
+//        case WAIT_HEALTH_REPORT:
+//          return sendMessage = reportService.changeStateAdoptiveParent(message,
+//              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
+//
+//        case WAIT_DIET_REPORT:
+//          return sendMessage = reportService.changeStateAdoptiveParent(message,
+//              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
+//
+//        case WAIT_HABITS_REPORT:
+//          return sendMessage = reportService.changeStateAdoptiveParent(message,
+//              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
+//      }
 
     return sendMessage;
+
   }
 
   //region clickButton
@@ -113,7 +114,7 @@ public class ReportAddHandler {
         AllText.CANCEL_TEXT);
 
     return sendMessage = reportService.changeStateAdoptiveParent(message,
-        AllText.DESCRIPTION_SEND_REPORT_TEXT, StateAdoptiveParent.WAIT_SEND_REPORT);
+        AllText.DESCRIPTION_SEND_REPORT_TEXT, StateAdoptiveParent.START_SEND_REPORT);
   }
 
   //endregion
@@ -170,7 +171,7 @@ public class ReportAddHandler {
 
   public SendMessage saveReportInDb(Message message) {
 
-    reportService.addReport();
+//    reportService.addReport();
 
     return sendMessage = reportService.changeStateAdoptiveParent(message,
         AllText.SUCCESSFUL_MESSAGE_SEND_REPORT_TEXT, StateAdoptiveParent.FREE);
