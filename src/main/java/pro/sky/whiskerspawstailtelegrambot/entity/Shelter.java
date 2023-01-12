@@ -15,6 +15,7 @@ import java.util.Set;
 @Setter
 @ToString
 @RequiredArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
@@ -70,5 +71,5 @@ public class Shelter {
     @JsonBackReference
     Set<Volunteer> volunteers;
     //Схема проезда
-    Byte[] locationMap;
+    byte[] locationMap;
 }
