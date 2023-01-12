@@ -11,6 +11,7 @@ import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
 import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
+import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
 
 /**
  * Обработчик стандартных сообщений от пользователя, в том числе и из обычной клавиатуры
@@ -69,7 +70,9 @@ public class StandardReplyHandler {
         return sendMessage = formReplyMessages.replyMessage(message, AllText.REGISTRATION_INIT,
             configKeyboard.formReplyKeyboardInOneRowInline(AllText.REGISTRATION_BUTTON));
 
-      case (AllText.CANCEL_TEXT)://реакция на кнопку отмена - возврат в главное меню
+      case (AllText.CANCEL_TEXT)://реакция на кнопку отмена - возврат в главное меню, изменение всех статусов на FREE
+        adoptiveParentService.updateStateAdoptiveParentByChatId(Long.parseLong(chatId),
+            StateAdoptiveParent.FREE);
         return sendMessage = formReplyMessages.replyMessage(message,
             AllText.CANCEL_RETURN_MAIN_MENU_TEXT,
             configKeyboard.initKeyboardOnClickStart());
@@ -81,7 +84,7 @@ public class StandardReplyHandler {
 
       //region реализация логики Отправить отчет о питомце
       case (AllText.SEND_PET_REPORT_TEXT):     // нажатие кнопки Отправить отчет о питомце
-        return sendMessage = reportAddHandler.getSendMessageReport(message,
+        return sendMessage = formReplyMessages.replyMessage(message,
             AllText.MENU_SEND_PET_REPORT_TEXT,
             configKeyboard.formReplyKeyboardInOneRowInline(AllText.SHOW_ALL_YOUR_PET_TEXT,
                 AllText.SEND_REPORT_TEXT, AllText.CANCEL_TEXT));
