@@ -46,15 +46,15 @@ class VolunteerServiceTest {
      */
     public static Stream<Arguments> provideAddParamsPositiveTest() {
         return Stream.of(
-                Arguments.of(new VolunteerRecord(1, "Ивченко Валентин Генадьевич", "89146667454",
+                Arguments.of(new VolunteerRecord(1l, "Ивченко Валентин Генадьевич", "89146667454",
                         "Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
                                 "предложен списокнаших волонтеров и их номера. Пожалуста уитывайте их расписание и они" +
                                 " будут рады вам помочь.", "рабочие дни 14-22ч", getTestShelter())),
-                Arguments.of(new VolunteerRecord(2, "Селезнева Лариса Игоревна", "89246554324",
+                Arguments.of(new VolunteerRecord(2l, "Селезнева Лариса Игоревна", "89246554324",
                         "Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
                                 "предложен списокнаших волонтеров и их номера. Пожалуста уитывайте их расписание и они" +
                                 " будут рады вам помочь.", "каждый день 8-16ч", getTestShelter())),
-                Arguments.of(new VolunteerRecord(3, "Фаер Людмила Анатольевна", "89045647676",
+                Arguments.of(new VolunteerRecord(3l, "Фаер Людмила Анатольевна", "89045647676",
                         "Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
                                 "предложен списокнаших волонтеров и их номера. Пожалуста уитывайте их расписание и они" +
                                 " будут рады вам помочь.", "с четверга по воскресенье 8-18ч", getTestShelter()))
@@ -98,7 +98,7 @@ class VolunteerServiceTest {
         assertTrue(out.getAllVolunteers().isEmpty());
 
         Volunteer volunteer = new Volunteer();
-        volunteer.setId(0);
+        volunteer.setId(0l);
         volunteer.setPhone(volunteerRecord.getPhone());
         volunteer.setFullName(volunteerRecord.getFullName());
         volunteer.setInfoVolunteer(volunteerRecord.getInfoVolunteer());
@@ -120,7 +120,7 @@ class VolunteerServiceTest {
      */
     @Test
     void deleteVolunteerPositiveTest() {
-        VolunteerRecord volunteerRecord = new VolunteerRecord(1, "Ивченко Валентин Генадьевич", "89146667454",
+        VolunteerRecord volunteerRecord = new VolunteerRecord(1l, "Ивченко Валентин Генадьевич", "89146667454",
                 "Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
                         "предложен списокнаших волонтеров и их номера. Пожалуста уитывайте их расписание и они" +
                         " будут рады вам помочь.", "рабочие дни 14-22ч", getTestShelter());
@@ -152,7 +152,7 @@ class VolunteerServiceTest {
      */
     @Test
     void getVolunteerByFullNamePositiveTest() {
-        VolunteerRecord volunteerRecord = new VolunteerRecord(1, "Ивченко Валентин Генадьевич", "89146667454",
+        VolunteerRecord volunteerRecord = new VolunteerRecord(1l, "Ивченко Валентин Генадьевич", "89146667454",
                 "Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
                         "предложен списокнаших волонтеров и их номера. Пожалуста уитывайте их расписание и они" +
                         " будут рады вам помочь.", "рабочие дни 14-22ч", getTestShelter());
@@ -185,13 +185,13 @@ class VolunteerServiceTest {
      */
     @Test
     void updateVolunteerPositiveTest() {
-        VolunteerRecord volunteerRecord = new VolunteerRecord(1, "Ивченко Валентин Генадьевич", "89146667454",
+        VolunteerRecord volunteerRecord = new VolunteerRecord(1l, "Ивченко Валентин Генадьевич", "89146667454",
                 "Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
                         "предложен списокнаших волонтеров и их номера. Пожалуста уитывайте их расписание и они" +
                         " будут рады вам помочь.", "рабочие дни 14-22ч", getTestShelter());
 
         Volunteer volunteer = new Volunteer();
-        volunteer.setId(1);
+        volunteer.setId(1l);
         volunteer.setFullName("Ивченко Валентин Генадьевич");
         volunteer.setPhone("89146667454");
         volunteer.setInfoVolunteer("Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
@@ -220,7 +220,7 @@ class VolunteerServiceTest {
         newVolunteer.setSchedule(schedule);
         newVolunteer.setShelter(shelter);
 
-        VolunteerRecord newVolunteerRecord = new VolunteerRecord(1, "Селезнева Лариса Игоревна", "89146667454",
+        VolunteerRecord newVolunteerRecord = new VolunteerRecord(1l, "Селезнева Лариса Игоревна", "89146667454",
                 "Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
                         "предложен списокнаших волонтеров и их номера. Пожалуста уитывайте их расписание и они" +
                         " будут рады вам помочь.", "рабочие дни 14-22ч", getTestShelter());
@@ -282,7 +282,7 @@ class VolunteerServiceTest {
         volunteer.setPhone("896503042");
         volunteer.setFullName("Ивченко Валентин Генадьевич");
         volunteer.setSchedule("рабочие дни 14-22ч");
-        volunteer.setId(1);
+        volunteer.setId(1l);
         volunteer.setInfoVolunteer("Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
                 "предложен списокнаших волонтеров и их номера. Пожалуста уитывайте их расписание и они будут рады вам " +
                 "помочь.");
@@ -294,7 +294,7 @@ class VolunteerServiceTest {
         volunteer1.setPhone("89246554324");
         volunteer1.setFullName("Селезнева Лариса Игоревна");
         volunteer1.setSchedule("каждый день 8-16ч");
-        volunteer1.setId(2);
+        volunteer1.setId(2l);
         volunteer1.setInfoVolunteer("Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
                 "предложен списокнаших волонтеров и их номера. Пожалуста уитывайте их расписание и они будут рады вам " +
                 "помочь.");
@@ -306,7 +306,7 @@ class VolunteerServiceTest {
         volunteer2.setPhone("89045647676");
         volunteer2.setFullName("Фаер Людмила Анатольевна");
         volunteer2.setSchedule("с четверга по воскресенье 8-18ч");
-        volunteer2.setId(3);
+        volunteer2.setId(3l);
         volunteer2.setInfoVolunteer("Дорогой посетитель, наши волонтеры с удовольствием окажут вам помощь, вам будет " +
                 "предложен списокнаших волонтеров и их номера. Пожалуста уитывайте их расписание и они будут рады вам " +
                 "помочь.");

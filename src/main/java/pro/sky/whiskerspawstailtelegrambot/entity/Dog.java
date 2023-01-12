@@ -3,6 +3,7 @@ package pro.sky.whiskerspawstailtelegrambot.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.google.common.base.Objects;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -16,13 +17,14 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Dog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    Long id;
 
 
     /**
@@ -96,6 +98,22 @@ public class Dog {
     @JsonIgnore
     List<Report> reports;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Dog dog = (Dog) o;
+        return age == dog.age && Objects.equal(id, dog.id)
+            && Objects.equal(fullName, dog.fullName)
+            && Objects.equal(description, dog.description);
+    }
 
-
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, fullName, age, description);
+    }
 }

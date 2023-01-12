@@ -14,17 +14,17 @@ import java.util.List;
 /**
  * A DTO for the {@link AdoptiveParent} entity
  */
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AdoptiveParentRecord implements Serializable {
 
     @JsonIgnore
-    long id;
+    Long id;
 
     @NotNull(message = "Обязательно нужно заполнить поле")
     @Size(message = "Длина не должна быть меньше 5 знаков и не больше 30", min = 5, max = 30)
@@ -40,7 +40,7 @@ public class AdoptiveParentRecord implements Serializable {
     String state;
 
     @JsonIgnore
-    long chatId;
+    Long chatId;
     @JsonIgnore
     List<DogRecord> dogs;
 

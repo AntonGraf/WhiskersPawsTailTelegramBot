@@ -11,6 +11,9 @@ import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
 import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
+import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
+
+import static org.glassfish.grizzly.http.util.Ascii.isDigit;
 
 /**
  * Обработчик стандартных сообщений от пользователя, в том числе и из обычной клавиатуры
@@ -57,6 +60,8 @@ public class StandardReplyHandler {
     log.debug("Вызов метода handler класса" + this.getClass().getName());
     String chatId = message.getChatId().toString();
     String textMessage = message.getText();
+    if (isDigit(textMessage.charAt(0))){menuInfo(message);} // Проверка команды на цифру и передача в цифровой метод
+
     //здесь инжект текст кнопок, любой текст крч
     switch (textMessage) {
 
@@ -69,7 +74,9 @@ public class StandardReplyHandler {
         return sendMessage = formReplyMessages.replyMessage(message, AllText.REGISTRATION_INIT,
             configKeyboard.formReplyKeyboardInOneRowInline(AllText.REGISTRATION_BUTTON));
 
-      case (AllText.CANCEL_TEXT)://реакция на кнопку отмена - возврат в главное меню
+      case (AllText.CANCEL_TEXT)://реакция на кнопку отмена - возврат в главное меню, изменение всех статусов на FREE
+        adoptiveParentService.updateStateAdoptiveParentByChatId(Long.parseLong(chatId),
+            StateAdoptiveParent.FREE);
         return sendMessage = formReplyMessages.replyMessage(message,
             AllText.CANCEL_RETURN_MAIN_MENU_TEXT,
             configKeyboard.initKeyboardOnClickStart());
@@ -81,7 +88,7 @@ public class StandardReplyHandler {
 
       //region реализация логики Отправить отчет о питомце
       case (AllText.SEND_PET_REPORT_TEXT):     // нажатие кнопки Отправить отчет о питомце
-        return sendMessage = reportAddHandler.getSendMessageReport(message,
+        return sendMessage = formReplyMessages.replyMessage(message,
             AllText.MENU_SEND_PET_REPORT_TEXT,
             configKeyboard.formReplyKeyboardInOneRowInline(AllText.SHOW_ALL_YOUR_PET_TEXT,
                 AllText.SEND_REPORT_TEXT, AllText.CANCEL_TEXT));
@@ -106,11 +113,47 @@ public class StandardReplyHandler {
 
       case (AllText.INFO_SHELTER_TEXT):
         return sendMessage = formReplyMessages.replyMessage(message,
-            shelterService.getOfShelterMessage(1L),
+                AllText.INFO,
             configKeyboard.initKeyboardOnClickStart());
 
       default:
         return sendMessage = new SendMessage(chatId, AllText.UNKNOWN_COMMAND_TEXT);
     }
+
   }
-}
+  private SendMessage menuInfo( Message message){
+    String number = message.getText();
+    SendMessage sendMessage = null;
+    switch (number) {
+      case ("1"): // Выбор информации из списка меню информации
+        sendMessage = formReplyMessages.replyMessage(message, shelterService.getOfShelterMessage((byte) 1),
+                configKeyboard.initKeyboardOnClickStart());
+        break;
+      case ("2"):
+        sendMessage = formReplyMessages.replyMessage(message, shelterService.getOfShelterMessage((byte) 2),
+                configKeyboard.initKeyboardOnClickStart());
+        break;
+      case ("3"):
+        sendMessage = formReplyMessages.replyMessage(message, shelterService.getOfShelterMessage((byte) 3),
+                configKeyboard.initKeyboardOnClickStart());
+        break;
+      case ("4"):
+        sendMessage = formReplyMessages.replyMessage(message, shelterService.getOfShelterMessage((byte) 4),
+                configKeyboard.initKeyboardOnClickStart());
+        break;
+      case ("5"):
+        sendMessage = formReplyMessages.replyMessage(message, shelterService.getOfShelterMessage((byte) 5),
+                configKeyboard.initKeyboardOnClickStart());
+        break;
+      case ("6"):
+        sendMessage = formReplyMessages.replyMessage(message, shelterService.getOfShelterMessage((byte) 6),
+                configKeyboard.initKeyboardOnClickStart());
+        break;
+      case ("7"):
+        sendMessage = formReplyMessages.replyMessage(message, shelterService.getOfShelterMessage((byte) 7),
+                configKeyboard.initKeyboardOnClickStart());
+        break;
+    }
+    return sendMessage;
+
+  }}

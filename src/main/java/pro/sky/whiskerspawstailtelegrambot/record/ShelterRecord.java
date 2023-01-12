@@ -2,7 +2,11 @@ package pro.sky.whiskerspawstailtelegrambot.record;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
@@ -12,9 +16,13 @@ import java.util.Set;
 /**
  * A DTO for the {@link pro.sky.whiskerspawstailtelegrambot.entity.Shelter} entity
  */
-@AllArgsConstructor
 @Getter
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ShelterRecord implements Serializable {
     Long id;
     String aboutShelter;
@@ -30,5 +38,5 @@ public class ShelterRecord implements Serializable {
     List<String> listOfReasonForRejection;
     Set<DogRecord> dogs;
     Set<VolunteerRecord> volunteers;
-    Byte[] locationMap;
+    byte[] locationMap;
 }

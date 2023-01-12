@@ -2,6 +2,7 @@ package pro.sky.whiskerspawstailtelegrambot.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.google.common.base.Objects;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,7 @@ public class AdoptiveParent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    long id;
+    Long id;
     /**
      * Поле полного имени
      */
@@ -54,7 +55,7 @@ public class AdoptiveParent {
      * chat id для отправки обратного сообщения
      */
     @Column(name = "chat_id")
-    long chatId;
+    Long chatId;
 
     /**
      * Список собак
@@ -63,4 +64,21 @@ public class AdoptiveParent {
     @JsonBackReference
     List<Dog> dogs;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        AdoptiveParent that = (AdoptiveParent) o;
+        return Objects.equal(id, that.id) && Objects.equal(
+            fullName, that.fullName) && Objects.equal(phone, that.phone);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, fullName, phone);
+    }
 }

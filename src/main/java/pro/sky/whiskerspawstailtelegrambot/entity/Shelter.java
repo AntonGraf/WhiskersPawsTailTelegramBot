@@ -1,6 +1,8 @@
 package pro.sky.whiskerspawstailtelegrambot.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.google.common.base.Objects;
+import java.util.Arrays;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -14,8 +16,8 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
-@EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Shelter {
@@ -70,5 +72,25 @@ public class Shelter {
     @JsonBackReference
     Set<Volunteer> volunteers;
     //Схема проезда
-    Byte[] locationMap;
+    byte[] locationMap;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Shelter shelter = (Shelter) o;
+        return Objects.equal(id, shelter.id)
+            && Objects.equal(name, shelter.name)
+            && Objects.equal(address, shelter.address)
+            && Objects.equal(phone, shelter.phone);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, name, address, phone);
+    }
 }

@@ -93,6 +93,9 @@ public class AdoptiveParentService {
    */
   public Collection<AdoptiveParentRecord> getListOfAdoptiveParent() {
     log.info("Was invoked method for get list of AdoptiveParent from DB");
+    var q = adoptiveParentMapper.toRecordList(
+        adoptiveParentRepo.findAll());
+    var w = adoptiveParentRepo.findAll();
     Collection<AdoptiveParentRecord> collection = adoptiveParentMapper.toRecordList(
         adoptiveParentRepo.findAll());
     if (collection == null || collection.isEmpty()) {
@@ -189,6 +192,21 @@ public class AdoptiveParentService {
       return StateAdoptiveParent.valueOf(state);
     }
     return null;
+  }
+
+  /**
+   * Обновить state пользователя по его chatId
+   * @param chatId long chatId
+   * @param state стейт на который нужно обновить
+   *
+   */
+  public AdoptiveParentRecord updateStateAdoptiveParentByChatId(long chatId, StateAdoptiveParent state){
+    AdoptiveParentRecord adoptiveParentRecord = getAdoptiveParentByChatId(chatId);
+    if (adoptiveParentRecord != null) {
+      adoptiveParentRecord.setState(state.getText());
+      updateAdoptiveParent(adoptiveParentRecord.getId(),adoptiveParentRecord);
+    }
+    return adoptiveParentRecord;
   }
 
 }

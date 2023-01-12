@@ -1,6 +1,7 @@
 package pro.sky.whiskerspawstailtelegrambot.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.base.Objects;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,14 +13,14 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
-@EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Volunteer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    Long id;
 
     /** Информация о волонтерах */
     @Column(name = "info_volunteer")
@@ -41,4 +42,24 @@ public class Volunteer {
     @JsonIgnore
     @JoinColumn(name = "shelter_id")
     Shelter shelter;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Volunteer volunteer = (Volunteer) o;
+        return Objects.equal(id, volunteer.id)
+            && Objects.equal(infoVolunteer, volunteer.infoVolunteer)
+            && Objects.equal(fullName, volunteer.fullName)
+            && Objects.equal(phone, volunteer.phone);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, infoVolunteer, fullName, phone);
+    }
 }
