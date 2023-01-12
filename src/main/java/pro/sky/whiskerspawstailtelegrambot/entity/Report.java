@@ -14,14 +14,14 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    long report_id;
+    long id;
 
     /**
      * Рацион животного
@@ -45,7 +45,7 @@ public class Report {
      * Фото животного
      */
     @Column(name = "photo_dog")
-    Byte[] photoDog;
+    byte[] photoDog;
 
     /**
      * id собаки
@@ -60,6 +60,12 @@ public class Report {
     @JoinColumn(name = "dog_id", referencedColumnName = "id", insertable = false, updatable = false)
     @JsonBackReference
     Dog dog;
+
+    /**
+     * Этапы заполнения отчета
+     */
+    @Column(name = "state_report")
+    String stateReport;
 
 }
 

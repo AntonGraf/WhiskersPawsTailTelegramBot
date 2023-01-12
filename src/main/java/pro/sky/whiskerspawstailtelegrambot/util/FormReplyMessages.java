@@ -6,6 +6,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import pro.sky.whiskerspawstailtelegrambot.configuration.ConfigMenu;
+import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 
 /**
  * сервис для формирования сообщений
@@ -32,17 +35,33 @@ public class FormReplyMessages {
         return sendMessage;
     }
 
+    /**
+     * сформировать ответное сообщение с сообщение об ошибке, с указаным текстом и inline клавиатурой
+     * @param message
+     * @param textReplyMessage
+     * @param inlineKeyboardMarkup
+     * @return
+     */
     public SendMessage replyMessageError(Message message, String textReplyMessage, InlineKeyboardMarkup inlineKeyboardMarkup) {
         String chatId = String.valueOf(message.getChatId());
         SendMessage sendMessage = new SendMessage(chatId, textReplyMessage);
         sendMessage.setReplyMarkup(inlineKeyboardMarkup);
         return sendMessage;
     }
-    public SendMessage replyMessageError(Message message, String textReplyMessage, ReplyKeyboardMarkup inlineKeyboardMarkup) {
+
+    /**
+     * сформировать ответное сообщение с сообщение об ошибке, с указаным текстом и обычной клавиатурой
+     * @param message
+     * @param textReplyMessage
+     * @param replyKeyboardMarkup
+     * @return
+     */
+    public SendMessage replyMessageError(Message message, String textReplyMessage, ReplyKeyboardMarkup replyKeyboardMarkup) {
         String chatId = String.valueOf(message.getChatId());
         SendMessage sendMessage = new SendMessage(chatId, textReplyMessage);
-        sendMessage.setReplyMarkup(inlineKeyboardMarkup);
+        sendMessage.setReplyMarkup(replyKeyboardMarkup);
         return sendMessage;
     }
+
 
 }

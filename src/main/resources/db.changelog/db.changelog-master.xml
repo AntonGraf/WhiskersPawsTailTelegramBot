@@ -32,6 +32,7 @@
     <include file="v-1.0/data/IgorBr_03_insert_adoptive_parent.sql" relativeToChangelogFile="true"/>
     <include file="v-1.0/IgorBr_04_delete_constraints_nullable_in_adoptive_parent_table.xml" relativeToChangelogFile="true"/>
 
+
     <changeSet id="5" author="DmitriyPospelov">
         <tagDatabase tag="CreateTableReport"/>
     </changeSet>
@@ -69,4 +70,8 @@
     <changeSet id="13" author="anton graf">
     </changeSet>
     <include file="v-1.0/data/13_update_data_on_table_shelter.sql" relativeToChangelogFile="true"/>
+
+    <changeSet id="14" author="anton graf">
+    </changeSet>
+    <include file="v-1.0/IgorBr_05_add_column_state_report_in_report_table.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

@@ -11,6 +11,7 @@ import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
 import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
+import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
 
 /**
  * Обработчик стандартных сообщений от пользователя, в том числе и из обычной клавиатуры
@@ -61,22 +62,29 @@ public class StandardReplyHandler {
     switch (textMessage) {
 
       case (AllText.START_TEXT):
-        return sendMessage = formReplyMessages.replyMessage(message, AllText.WELCOME_MESSAGE_TEXT,
-            configKeyboard.initKeyboardOnClickStart());
+        if (adoptiveParentService.getStateAdoptiveParentByChatId(Long.parseLong(chatId)) != null) {
+          return sendMessage = formReplyMessages.replyMessage(message,
+              AllText.WELCOME_MESSAGE_TEXT,
+              configKeyboard.initKeyboardOnClickStart());
+        }
+        return sendMessage = formReplyMessages.replyMessage(message, AllText.REGISTRATION_INIT,
+            configKeyboard.formReplyKeyboardInOneRowInline(AllText.REGISTRATION_BUTTON));
 
-      case (AllText.CANCEL_TEXT)://реакция на кнопку отмена - возврат в главное меню
+      case (AllText.CANCEL_TEXT)://реакция на кнопку отмена - возврат в главное меню, изменение всех статусов на FREE
+        adoptiveParentService.updateStateAdoptiveParentByChatId(Long.parseLong(chatId),
+            StateAdoptiveParent.FREE);
         return sendMessage = formReplyMessages.replyMessage(message,
             AllText.CANCEL_RETURN_MAIN_MENU_TEXT,
             configKeyboard.initKeyboardOnClickStart());
 
       case (AllText.CALL_TO_VOLUNTEER_TEXT): //ответ на позвать волонтера, просто инфа про волонтеров
-        return sendMessage = formReplyMessages.replyMessage(message,
-            parserToBot.parserVolunteer(volunteerService.getAllVolunteers()),
-            configKeyboard.initKeyboardOnClickStart());
+
+        return new SendMessage(chatId,
+            parserToBot.parserVolunteer(volunteerService.getAllVolunteers()));
 
       //region реализация логики Отправить отчет о питомце
       case (AllText.SEND_PET_REPORT_TEXT):     // нажатие кнопки Отправить отчет о питомце
-        return sendMessage = reportAddHandler.getSendMessageReport(message,
+        return sendMessage = formReplyMessages.replyMessage(message,
             AllText.MENU_SEND_PET_REPORT_TEXT,
             configKeyboard.formReplyKeyboardInOneRowInline(AllText.SHOW_ALL_YOUR_PET_TEXT,
                 AllText.SEND_REPORT_TEXT, AllText.CANCEL_TEXT));
@@ -91,7 +99,6 @@ public class StandardReplyHandler {
         //либо отменет регистрацию
         if (adoptiveParentService.getStateAdoptiveParentByChatId(Long.parseLong(chatId)) != null) {
           return new SendMessage(chatId, AllText.ALREADY_REGISTERED);
-
         }
         return registrationHandler.addToTable(message, chatId);
       //------------------> регистрация

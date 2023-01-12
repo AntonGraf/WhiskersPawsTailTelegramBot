@@ -26,13 +26,14 @@ public abstract class AllText {
   public static final String YOU_HAVE_NO_ADOPTED_PETS_TEXT = "У вас нет животных требующих отправки отчета";
   public static final String DESCRIPTION_SEND_REPORT_TEXT = "В каждом отчете должна быть 1 фотография и текст не менее 15 слов, о состоянии животного."
       + "\nВведите id, напишите тект, добавьте фотографию и отправьте сообщение.";
-  public static final String RESULT_MESSAGE_SEND_REPORT_TEXT = "Отчет успешно отправлен, волотеры ознакомятся с ним в ближайшее время.\n"
+  public static final String SUCCESSFUL_MESSAGE_SEND_REPORT_TEXT = "Отчет успешно отправлен, волотеры ознакомятся с ним в ближайшее время.\n"
       + "При возникновении вопросов, они свяжутся с вами.";
   public static final String NO_TEXT_SEND_REPORT_TEXT = "В отчете нехватает текста, попробуйте снова.";
   public static final String NO_PHOTO_SEND_REPORT_TEXT = "В отчете нехватает фото, попробуйте снова.";
   public static final String NO_TEXT_AND_PHOTO_SEND_REPORT_TEXT = "В отчете нехватает текста и фото, попробуйте снова.";
 
     //кнопки для регистрации
+   public static final String REGISTRATION_INIT = "Пройдите регистрацию";
     public static final String REGISTRATION_BUTTON = "Регистрация";
     public static final String REGISTRATION_CANCEL = "Отмена регистрации и выход в меню";
     public static final String REGISTRATION_SUCCESS = "Регистрация прошла успешно, ваш Id : \n";
