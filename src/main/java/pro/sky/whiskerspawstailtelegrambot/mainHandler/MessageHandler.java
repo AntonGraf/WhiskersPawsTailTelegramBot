@@ -1,18 +1,17 @@
 package pro.sky.whiskerspawstailtelegrambot.mainHandler;
 
 
+import java.util.Objects;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import pro.sky.whiskerspawstailtelegrambot.service.ReportService;
-import pro.sky.whiskerspawstailtelegrambot.service.ShelterService;
-import pro.sky.whiskerspawstailtelegrambot.service.VolunteerService;
-import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
+import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
+import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
-import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
-import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
+import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
 
 
 /**
@@ -20,29 +19,25 @@ import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
  */
 @Slf4j
 @Component("MessageHandler")
+@Data
 public class MessageHandler implements MainHandler {
 
-  final ConfigKeyboard configKeyboard;
   private final ReportAddHandler reportAddHandler;
-  private final FormReplyMessages formReplyMessages;
+  private final StandardReplyHandler standardReplyHandler;
+  private final AdoptiveParentService adoptiveParentService;
+  private final CallbackQueryHandler callbackQueryHandler;
 
-  private final VolunteerService volunteerService;
-
-  private final ParserToBot parserToBot;
-  private final ShelterService shelterService;
-  private final ReportService reportService;
+  private final RegistrationHandler registrationHandler;
 
 
-  public MessageHandler(ConfigKeyboard configKeyboard, ReportAddHandler reportAddHandler,
-      FormReplyMessages formReplyMessages, VolunteerService volunteerService,
-      ParserToBot parserToBot, ShelterService shelterService, ReportService reportService) {
-    this.configKeyboard = configKeyboard;
+  public MessageHandler(ReportAddHandler reportAddHandler,
+      StandardReplyHandler standardReplyHandler, AdoptiveParentService adoptiveParentService,
+      CallbackQueryHandler callbackQueryHandler, RegistrationHandler registrationHandler) {
     this.reportAddHandler = reportAddHandler;
-    this.formReplyMessages = formReplyMessages;
-    this.volunteerService = volunteerService;
-    this.parserToBot = parserToBot;
-    this.shelterService = shelterService;
-    this.reportService = reportService;
+    this.standardReplyHandler = standardReplyHandler;
+    this.adoptiveParentService = adoptiveParentService;
+    this.callbackQueryHandler = callbackQueryHandler;
+    this.registrationHandler = registrationHandler;
   }
 
   /**
@@ -54,70 +49,68 @@ public class MessageHandler implements MainHandler {
   @Override
   public SendMessage handler(Update update) {
 
-    String chatId = String.valueOf(update.getMessage().getChatId());
-    SendMessage sendMessage = new SendMessage(chatId, AllText.ERROR_REPLY_TEXT);
+    String chatId = null;
+    SendMessage sendMessage = null;
+    Message message = null;
+    StateAdoptiveParent state;
+    AdoptiveParentRecord adoptiveParent;
     try {
-      boolean checkUpdate = !update.getMessage().hasText();
-      if (!checkUpdate) {
-        log.debug("Обработка сообщения в виде текста");
-        Message message = update.getMessage();
-        String textMessage = message.getText();
-        //здесь инжект текст кнопок, любой текст крч
-        switch (textMessage) {
+      /*
+       Проверям CallbackQuery от inline клавиатуры,
+       если не null то обрабатываем его в callbackQueryHandler
+       иначе идем дальше.
+       В зависимости от варианта берем chatId
+       */
+      if (update.getCallbackQuery() != null) {
+        chatId = update.getCallbackQuery().getMessage().getChatId().toString();
+        return sendMessage = callbackQueryHandler.handler(update.getCallbackQuery());
+      } else {
+        message = update.getMessage();
+        chatId = message.getChatId().toString();
+        state = adoptiveParentService.getStateAdoptiveParentByChatId(
+            Long.parseLong(chatId));
+        adoptiveParent = adoptiveParentService
+            .getAdoptiveParentByChatId(Long.parseLong(chatId));
+      }
 
-          case (AllText.START_TEXT):
-            sendMessage = formReplyMessages.replyMessage(message, AllText.WELCOME_MESSAGE_TEXT,
-                configKeyboard.initKeyboardOnClickStart());
-            break;
+        /*
+       Проверям состояние пользователя,
+       если состояни отличное от свободного,
+        то обрабатываем состояние.
+       */
+      if (state != null && state.ordinal() >= 1) {
 
-          case (AllText.CANCEL_TEXT)://реакция на кнопку отмена - возврат в главное меню
-            sendMessage = formReplyMessages.replyMessage(message,
-                AllText.CANCEL_RETURN_MAIN_MENU_TEXT,
-                configKeyboard.initKeyboardOnClickStart());
-            break;
+        switch (state) {
 
-          case (AllText.CALL_TO_VOLUNTEER_TEXT): //ответ на позвать волонтера, просто инфа про волонтеров
-            sendMessage = formReplyMessages.replyMessage(message,
-                parserToBot.parserVolunteer(volunteerService.getAllVolunteers()),
-                configKeyboard.initKeyboardOnClickStart());
-            break;
-
-          //region реализация логики Отправить отчет о питомце
-          case (AllText.SEND_PET_REPORT_TEXT):     // нажатие кнопки Отправить отчет о питомце
-            sendMessage = reportAddHandler.getSendMessageReport(message, AllText.MENU_SEND_PET_REPORT_TEXT,
-                configKeyboard.formReplyKeyboardInOneRow(AllText.SHOW_ALL_YOUR_PET_TEXT, AllText.SEND_REPORT_TEXT, AllText.CANCEL_TEXT));
-            break;
-
-          case (AllText.SHOW_ALL_YOUR_PET_TEXT):     // нажатие кнопки показать всех взятых животных
-            sendMessage = reportAddHandler.getSendMessageReport(message,
-                reportService.showAllAdoptedPets(message),
-                configKeyboard.formReplyKeyboardInOneRow(AllText.SHOW_ALL_YOUR_PET_TEXT, AllText.SEND_REPORT_TEXT, AllText.CANCEL_TEXT));
-            break;
-
-          case (AllText.SEND_REPORT_TEXT):     // нажатие кнопки отправить отчет
-            sendMessage = reportAddHandler.sendReport(message, AllText.DESCRIPTION_SEND_REPORT_TEXT,
-                configKeyboard.formReplyKeyboardInOneRow(AllText.SEND_TEXT, AllText.CANCEL_TEXT));
-            break;
-          //endregion
-
-          case (AllText.HOW_TAKE_DOG):
-            sendMessage = formReplyMessages.replyMessage(message, AllText.HOW_TAKE_DOG_SHELTER,
-                configKeyboard.initKeyboardOnClickStart());
-            break;
-          case (AllText.INFO_SHELTER_TEXT):
-            sendMessage = formReplyMessages.replyMessage(message,
-                shelterService.getOfShelterMessage(1L),
-                configKeyboard.initKeyboardOnClickStart());
-            break;
-
-          default:
-            sendMessage = new SendMessage(chatId, AllText.UNKNOWN_COMMAND_TEXT);
-            break;
+          case THE_FIRST_STATE:
+            return sendMessage = registrationHandler
+                .handlerWithStatusTheFirstState(message,adoptiveParent, message.getText(), chatId);
+          case ONLY_NAME:
+            return sendMessage = registrationHandler
+                .handlerWithStatusOnlyName(message,adoptiveParent, message.getText(), chatId);
+          case SUCCESS_REG:
+            //если уже есть такой в таблице со статусом зареган, то просто сообщение что вы уже есть у нас
+           /* return sendMessage = registrationHandler
+                .handlerWithStatuSuccessReg(message,adoptiveParent, message.getText(), chatId);*/
+          case WAIT_SEND_REPORT:
+            return sendMessage = reportAddHandler.sendReport(message);
         }
       }
+
+      /*
+       * Обработка стандартных сообщений от пользователя,
+       * если он находится в свободном состоянии (например не в состоянии регистрации или отправки отчета)
+       */
+      if (update.getMessage().hasText()) {
+        return sendMessage = standardReplyHandler.handler(message);
+      }
+
     } finally {
-      return sendMessage;
+      if (sendMessage == null) {
+        sendMessage = new SendMessage(chatId, AllText.ERROR_REPLY_TEXT);
+      }
     }
+    return sendMessage;
   }
 
 }

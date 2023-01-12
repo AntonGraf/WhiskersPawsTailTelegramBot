@@ -15,5 +15,8 @@ public class Button extends AllText {
     protected static final KeyboardButton CANCEL_BUTTON = new KeyboardButton(CANCEL_TEXT);
     protected static final KeyboardButton SEND_BUTTON = new KeyboardButton(SEND_TEXT);
 
+    //кнопка регистрации
+    protected static final KeyboardButton REGISTRATION_BUT = new KeyboardButton(REGISTRATION_BUTTON);
+
 
 }

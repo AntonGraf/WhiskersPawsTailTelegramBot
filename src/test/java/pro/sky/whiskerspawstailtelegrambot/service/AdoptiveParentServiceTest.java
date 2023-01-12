@@ -1,5 +1,7 @@
 package pro.sky.whiskerspawstailtelegrambot.service;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,18 +30,39 @@ import static org.mockito.Mockito.*;
  */
 @ExtendWith(MockitoExtension.class)
 class AdoptiveParentServiceTest {
-    final String ANYSTRING = "anystring";
-    final long ANYLONG = 1L;
     @Mock
     AdoptiveParentRepo adoptiveParentRepo;
     @Spy
     AdoptiveParentMapper adoptiveParentMapper;
-    List<Dog> dogs = new ArrayList<>();
-    List<DogRecord> dogRecords = new ArrayList<>();
-    AdoptiveParentRecord adoptiveParentTestPositive = new AdoptiveParentRecord(1, "fullName", "phone", true, "start", 0, dogRecords);
-    AdoptiveParent adoptiveParent = new AdoptiveParent(1, "fullName", "phone", true, "start", 0, dogs);
     @InjectMocks
     AdoptiveParentService adoptiveParentService;
+
+    String ANYSTRING;
+    long ANYLONG;
+    List<Dog> dogs;
+    List<DogRecord> dogRecords;
+    AdoptiveParentRecord adoptiveParentTestPositive;
+    AdoptiveParent adoptiveParent;
+
+    @BeforeEach
+    void init(){
+        ANYSTRING = "anystring";
+        ANYLONG = 1L;
+        dogs = new ArrayList<>();
+        dogRecords = new ArrayList<>();
+        adoptiveParentTestPositive = new AdoptiveParentRecord(1, "fullName", "phone", true, "start", 0, dogRecords);
+        adoptiveParent = new AdoptiveParent(1, "fullName", "phone", true, "start", 0, dogs);
+    }
+
+    @AfterEach
+    void clearAll(){
+        ANYSTRING = null;
+        ANYLONG = 0;
+        dogs.clear();
+        dogRecords.clear();
+        adoptiveParentTestPositive = null;
+        adoptiveParent = null;
+    }
 
     @Test
     void getParentIdByNameAndPhoneAndChatIdPositiveFullName() {

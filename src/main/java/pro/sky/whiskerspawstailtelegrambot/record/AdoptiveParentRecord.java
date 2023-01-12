@@ -1,10 +1,7 @@
 package pro.sky.whiskerspawstailtelegrambot.record;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
 import pro.sky.whiskerspawstailtelegrambot.entity.Dog;
@@ -19,7 +16,10 @@ import java.util.List;
  */
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AdoptiveParentRecord implements Serializable {
 
@@ -38,7 +38,6 @@ public class AdoptiveParentRecord implements Serializable {
 
     @JsonIgnore
     String state;
-
 
     @JsonIgnore
     long chatId;
