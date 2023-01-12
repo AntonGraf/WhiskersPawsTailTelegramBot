@@ -66,7 +66,7 @@ public class ReportService {
    */
   public ReportRecord getReportByPetId(long petId) {
 
-    Report report = reportRepository.getReportByPetId(petId);
+    Report report = reportRepository.getReportByDog_id(petId);
     ReportRecord reportRecord = null;
     if (report != null) {
       reportRecord = reportMapper.toRecord(report);

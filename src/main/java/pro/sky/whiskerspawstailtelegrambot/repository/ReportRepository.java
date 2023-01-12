@@ -10,6 +10,6 @@ import pro.sky.whiskerspawstailtelegrambot.entity.Report;
 @Repository
 public interface ReportRepository extends JpaRepository<Report, Long> {
 
-   Report getReportByPetId(Long id);
+   Report getReportByDog_id(Long id);
 
 }
