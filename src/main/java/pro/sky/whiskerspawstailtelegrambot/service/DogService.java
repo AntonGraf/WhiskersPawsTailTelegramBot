@@ -29,7 +29,6 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @Transactional
 public class DogService {
 
-
     @Value("${dog.photo.dir.path}")
     private String dogDir;
 
@@ -58,7 +57,7 @@ public class DogService {
      * Коллекция всех собак в БД
      * @return список всех собак хранящиеся в БД
      */
-    public Collection<DogRecord> findAllDog() { //Get
+    public Collection<DogRecord> findAllDog() { //GetAll
         log.info("Поиск всех собак в БД");
         return dogMapper.toRecordList(dogRepository.findAll());
     }
@@ -68,30 +67,54 @@ public class DogService {
      *
      * @param dogId
      */
-    public void removeDog (long dogId) { //Delete
+    public DogRecord removeDog (long dogId) { //Delete
         log.info("Поиск собаки в БД");
         DogRecord dogRecord = findDog(dogId);
         dogRepository.deleteById(dogRecord.getId());
+        return dogRecord;
     }
 
     /**
      * Изменение собаки в БД
+     *
      * @param dogId
      * @param fullName
      * @param age
      * @param description
      * @param photo
+     * @return
      * @throws IOException
      */
-    public void editDog(Long dogId, String fullName, String age, String description, MultipartFile photo) throws IOException { //Put
+    public DogRecord editDog(Long dogId, String fullName, String age, String description, MultipartFile photo) throws IOException { //Put
         log.info("Изменение данных собаки в БД");
-        DogRecord dogRecord = findDog(dogId);
-        Dog dog = dogMapper.toEntity(dogRecord);
-        dog.setFullName(fullName);
-        dog.setAge(age);
-        dog.setDescription(description);
-        uploadPhoto(dogId, photo);
+        Dog dog = dogMapper.toEntity(findDog(dogId));
+        if (fullName != null && !fullName.isEmpty() && !fullName.isBlank()) {
+            dog.setFullName(fullName);
+        }
+        if (age != null && !age.isEmpty() && !age.isBlank()) {
+            dog.setAge(age);
+        }
+        if (description != null && !description.isEmpty() && !description.isBlank()) {
+            dog.setDescription(description);
+        }
         dogRepository.save(dog);
+        DogRecord dogRecord = dogMapper.toRecord(dog);
+        if (photo != null) {
+            uploadPhoto(dogRecord.getId(), photo);
+        }
+        return dogRecord;
+    }
+
+    /**
+     * Добавление id усыновителя в БД в таблицу Dog
+     * @param dogId
+     * @param adoptiveParentId
+     */
+    public void addIdAdoptiveParent(Long dogId, Long adoptiveParentId) {//Put
+        log.info("Изменение данных собаки в БД");
+        Dog dog = dogMapper.toEntity(findDog(dogId));
+        dogRepository.addIdAdoptiveParent(dogId, adoptiveParentId);
+
     }
 
     /**
@@ -107,9 +130,9 @@ public class DogService {
         Files.deleteIfExists(filePath);
 
         try (InputStream is = file.getInputStream();
-             OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
-             BufferedInputStream bis = new BufferedInputStream(is, 1024);
-             BufferedOutputStream bos = new BufferedOutputStream(os, 1024);
+            OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
+            BufferedInputStream bis = new BufferedInputStream(is, 1024);
+            BufferedOutputStream bos = new BufferedOutputStream(os, 1024);
         ) {
             bis.transferTo(bos);
         }
@@ -136,16 +159,29 @@ public class DogService {
      * @param age
      * @param description
      * @param photo
+     * @return
      * @throws IOException
      */
-    public void addDog(String fullName, String age, String description, MultipartFile photo) throws IOException { //Post
+    public DogRecord addDog(String fullName, String age, String description, MultipartFile photo) throws IOException { //Post
         log.info("Добавление собаки в БД");
         Dog dog = new Dog();
-        dog.setFullName(fullName);
-        dog.setAge(age);
-        dog.setDescription(description);
-        DogRecord dogRecord = dogMapper.toRecord(dogRepository.save(dog));
-        uploadPhoto(dogRecord.getId(), photo);
+        if (fullName != null && !fullName.isEmpty() && !fullName.isBlank()) {
+            dog.setFullName(fullName);
+        }
+        if (age != null && !age.isEmpty() && !age.isBlank()) {
+            dog.setAge(age);
+        }
+        if (description != null && !description.isEmpty() && !description.isBlank()) {
+            dog.setDescription(description);
+        }
+        dogRepository.save(dog);
+        DogRecord dogRecord = dogMapper.toRecord(dog);
+        if (photo != null) {
+            uploadPhoto(dogRecord.getId(), photo);
+        }
+        return dogRecord;
+
+
     }
 
 
