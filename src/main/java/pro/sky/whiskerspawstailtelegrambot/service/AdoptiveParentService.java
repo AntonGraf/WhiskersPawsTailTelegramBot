@@ -191,4 +191,19 @@ public class AdoptiveParentService {
     return null;
   }
 
+  /**
+   * Обновить state пользователя по его chatId
+   * @param chatId long chatId
+   * @param state стейт на который нужно обновить
+   *
+   */
+  public AdoptiveParentRecord updateStateAdoptiveParentByChatId(long chatId, StateAdoptiveParent state){
+    AdoptiveParentRecord adoptiveParentRecord = getAdoptiveParentByChatId(chatId);
+    if (adoptiveParentRecord != null) {
+      adoptiveParentRecord.setState(state.getText());
+      updateAdoptiveParent(adoptiveParentRecord.getId(),adoptiveParentRecord);
+    }
+    return adoptiveParentRecord;
+  }
+
 }
