@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,8 @@ import java.util.Collection;
 @Setter
 @Slf4j
 @RequestMapping("/pets")
+@Tag(name = "PetController",
+    description = "The Admin API")
 public class PetController {
   private final PetService petService;
   private final PetMapper petMapper;

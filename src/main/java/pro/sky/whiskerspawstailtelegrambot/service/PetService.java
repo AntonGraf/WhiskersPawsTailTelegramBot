@@ -49,7 +49,7 @@ public class  PetService {
      * @param petId
      * @return возвращает питомца
      */
-    public PetRecord findPet(long petId) { //Get
+    public PetRecord findPet(Long petId) { //Get
         log.info("Поиск питомца в БД" + petId);
         Pet pet = petRepository.findById(petId).orElseThrow(ElemNotFound::new);
         return petMapper.toRecord(pet);
@@ -70,7 +70,7 @@ public class  PetService {
      *
      * @param petId
      */
-    public PetRecord removePet(long petId) { //Delete
+    public PetRecord removePet(Long petId) { //Delete
         log.info("Поиск питомца в БД");
         PetRecord petRecord = findPet(petId);
         petRepository.deleteById(petRecord.getId());
@@ -124,7 +124,7 @@ public class  PetService {
      * @param file
      * @throws IOException
      */
-    public void uploadPhoto(long petId, MultipartFile file) throws IOException { //Put фото
+    public void uploadPhoto(Long petId, MultipartFile file) throws IOException { //Put фото
         PetRecord petRecord = findPet(petId);
         Path filePath = Path.of(petDir, petId + "." + getExtension(file.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
