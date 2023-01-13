@@ -24,6 +24,7 @@ public class ConfigMenu {
         List<BotCommand> listofCommands = new ArrayList<>();
         listofCommands.add(new BotCommand(AllText.START_TEXT, AllText.START_MENU_TEXT));
         listofCommands.add(new BotCommand(AllText.CALL_TO_VOLUNTEER_TEXT, AllText.CALL_VOLUNTEER_TEXT));
+        listofCommands.add(new BotCommand(AllText.SHOW_ME_ID, AllText.SHOW_ID));
         try {
             bot.execute(new SetMyCommands(listofCommands, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException e) {

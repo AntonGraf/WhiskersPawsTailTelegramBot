@@ -1,21 +1,13 @@
-package pro.sky.whiskerspawstailtelegrambot.mainHandler.MessageHandler;
+package pro.sky.whiskerspawstailtelegrambot.mainHandler;
 
 
-import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.CANCEL_TEXT;
-import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.REGISTRATION_CANCEL;
-
+import java.util.Objects;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import pro.sky.whiskerspawstailtelegrambot.mainHandler.CallbackQueryHandler;
-import pro.sky.whiskerspawstailtelegrambot.mainHandler.MainHandler;
-import pro.sky.whiskerspawstailtelegrambot.mainHandler.RegistrationHandler;
-import pro.sky.whiskerspawstailtelegrambot.mainHandler.StandardReplyHandler;
-import pro.sky.whiskerspawstailtelegrambot.mainHandler.reportHandler.ReportAddHandler;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
@@ -92,22 +84,16 @@ public class MessageHandler implements MainHandler {
        если состояни отличное от FREE,
         то обрабатываем состояние.
        */
-      if (state != null) {
+      if (state != null && state != StateAdoptiveParent.FREE) {
 
         switch (state) {
 
           case THE_FIRST_STATE:
-            return sendMessage = registrationHandler
-                .handlerWithStatusTheFirstState(message, adoptiveParentRecord, message.getText(),
-                    chatId);
+            return registrationHandler
+                .handlerWithStatusTheFirstState(message, adoptiveParent, message.getText(), chatId);
           case ONLY_NAME:
-            return sendMessage = registrationHandler
-                .handlerWithStatusOnlyName(message, adoptiveParentRecord, message.getText(),
-                    chatId);
-          case SUCCESS_REG:
-            //
-            break;
-          //проверяется стейт ПОЛЬЗОВАТЕЛЯ на отправку отчета
+            return registrationHandler
+                .handlerWithStatusOnlyName(message, adoptiveParent, message.getText(), chatId);
           case START_SEND_REPORT:
             return sendMessage = reportAddHandler.handler(message);
         }
