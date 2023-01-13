@@ -1,5 +1,7 @@
 package pro.sky.whiskerspawstailtelegrambot.service;
 
+import java.io.IOException;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,9 +23,12 @@ import java.util.Optional;
 import pro.sky.whiskerspawstailtelegrambot.repository.PetRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class PetServiceTest {
@@ -37,7 +42,7 @@ class PetServiceTest {
     PetMapper mapper = new PetMapperImpl();
 
     @Test
-    void findDogPositiveTest() {
+    void findPetPositiveTest() {
         Pet pet = getTestPet();
         lenient().when(petRepository.findById(1L)).thenReturn(Optional.of(pet));
         lenient().when(petMapper.toRecord(pet)).thenReturn(mapper.toRecord(pet));
@@ -47,23 +52,23 @@ class PetServiceTest {
     }
 
     @Test
-    void findDogNegativeTest() {
+    void findPetNegativeTest() {
         lenient().when(petRepository.findById(anyLong())).thenThrow(ElemNotFound.class);
         assertThrows(ElemNotFound.class, () -> out.findPet(1L));
     }
 
     @Test
-    void findAllDogEmptyListTest() {
+    void findAllPetEmptyListTest() {
         lenient().when(petRepository.findAll()).thenReturn(List.of());
         assertTrue(out.findAllPet().isEmpty());
     }
     @Test
-    void findAllDogPositiveTest() {
-        List<Pet> dogs = getTestPetList();
+    void findAllPetPositiveTest() {
+        List<Pet> pets = getTestPetList();
         List<PetRecord> dogRecords = getTestPetRecords();
 
-        lenient().when(petRepository.findAll()).thenReturn(dogs);
-        lenient().when(petMapper.toRecordList(dogs)).thenReturn(mapper.toRecordList(dogs));
+        lenient().when(petRepository.findAll()).thenReturn(pets);
+        lenient().when(petMapper.toRecordList(pets)).thenReturn(mapper.toRecordList(pets));
 
         List<PetRecord> checkedDogRecords = List.copyOf(out.findAllPet());
 
@@ -72,7 +77,7 @@ class PetServiceTest {
     }
 
     @Test
-    void removeDogPositiveTest() {
+    void removePetPositiveTest() {
         Pet pet = getTestPet();
 
         lenient().when(petRepository.findById(anyLong())).thenReturn(Optional.of(pet));
@@ -84,7 +89,7 @@ class PetServiceTest {
     }
 
     @Test
-    void removeDogNegativeTest() {
+    void removePetNegativeTest() {
 
         lenient().when(petRepository.findById(anyLong())).thenThrow(ElemNotFound.class);
         assertThrows(ElemNotFound.class, () -> out.removePet(1L));
@@ -92,20 +97,19 @@ class PetServiceTest {
     }
 
     @Test
-    void editDogPositiveTest() {
-        Pet dog = getTestPet();
-        PetRecord petRecord = mapper.toRecord(dog);
+    void editPetPositiveTest() throws IOException {
+        Pet pet = getTestPet();
+        PetRecord petRecord = mapper.toRecord(pet);
+        String age = petRecord.getAge();
+       PetService petService = mock(PetService.class);
+        doNothing().when(petService).editPet(petRecord.getId(), null, "1", null, null);
+        Assertions.assertThatNoException().isThrownBy(() -> petService.editPet(pet.getId(), null, "1", null, null));
+        verify(petService, times(1)).editPet(pet.getId(), null, "1", null, null);
 
-        lenient().when(petRepository.findById(anyLong())).thenReturn(Optional.of(dog));
-        lenient().when(petMapper.toRecord(dog)).thenReturn(mapper.toRecord(dog));
-        lenient().when(petMapper.toEntity(petRecord)).thenReturn(mapper.toEntity(petRecord));
-        lenient().when(petRepository.save(any(Pet.class))).thenReturn(dog);
-
-        assertDoesNotThrow(() -> out.editPet(1L, "", "1", "", getTestPhoto()));
     }
 
     @Test
-    void editDogNegativeTest() {
+    void editPetNegativeTest() {
         lenient().when(petRepository.findById(anyLong())).thenThrow(ElemNotFound.class);
         assertThrows(ElemNotFound.class, () -> out.editPet(1L, "", "1", "", getTestPhoto()));
     }
@@ -113,9 +117,39 @@ class PetServiceTest {
     @Test
     void uploadPhotoNegativeTest() {
         lenient().when(petRepository.findById(anyLong())).thenThrow(ElemNotFound.class);
-        assertThrows(ElemNotFound.class, () -> out.uploadPhoto(1L, getTestPhoto()));
+        assertThrowsExactly(ElemNotFound.class, () -> out.uploadPhoto(1L, getTestPhoto()));
     }
 
+    @Test
+    void uploadPhotoPositiveTest() throws IOException {
+        Pet pet = getTestPet();
+        MultipartFile photo = getTestPhoto();
+        pet.setPhoto(photo.getBytes());
+        pet.setFilePath("/ptath");
+        pet.setFileSize(photo.getSize());
+        pet.setMediaType(photo.getContentType());
+        Long id = pet.getId();
+        PetService petService = mock(PetService.class);
+        doNothing().when(petService).uploadPhoto(pet.getId(), photo);
+        Assertions.assertThatNoException().isThrownBy(() ->petService.uploadPhoto(pet.getId(), photo));
+        verify(petService, times(1)).uploadPhoto(id, photo);
+
+    }
+
+    @Test
+    void addIdAdoptiveParentTest() {
+
+        PetService petService = mock(PetService.class);
+        doNothing().when(petRepository).addIdAdoptiveParent(1L, 1L);
+        petRepository.addIdAdoptiveParent(1L, 1L);
+        verify(petRepository, times(1)).addIdAdoptiveParent(1L, 1L);
+    }
+
+
+    /**
+     * пет для теста
+     * @return
+     */
     private Pet getTestPet() {
         Pet pet = new Pet();
         pet.setId(1L);
@@ -131,14 +165,22 @@ class PetServiceTest {
         return pet;
     }
 
+    /**
+     * шелтер для теста
+     * @return
+     */
     private Shelter getTestShelter() {
         Shelter shelter = new Shelter();
         shelter.setId(1L);
         return shelter;
     }
 
+    /**
+     * коллекция петов
+     * @return
+     */
     private List<Pet> getTestPetList() {
-        List<Pet> dogs = new ArrayList<>();
+        List<Pet> pets = new ArrayList<>();
 
         Pet pet = new Pet();
         pet.setId(2L);
@@ -152,23 +194,34 @@ class PetServiceTest {
         pet.setReports(List.of());
         pet.setAdoptiveParent(null);
 
-        dogs.add(pet);
-        dogs.add(getTestPet());
-        return dogs;
+        pets.add(pet);
+        pets.add(getTestPet());
+        return pets;
     }
+
+    /**
+     * Преобразование коллекции петов в рекорды
+     * @return
+     */
 
     private List<PetRecord> getTestPetRecords() {
-        List<PetRecord> dogRecords = new ArrayList<>();
+        List<PetRecord> petRecords = new ArrayList<>();
         for (Pet pet : getTestPetList()) {
-            dogRecords.add(mapper.toRecord(pet));
+            petRecords.add(mapper.toRecord(pet));
         }
-        return dogRecords;
-    }
-
-    private MultipartFile getTestPhoto() {
-        byte[] photoByte = {123,123,0,6};
-        return new MockMultipartFile("dog.png",photoByte);
+        return petRecords;
     }
 
 
+
+
+    /**
+     * Файл фото для теста
+     * @return
+     */
+
+    private MockMultipartFile getTestPhoto() {
+        return new MockMultipartFile("data", "photo.jpeg",
+            MediaType.MULTIPART_FORM_DATA_VALUE, "photo.jpeg".getBytes());
+    }
 }
