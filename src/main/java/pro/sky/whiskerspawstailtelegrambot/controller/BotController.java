@@ -21,7 +21,7 @@ import pro.sky.whiskerspawstailtelegrambot.TelegramBotUpdatesListener;
 @Getter
 @Setter
 @Slf4j
-@Hidden
+//@Hidden
 public class BotController {
     final TelegramBotUpdatesListener telegramBotUpdatesListener;
 

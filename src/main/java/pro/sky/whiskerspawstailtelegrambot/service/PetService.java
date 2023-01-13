@@ -29,7 +29,7 @@ import pro.sky.whiskerspawstailtelegrambot.repository.PetRepository;
 @Service
 @Slf4j
 @Transactional
-public class PetService {
+public class  PetService {
 
     @Value("${pet.photo.dir.path}")
     private String petDir;
