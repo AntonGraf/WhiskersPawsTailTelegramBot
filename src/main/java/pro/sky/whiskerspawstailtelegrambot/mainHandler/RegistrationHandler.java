@@ -91,7 +91,7 @@ public class RegistrationHandler {
 
   //добавляет нового пользователя в таблиц при нажатии кнопки регистрация. Меняет статус и ракладку
   //отправляет новое сообщение
-  SendMessage addToTable(Message message, String chatId) {
+  public SendMessage addToTable(Message message, String chatId) {
     AdoptiveParentRecord adoptiveParentRecord = new AdoptiveParentRecord();
     adoptiveParentRecord.setFullName("newParent");
     adoptiveParentRecord.setPhone("somePhone");

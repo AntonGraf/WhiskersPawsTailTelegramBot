@@ -1,13 +1,22 @@
-package pro.sky.whiskerspawstailtelegrambot.mainHandler;
+package pro.sky.whiskerspawstailtelegrambot.mainHandler.MessageHandler;
 
+
+import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.CANCEL_TEXT;
+import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.REGISTRATION_CANCEL;
 
 import java.util.Objects;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import pro.sky.whiskerspawstailtelegrambot.mainHandler.CallbackQueryHandler;
+import pro.sky.whiskerspawstailtelegrambot.mainHandler.MainHandler;
+import pro.sky.whiskerspawstailtelegrambot.mainHandler.RegistrationHandler;
+import pro.sky.whiskerspawstailtelegrambot.mainHandler.StandardReplyHandler;
+import pro.sky.whiskerspawstailtelegrambot.mainHandler.reportHandler.ReportAddHandler;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
@@ -90,10 +99,10 @@ public class MessageHandler implements MainHandler {
 
           case THE_FIRST_STATE:
             return registrationHandler
-                .handlerWithStatusTheFirstState(message, adoptiveParent, message.getText(), chatId);
+                .handlerWithStatusTheFirstState(message, adoptiveParentRecord, message.getText(), chatId);
           case ONLY_NAME:
             return registrationHandler
-                .handlerWithStatusOnlyName(message, adoptiveParent, message.getText(), chatId);
+                .handlerWithStatusOnlyName(message, adoptiveParentRecord, message.getText(), chatId);
           case START_SEND_REPORT:
             return sendMessage = reportAddHandler.handler(message);
         }

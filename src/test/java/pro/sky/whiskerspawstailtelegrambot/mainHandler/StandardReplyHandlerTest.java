@@ -1,4 +1,4 @@
-package pro.sky.whiskerspawstailtelegrambot.mainHandler;
+package pro.sky.whiskerspawstailtelegrambot.mainHandler.MessageHandler;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +12,9 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import pro.sky.whiskerspawstailtelegrambot.entity.Shelter;
+import pro.sky.whiskerspawstailtelegrambot.mainHandler.RegistrationHandler;
+import pro.sky.whiskerspawstailtelegrambot.mainHandler.StandardReplyHandler;
+import pro.sky.whiskerspawstailtelegrambot.mainHandler.reportHandler.ReportAddHandler;
 import pro.sky.whiskerspawstailtelegrambot.record.VolunteerRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.service.ShelterService;
