@@ -66,9 +66,13 @@ public class ParserToBot {
     if (textMessage == null) {
       return null;
     }
-    int index =  textMessage.indexOf("ID: ");
-    String id = textMessage.substring(index, index + 1);
+    try {
+      int index =  textMessage.indexOf("ID: ");
+      String id = textMessage.substring(index, index + 1);
+      return Long.parseLong(id);
+    }catch (Exception e){
+      return null;
+    }
 
-    return Long.parseLong(id);
   }
 }

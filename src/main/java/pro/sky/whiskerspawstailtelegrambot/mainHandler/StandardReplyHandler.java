@@ -87,8 +87,6 @@ public class StandardReplyHandler {
       Менется стейт ПОЛЬЗОВАТЕЛЯ на начало отправки отчета
        */
       case (AllText.SEND_PET_REPORT_TEXT):     // нажатие кнопки Отправить отчет о питомце
-      adoptiveParentService.updateStateAdoptiveParentByChatId(Long.parseLong(chatId),
-            StateAdoptiveParent.START_SEND_REPORT);
         return sendMessage = reportAddHandler.clickButton_SEND_REPORT(message);
       //endregion
 

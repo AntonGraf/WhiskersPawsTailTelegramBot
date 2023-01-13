@@ -53,11 +53,11 @@ public class CallbackQueryHandler {
 //        sendMessage = reportAddHandler.clickButton_SHOW_ALL_YOUR_PET(message);
 //        break;
 
-      case (AllText.SEND_REPORT_TEXT):     // нажатие кнопки отправить отчет
-        adoptiveParentService.updateStateAdoptiveParentByChatId(Long.parseLong(chatId),
-            StateAdoptiveParent.START_SEND_REPORT);
-        sendMessage = reportAddHandler.clickButton_SEND_REPORT(message);
-        break;
+//      case (AllText.SEND_REPORT_TEXT):     // нажатие кнопки отправить отчет
+//        adoptiveParentService.updateStateAdoptiveParentByChatId(Long.parseLong(chatId),
+//            StateAdoptiveParent.START_SEND_REPORT);
+//        sendMessage = reportAddHandler.clickButton_SEND_REPORT(message);
+//        break;
 
       case (AllText.REGISTRATION_BUTTON):     // нажатие кнопки регистрация
         sendMessage = registrationHandler.addToTable(message,String.valueOf(message.getChatId()));

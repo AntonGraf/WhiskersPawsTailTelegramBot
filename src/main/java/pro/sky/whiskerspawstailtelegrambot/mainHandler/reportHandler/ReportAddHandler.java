@@ -30,6 +30,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import pro.sky.whiskerspawstailtelegrambot.record.PetRecord;
 import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
+import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.service.ReportService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
@@ -47,12 +48,14 @@ public class ReportAddHandler {
   private final ReportService reportService;
   private final ConfigKeyboard configKeyboard;
   private SendMessage sendMessage = null;
+  private final AdoptiveParentService adoptiveParentService;
 
   public ReportAddHandler(FormReplyMessages formReplyMessages, ReportService reportService,
-      ConfigKeyboard configKeyboard) {
+      ConfigKeyboard configKeyboard, AdoptiveParentService adoptiveParentService) {
     this.formReplyMessages = formReplyMessages;
     this.reportService = reportService;
     this.configKeyboard = configKeyboard;
+    this.adoptiveParentService = adoptiveParentService;
   }
 
   public SendMessage handler(Message message) {
@@ -145,15 +148,15 @@ public class ReportAddHandler {
    * Метод обрабатывает нажатие на кнопку показать всех отправить отчет и изменят статус
    * пользователя на ожидание отправки отчета
    *
-   * @param message сообщение из update
+   * @param messageFromStandardHandler сообщение из update
    */
-  public SendMessage clickButton_SEND_REPORT(Message message) {
+  public SendMessage clickButton_SEND_REPORT(Message messageFromStandardHandler) {
     log.info("Вызов метода " + new Throwable()
         .getStackTrace()[0]
         .getMethodName() + " класса " + this.getClass().getName());
-    String allPetByChatId = reportService.showAllAdoptedPets(message.getChatId());
+    String allPetByChatId = reportService.showAllAdoptedPets(messageFromStandardHandler.getChatId());
     if (allPetByChatId == null) {
-      return sendMessage = formReplyMessages.replyMessage(message,
+      return sendMessage = formReplyMessages.replyMessage(messageFromStandardHandler,
           YOU_HAVE_NO_ADOPTED_PETS_TEXT, configKeyboard.initKeyboardOnClickStart());
     }
 
@@ -165,7 +168,10 @@ public class ReportAddHandler {
     InlineKeyboardMarkup inlineKeyboardMarkup = configKeyboard.formReplyKeyboardAnyRowInline(
         numberPerLine, buttonsPets);
 
-    return sendMessage = formReplyMessages.replyMessage(message,
+    adoptiveParentService.updateStateAdoptiveParentByChatId((messageFromStandardHandler.getChatId()),
+        StateAdoptiveParent.START_SEND_REPORT);
+
+    return sendMessage = formReplyMessages.replyMessage(messageFromStandardHandler,
         DESCRIPTION_SEND_REPORT_TEXT, inlineKeyboardMarkup);
   }
 
