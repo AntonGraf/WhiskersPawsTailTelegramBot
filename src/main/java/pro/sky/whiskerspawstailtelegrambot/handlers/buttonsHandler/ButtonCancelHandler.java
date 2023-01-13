@@ -1,8 +1,8 @@
-//package pro.sky.whiskerspawstailtelegrambot.handlers.messageHandler;
+//package pro.sky.whiskerspawstailtelegrambot.handlers.buttonsHandler;
 //
 //import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 //import org.telegram.telegrambots.meta.api.objects.Message;
-//import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
+//import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.ReportHandler;
 //import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 //import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 //import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
@@ -11,23 +11,22 @@
 ///**
 // * обработчик кнопки отмена
 // */
-//public class ButtonCancelHandler {
+//public class ButtonCancelHandler{
 //
 //  /**
 //   * реакция на кнопку отмена - возврат в главное меню,
 //   * изменение любого статуса пользователя на FREE
 //   * @return
 //   */
-//  public SendMessage clickCancel(Message message, AdoptiveParentService adoptiveParentService, String chatId){
+//  public SendMessage clickCancel(Message message){
 //
-//    SendMessage sendMessage = new SendMessage();
 //    FormReplyMessages formReplyMessages = new FormReplyMessages();
 //    ConfigKeyboard configKeyboard = new ConfigKeyboard();
+////
+////    adoptiveParentService.updateStateAdoptiveParentByChatId(Long.parseLong(chatId),
+////        StateAdoptiveParent.FREE);
 //
-//    adoptiveParentService.updateStateAdoptiveParentByChatId(Long.parseLong(chatId),
-//        StateAdoptiveParent.FREE);
-//
-//    return formReplyMessages.replyMessage(message,
+//    return formReplyMessages.replyMessage(this.,
 //        AllText.CANCEL_RETURN_MAIN_MENU_TEXT,
 //        configKeyboard.initKeyboardOnClickStart());
 //

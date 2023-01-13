@@ -28,6 +28,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import pro.sky.whiskerspawstailtelegrambot.handlers.stateHandlers.StateCommonHandlerImpl;
 import pro.sky.whiskerspawstailtelegrambot.record.PetRecord;
 import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
@@ -42,22 +43,24 @@ import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
  */
 @Slf4j
 @Component
-public class ReportAddHandler {
+public class ReportHandler {
 
   private final FormReplyMessages formReplyMessages;
   private final ReportService reportService;
   private final ConfigKeyboard configKeyboard;
   private SendMessage sendMessage = null;
   private final AdoptiveParentService adoptiveParentService;
+  private final StateCommonHandlerImpl stateCommonHandler;
 
 
-
-  public ReportAddHandler(FormReplyMessages formReplyMessages, ReportService reportService,
-      ConfigKeyboard configKeyboard, AdoptiveParentService adoptiveParentService) {
+  public ReportHandler(FormReplyMessages formReplyMessages, ReportService reportService,
+      ConfigKeyboard configKeyboard, AdoptiveParentService adoptiveParentService,
+      StateCommonHandlerImpl stateCommonHandler) {
     this.formReplyMessages = formReplyMessages;
     this.reportService = reportService;
     this.configKeyboard = configKeyboard;
     this.adoptiveParentService = adoptiveParentService;
+    this.stateCommonHandler = stateCommonHandler;
   }
 
   public SendMessage handler(Message message) {
@@ -77,9 +80,9 @@ public class ReportAddHandler {
 
     }
 
-    String stateReport = reportService.getStateReportByPetId(chatId) == null ? NOT_STARTED
-        : reportService.getStateReportByPetId(chatId);
-
+//    String stateReport = reportService.getStateReportByPetId(chatId) == null ? NOT_STARTED
+//        : reportService.getStateReportByPetId(chatId);
+    String stateReport = null;
     switch (stateReport) {
 
 //      case NOT_STARTED:
@@ -121,30 +124,6 @@ public class ReportAddHandler {
 
   //region clickButton
 
-  /**
-   * Метод обрабатывает нажатие на кнопку показать всех ваших животных
-   *
-   * @param message сообщение из update
-   */
-//  public SendMessage clickButton_SHOW_ALL_YOUR_PET(Message message) {
-//    log.info("Вызов метода " + new Throwable()
-//        .getStackTrace()[0]
-//        .getMethodName() + " класса " + this.getClass().getName());
-//    String allPetByChatId = reportService.showAllAdoptedPets(message.getChatId());
-//    String[] buttonsPets = new String[allPetByChatId.length() + 1];
-//    buttonsPets = allPetByChatId.split(AllText.DELIMITER_FOR_PARSER_PETS);
-//    buttonsPets[buttonsPets.length - 1] = CANCEL_TEXT;
-//
-////    InlineKeyboardMarkup inlineKeyboardMarkup = configKeyboard.formReplyKeyboardInOneRowInline(
-////    );
-//
-//    int numberPerLine = 1;
-//    InlineKeyboardMarkup inlineKeyboardMarkup = configKeyboard.formReplyKeyboardAnyRowInline(
-//        numberPerLine, buttonsPets);
-//
-//    return sendMessage = formReplyMessages.replyMessage(message,
-//        DESCRIPTION_SEND_REPORT_TEXT, inlineKeyboardMarkup);
-//  }
 
   /**
    * Метод обрабатывает нажатие на кнопку показать всех отправить отчет и изменят статус
@@ -156,25 +135,12 @@ public class ReportAddHandler {
     log.info("Вызов метода " + new Throwable()
         .getStackTrace()[0]
         .getMethodName() + " класса " + this.getClass().getName());
-    String allPetByChatId = reportService.showAllAdoptedPets(messageFromStandardHandler.getChatId());
-    if (allPetByChatId == null) {
-      return sendMessage = formReplyMessages.replyMessage(messageFromStandardHandler,
-          YOU_HAVE_NO_ADOPTED_PETS_TEXT, configKeyboard.initKeyboardOnClickStart());
-    }
 
-    List<String> buttonsPets = new ArrayList<>(
-        List.of(allPetByChatId.split(AllText.DELIMITER_FOR_PARSER_PETS)));
-    buttonsPets.add(CANCEL_TEXT);
+    SendMessage sendMessage = clickButton_SHOW_Id_YOUR_PET(messageFromStandardHandler);
+    reportService.addNewBlankReportInDbForPetByPetId();
+    formReplyMessages.setSuccessful(true);
+    return sendMessage;
 
-    int numberPerLine = 1;
-    InlineKeyboardMarkup inlineKeyboardMarkup = configKeyboard.formReplyKeyboardAnyRowInline(
-        numberPerLine, buttonsPets);
-
-    adoptiveParentService.updateStateAdoptiveParentByChatId((messageFromStandardHandler.getChatId()),
-        StateAdoptiveParent.START_SEND_REPORT);
-
-    return sendMessage = formReplyMessages.replyMessage(messageFromStandardHandler,
-        DESCRIPTION_SEND_REPORT_TEXT, inlineKeyboardMarkup);
   }
 
   //endregion
@@ -243,12 +209,40 @@ public class ReportAddHandler {
   public SendMessage saveReportInDb(Message message, ReportRecord reportRecord) {
 
     long chatId = message.getChatId();
-//    reportService.addReport();
 
-    reportService.updateStateAdoptiveParentByChatId(chatId, StateAdoptiveParent.FREE);
-    return sendMessage = formReplyMessages.replyMessage(message,
+    SendMessage sendMessage = formReplyMessages.replyMessage(message,
         CANCEL_RETURN_MAIN_MENU_TEXT, configKeyboard.initKeyboardOnClickStart());
+    return sendMessage;
+  }
 
+  /**
+   * Метод формирует список id питомцев которые зарегистрироаны за AdoptiveParent и inline
+   * клавиатуру
+   *
+   * @param message сообщение из update
+   */
+  public SendMessage clickButton_SHOW_Id_YOUR_PET(Message message) {
+    log.info("Вызов метода " + new Throwable()
+        .getStackTrace()[0]
+        .getMethodName() + " класса " + this.getClass().getName());
+
+    String allPetByChatId = reportService.showAllAdoptedPets(message.getChatId());
+    if (allPetByChatId == null) {
+      formReplyMessages.setSuccessful(false);
+      return sendMessage = formReplyMessages.replyMessage(message,
+          YOU_HAVE_NO_ADOPTED_PETS_TEXT, configKeyboard.initKeyboardOnClickStart());
+    }
+
+    List<String> buttonsPets = new ArrayList<>(
+        List.of(allPetByChatId.split(AllText.DELIMITER_FOR_PARSER_PETS)));
+    buttonsPets.add(CANCEL_TEXT);
+
+    int numberPerLine = 1;
+    InlineKeyboardMarkup inlineKeyboardMarkup = configKeyboard.formReplyKeyboardAnyRowInline(
+        numberPerLine, buttonsPets);
+
+    return sendMessage = formReplyMessages.replyMessage(message,
+        DESCRIPTION_SEND_REPORT_TEXT, inlineKeyboardMarkup);
   }
 
 

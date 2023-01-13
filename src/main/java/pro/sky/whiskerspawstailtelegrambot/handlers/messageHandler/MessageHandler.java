@@ -12,11 +12,11 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import pro.sky.whiskerspawstailtelegrambot.handlers.CallbackQueryHandler;
-import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.mainHandler.GetBaseInfoFromUpdate;
-import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.mainHandler.MainHandler;
+import pro.sky.whiskerspawstailtelegrambot.handlers.mainHandler.GetBaseInfoFromUpdate;
+import pro.sky.whiskerspawstailtelegrambot.handlers.mainHandler.MainHandler;
 import pro.sky.whiskerspawstailtelegrambot.handlers.RegistrationHandler;
 import pro.sky.whiskerspawstailtelegrambot.handlers.StandardReplyHandler;
-import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.ReportAddHandler;
+import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.ReportHandler;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
@@ -31,7 +31,7 @@ import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
 @Data
 public class MessageHandler implements MainHandler {
 
-  private final ReportAddHandler reportAddHandler;
+  private final ReportHandler reportHandler;
   private final StandardReplyHandler standardReplyHandler;
   private final AdoptiveParentService adoptiveParentService;
   private final CallbackQueryHandler callbackQueryHandler;
@@ -39,10 +39,10 @@ public class MessageHandler implements MainHandler {
   private final RegistrationHandler registrationHandler;
 
 
-  public MessageHandler(ReportAddHandler reportAddHandler,
+  public MessageHandler(ReportHandler reportHandler,
       StandardReplyHandler standardReplyHandler, AdoptiveParentService adoptiveParentService,
       CallbackQueryHandler callbackQueryHandler, RegistrationHandler registrationHandler) {
-    this.reportAddHandler = reportAddHandler;
+    this.reportHandler = reportHandler;
     this.standardReplyHandler = standardReplyHandler;
     this.adoptiveParentService = adoptiveParentService;
     this.callbackQueryHandler = callbackQueryHandler;
@@ -72,8 +72,8 @@ public class MessageHandler implements MainHandler {
 
       if (textMessage != null && (textMessage.equals(CANCEL_TEXT) || textMessage.equals(
           REGISTRATION_CANCEL))) {
-        return sendMessage = new ButtonCancelHandler().clickCancel(message, adoptiveParentService,
-            chatId);
+//        return sendMessage = new ButtonCancelHandler().clickCancel(message, adoptiveParentService,
+//            chatId);
       }
 
         Long idChat = Long.parseLong(chatId);
@@ -103,8 +103,8 @@ public class MessageHandler implements MainHandler {
           case ONLY_NAME:
             return registrationHandler
                 .handlerWithStatusOnlyName(message, adoptiveParentRecord, message.getText(), chatId);
-          case START_SEND_REPORT:
-            return sendMessage = reportAddHandler.handler(message);
+//          case START_SEND_REPORT:
+//            return sendMessage = reportAddHandler.handler(message);
         }
       }
 

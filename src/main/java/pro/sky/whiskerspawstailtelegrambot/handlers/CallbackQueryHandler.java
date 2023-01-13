@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.ReportAddHandler;
+import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.ReportHandler;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
@@ -20,16 +20,16 @@ public class CallbackQueryHandler {
 
   private final FormReplyMessages formReplyMessages;
   private final ConfigKeyboard configKeyboard;
-  private final ReportAddHandler reportAddHandler;
+  private final ReportHandler reportHandler;
 
   private final RegistrationHandler registrationHandler;
   private final AdoptiveParentService adoptiveParentService;
 
-  public CallbackQueryHandler(FormReplyMessages formReplyMessages, ConfigKeyboard configKeyboard, ReportAddHandler reportAddHandler,
+  public CallbackQueryHandler(FormReplyMessages formReplyMessages, ConfigKeyboard configKeyboard, ReportHandler reportHandler,
       RegistrationHandler registrationHandler, AdoptiveParentService adoptiveParentService) {
     this.formReplyMessages = formReplyMessages;
     this.configKeyboard = configKeyboard;
-    this.reportAddHandler = reportAddHandler;
+    this.reportHandler = reportHandler;
     this.registrationHandler = registrationHandler;
     this.adoptiveParentService = adoptiveParentService;
   }
@@ -64,6 +64,13 @@ public class CallbackQueryHandler {
     }
     return sendMessage;
   }
+
+  public SendMessage checkClickBaseButtons(){
+
+
+
+  }
+
 
 
 

@@ -10,6 +10,7 @@ import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
+import pro.sky.whiskerspawstailtelegrambot.util.StateReport;
 
 /**
  * A DTO for the {@link pro.sky.whiskerspawstailtelegrambot.entity.Report} entity
@@ -28,5 +29,5 @@ public class ReportRecord implements Serializable {
     String diet;
     String reportAboutFeelings;
     String reportAboutHabits;
-    String stateReport;
+    StateReport stateReport;
 }

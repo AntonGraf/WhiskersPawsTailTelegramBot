@@ -1,4 +1,4 @@
-package pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.mainHandler;
+package pro.sky.whiskerspawstailtelegrambot.handlers.mainHandler;
 
 
 import lombok.extern.slf4j.Slf4j;
@@ -10,10 +10,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import pro.sky.whiskerspawstailtelegrambot.handlers.CallbackQueryHandler;
 import pro.sky.whiskerspawstailtelegrambot.handlers.StandardReplyHandler;
 import pro.sky.whiskerspawstailtelegrambot.handlers.stateHandlers.StateAdoptiveParentHandlerImpl;
+import pro.sky.whiskerspawstailtelegrambot.handlers.stateHandlers.StateCommonHandlerImpl;
 import pro.sky.whiskerspawstailtelegrambot.handlers.stateHandlers.StateReportHandlerImpl;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
-import pro.sky.whiskerspawstailtelegrambot.util.StateReport;
 
 @Slf4j
 @Component("MainHandler")
@@ -21,19 +21,17 @@ public class MainHandlerImpl implements MainHandler {
 
   private final StandardReplyHandler standardReplyHandler;
   private final CallbackQueryHandler callbackQueryHandler;
-  private  final StateAdoptiveParentHandlerImpl stateAdoptiveParentHandler;
-  private  final StateReportHandlerImpl stateReportHandler;
 
+  private final StateCommonHandlerImpl stateCommonHandler;
 
 
   public MainHandlerImpl(StandardReplyHandler standardReplyHandler,
       CallbackQueryHandler callbackQueryHandler,
       StateAdoptiveParentHandlerImpl stateAdoptiveParentHandler,
-      StateReportHandlerImpl stateReportHandler) {
+      StateReportHandlerImpl stateReportHandler, StateCommonHandlerImpl stateCommonHandler) {
     this.standardReplyHandler = standardReplyHandler;
     this.callbackQueryHandler = callbackQueryHandler;
-    this.stateAdoptiveParentHandler = stateAdoptiveParentHandler;
-    this.stateReportHandler = stateReportHandler;
+    this.stateCommonHandler = stateCommonHandler;
   }
 
   /**
@@ -41,6 +39,13 @@ public class MainHandlerImpl implements MainHandler {
    */
   @Override
   public SendMessage process(Update update) {
+
+    if(processingStates(update)){
+
+
+
+
+    }
 
     return processingIncomingMessages(update);
 
@@ -70,17 +75,24 @@ public class MainHandlerImpl implements MainHandler {
     return sendMessage;
   }
 
-  private SendMessage processingStates(Message message) {
+  private boolean processingStates(Update update) {
 
+    long id = 0;
     try {
-      StateAdoptiveParent stateAdoptiveParent = stateAdoptiveParentHandler.startHandler(message);
-      StateReport stateReport = stateReportHandler.getStateReportByPetId(message);
+      StateAdoptiveParent stateAdoptiveParent = stateCommonHandler.getStateAdoptiveParentByChatId(
+          id);
+//      StateReport stateReport = stateCommonHandler.getStateReportByPetId(id);
+
+
+
+
 
     } catch (Exception e) {
-      return sendMessage;
+      return false;
     }
-    return sendMessage;
+    return true;
   }
+
 
   private void sendReplyMessage(SendMessage replyMessage) {
 

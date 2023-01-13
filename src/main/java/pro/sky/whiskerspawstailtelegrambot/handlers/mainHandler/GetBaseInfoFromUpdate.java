@@ -1,4 +1,4 @@
-package pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.mainHandler;//package pro.sky.whiskerspawstailtelegrambot.mainHandler.messageHandler;
+package pro.sky.whiskerspawstailtelegrambot.handlers.mainHandler;//package pro.sky.whiskerspawstailtelegrambot.mainHandler.messageHandler;
 
 import lombok.AccessLevel;
 import lombok.Getter;

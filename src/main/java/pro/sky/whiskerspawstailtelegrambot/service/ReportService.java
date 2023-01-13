@@ -71,6 +71,17 @@ public class ReportService {
   }
 
   /**
+   * Создать новый пустой отчет и сохранить его в базе данных
+   *
+   * @return новй созданый отчет
+   */
+  public ReportRecord addNewBlankReportInDbForPetByPetId() {
+    Report report = new Report();
+    reportRepository.save(report);
+    return reportMapper.toRecord(report);
+  }
+
+  /**
    * Создать новый отчет и сохранить его в базе данных с привязкой к животному по его id
    *
    * @param petId Id животного
@@ -164,7 +175,7 @@ public class ReportService {
    * @param petId id животного
    * @return Состояние отчета из бд или null
    */
-  public String getStateReportByPetId(long petId) {
+  public StateReport getStateReportByPetId(long petId) {
 
     ReportRecord reportRecord = getReportByPetId(petId);
     StateReport stateReport;
