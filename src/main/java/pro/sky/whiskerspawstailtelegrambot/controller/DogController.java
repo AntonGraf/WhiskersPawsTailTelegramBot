@@ -61,8 +61,8 @@ public class DogController {
           }
       )
   })
-  @GetMapping(value = "{id}")
-  public ResponseEntity<?> findDog(@PathVariable Long id) {
+  @GetMapping
+  public ResponseEntity<?> findDog(@RequestParam(name = "id") Long id) {
     DogRecord dogRecord = dogService.findDog(id);
     return ResponseEntity.ok().body(dogRecord);
   }
@@ -118,7 +118,7 @@ public class DogController {
           }
       )
   })
-  @GetMapping(produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+  @GetMapping(value = "/photo", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<byte[]> getDogPhoto(@RequestParam(name = "id") Long id) {
     DogRecord dog = dogService.findDog(id);
     HttpHeaders headers = new HttpHeaders();
@@ -149,7 +149,7 @@ public class DogController {
       )
   })
   @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<DogRecord> addDog(
+  public ResponseEntity<?> addDog(
       @RequestParam(required = false, name = "name") String fullName,
       @RequestParam(required = false, name = "age") String age,
       @RequestParam(required = false, name = "des") String description,
@@ -181,11 +181,11 @@ public class DogController {
       )
   })
   @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<DogRecord> editDog(
-      @RequestParam Long id,
-      @RequestParam(required = false) String fullName,
-      @RequestParam(required = false) String age,
-      @RequestParam(required = false) String description,
+  public ResponseEntity<?> editDog(
+      @RequestParam(name ="id") Long id,
+      @RequestParam(required = false, name = "name") String fullName,
+      @RequestParam(required = false, name = "age") String age,
+      @RequestParam(required = false, name = "des") String description,
       @RequestParam(required = false) MultipartFile photo) throws IOException {
     dogService.editDog(id, fullName, age, description, photo);
     return ResponseEntity.ok().build();
@@ -213,8 +213,8 @@ public class DogController {
           }
       )
   })
-  @PutMapping(value = "/{dogId}")
-  public ResponseEntity<DogRecord> addIdAdoptiveParent(@PathVariable Long dogId, @RequestParam(name = "id") Long adoptiveParentId) {
+  @PutMapping(value = "/parent")
+  public ResponseEntity<DogRecord> addIdAdoptiveParent(@RequestParam(name = "dogId") Long dogId, @RequestParam(name = "id") Long adoptiveParentId) {
     dogService.addIdAdoptiveParent(dogId, adoptiveParentId);
     return ResponseEntity.ok().build();
   }
@@ -242,8 +242,8 @@ public class DogController {
           }
       )
   })
-  @DeleteMapping("{id}")
-  public ResponseEntity<DogRecord> removeDog(@PathVariable Long id) {
+  @DeleteMapping
+  public ResponseEntity<DogRecord> removeDog(@RequestParam(name = "id") Long id) {
     dogService.removeDog(id);
     return ResponseEntity.ok().build();
   }

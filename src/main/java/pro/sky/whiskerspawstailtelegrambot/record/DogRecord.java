@@ -34,7 +34,7 @@ public class DogRecord implements Serializable {
     String fullName;
 
     @NotNull
-    int age;
+    String age;
 
     @NotNull
     String description;

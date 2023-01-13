@@ -3,10 +3,6 @@ package pro.sky.whiskerspawstailtelegrambot.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pro.sky.whiskerspawstailtelegrambot.entity.Dog;
@@ -87,10 +83,9 @@ public class DogService {
      * @param age
      * @param description
      * @param photo
-     * @return
      * @throws IOException
      */
-    public DogRecord editDog(Long dogId, String fullName, String age, String description, MultipartFile photo) throws IOException { //Put
+    public void editDog(Long dogId, String fullName, String age, String description, MultipartFile photo) throws IOException { //Put
         log.info("Изменение данных собаки в БД");
         Dog dog = dogMapper.toEntity(findDog(dogId));
         if (fullName != null && !fullName.isEmpty() && !fullName.isBlank()) {
@@ -107,7 +102,6 @@ public class DogService {
         if (photo != null) {
             uploadPhoto(dogRecord.getId(), photo);
         }
-        return dogRecord;
     }
 
     /**
@@ -164,10 +158,9 @@ public class DogService {
      * @param age
      * @param description
      * @param photo
-     * @return
      * @throws IOException
      */
-    public DogRecord addDog(String fullName, String age, String description, MultipartFile photo) throws IOException { //Post
+    public void addDog(String fullName, String age, String description, MultipartFile photo) throws IOException { //Post
         log.info("Добавление собаки в БД");
         Dog dog = new Dog();
         if (fullName != null && !fullName.isEmpty() && !fullName.isBlank()) {
@@ -184,7 +177,6 @@ public class DogService {
         if (photo != null) {
             uploadPhoto(dogRecord.getId(), photo);
         }
-        return dogRecord;
 
 
     }
