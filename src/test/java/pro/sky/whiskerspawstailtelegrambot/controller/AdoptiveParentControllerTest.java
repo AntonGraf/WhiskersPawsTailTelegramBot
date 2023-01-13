@@ -2,13 +2,11 @@ package pro.sky.whiskerspawstailtelegrambot.controller;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import javax.ws.rs.core.MediaType;
@@ -23,12 +21,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
 import pro.sky.whiskerspawstailtelegrambot.entity.Dog;
-import pro.sky.whiskerspawstailtelegrambot.entity.Volunteer;
 import pro.sky.whiskerspawstailtelegrambot.mapper.AdoptiveParentMapper;
 import pro.sky.whiskerspawstailtelegrambot.mapper.AdoptiveParentMapperImpl;
 import pro.sky.whiskerspawstailtelegrambot.mapper.ReportMapper;
@@ -38,10 +33,21 @@ import pro.sky.whiskerspawstailtelegrambot.record.DogRecord;
 import pro.sky.whiskerspawstailtelegrambot.repository.AdoptiveParentRepo;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 
+/**
+ * Тесты контроллера усыновителя
+ */
 
 @WebMvcTest(AdoptiveParentController.class)
 class AdoptiveParentControllerTest {
 
+  AdoptiveParentRecord adoptiveParentPositive;
+  AdoptiveParentRecord adoptiveParentWithEmptyName;
+  Long anyLong = 1L;
+  List<DogRecord> listdogs;
+  List<Dog> listOfdog;
+  AdoptiveParent adoptiveParent;
+  JSONObject parentObject;
+  JSONObject parentObjectNegative;
   @Autowired
   private MockMvc mockMvc;
   @MockBean
@@ -55,36 +61,21 @@ class AdoptiveParentControllerTest {
   @InjectMocks
   private AdoptiveParentController adoptiveParentController;
 
-  AdoptiveParentRecord adoptiveParentPositive;
-
-  AdoptiveParentRecord adoptiveParentWithEmptyName;
-
-  Long anyLong = 1L;
-
-  List<DogRecord> listdogs;
-
-  List<Dog> listOfdog;
-
-  AdoptiveParent adoptiveParent;
-
-  JSONObject parentObject;
-
-  JSONObject parentObjectNegative;
-
   @BeforeEach
-  void init(){
+  void init() {
     adoptiveParentPositive = new AdoptiveParentRecord();
     listdogs = new ArrayList<>();
-    adoptiveParentWithEmptyName = new AdoptiveParentRecord(anyLong,"","89139131233",false,"Empty",12312L,listdogs);
+    adoptiveParentWithEmptyName = new AdoptiveParentRecord(anyLong, "", "89139131233", false,
+        "Empty", 12312L, listdogs);
     adoptiveParent = new AdoptiveParent(1l, "fullName", "phone", true, "start", 0l, listOfdog);
     parentObject = new JSONObject();
-    parentObject.put("id",1L);
-    parentObject.put("fullName","fullName");
-    parentObject.put("phone","89131231213");
+    parentObject.put("id", 1L);
+    parentObject.put("fullName", "fullName");
+    parentObject.put("phone", "89131231213");
     parentObjectNegative = new JSONObject();
-    parentObjectNegative.put("id",1L);
-    parentObjectNegative.put("fullName","");
-    parentObjectNegative.put("phone","");
+    parentObjectNegative.put("id", 1L);
+    parentObjectNegative.put("fullName", "");
+    parentObjectNegative.put("phone", "");
   }
 
   @Test
@@ -92,7 +83,8 @@ class AdoptiveParentControllerTest {
 
     when(repository.findById(1L)).thenReturn(Optional.of(adoptiveParent));
 
-    mockMvc.perform(MockMvcRequestBuilders.get("/getAdoptiveParentByID?parentId=" + adoptiveParent.getId()) //send
+    mockMvc.perform(MockMvcRequestBuilders.get(
+                "/getAdoptiveParentByID?parentId=" + adoptiveParent.getId()) //send
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk()) //receive
@@ -105,7 +97,8 @@ class AdoptiveParentControllerTest {
 
     when(repository.findById(1L)).thenReturn(Optional.empty());
 
-    mockMvc.perform(MockMvcRequestBuilders.get("/getAdoptiveParentByID?parentId=" + adoptiveParent.getId()) //send
+    mockMvc.perform(MockMvcRequestBuilders.get(
+                "/getAdoptiveParentByID?parentId=" + adoptiveParent.getId()) //send
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest()); //receive
@@ -118,8 +111,8 @@ class AdoptiveParentControllerTest {
 
     when(repository.findById(any(Long.class))).thenReturn(Optional.of(adoptiveParent));
 
-
-    mockMvc.perform(MockMvcRequestBuilders.delete("/deleteAdoptiveParentByID?parentId=" + adoptiveParent.getId()) //send
+    mockMvc.perform(MockMvcRequestBuilders.delete(
+                "/deleteAdoptiveParentByID?parentId=" + adoptiveParent.getId()) //send
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
@@ -134,8 +127,8 @@ class AdoptiveParentControllerTest {
 
     when(repository.findById(any(Long.class))).thenReturn(Optional.of(adoptiveParent));
 
-
-    mockMvc.perform(MockMvcRequestBuilders.delete("/deleteAdoptiveParentByID?parentId=" + adoptiveParent.getId()) //send
+    mockMvc.perform(MockMvcRequestBuilders.delete(
+                "/deleteAdoptiveParentByID?parentId=" + adoptiveParent.getId()) //send
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
@@ -189,7 +182,8 @@ class AdoptiveParentControllerTest {
     when(repository.findById(any(Long.class))).thenReturn(Optional.of(adoptiveParent));
     when(repository.save(any(AdoptiveParent.class))).thenReturn(adoptiveParent);
 
-    mockMvc.perform(MockMvcRequestBuilders.put("/updateAdoptiveParent?parentId=" + adoptiveParent.getId()) //send
+    mockMvc.perform(MockMvcRequestBuilders.put(
+                "/updateAdoptiveParent?parentId=" + adoptiveParent.getId()) //send
             .content(parentObject.toString())
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
@@ -203,7 +197,8 @@ class AdoptiveParentControllerTest {
     when(repository.findById(any(Long.class))).thenReturn(Optional.of(adoptiveParent));
     when(repository.save(any(AdoptiveParent.class))).thenReturn(adoptiveParent);
 
-    mockMvc.perform(MockMvcRequestBuilders.put("/updateAdoptiveParent?parentId=" + adoptiveParent.getId()) //send
+    mockMvc.perform(MockMvcRequestBuilders.put(
+                "/updateAdoptiveParent?parentId=" + adoptiveParent.getId()) //send
             .content(parentObjectNegative.toString())
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
@@ -223,8 +218,8 @@ class AdoptiveParentControllerTest {
         .thenReturn(adoptiveParent);
 
     mockMvc.perform(MockMvcRequestBuilders
-        .get("/getParentIdByNameAndPhoneAndChatId?fullName="+adoptiveParent.getFullName()
-        +"&phone="+adoptiveParent.getPhone()+"&chatId="+adoptiveParent.getChatId())
+            .get("/getParentIdByNameAndPhoneAndChatId?fullName=" + adoptiveParent.getFullName()
+                + "&phone=" + adoptiveParent.getPhone() + "&chatId=" + adoptiveParent.getChatId())
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk()) //receive
@@ -242,8 +237,8 @@ class AdoptiveParentControllerTest {
         .thenReturn(adoptiveParent);
 
     mockMvc.perform(MockMvcRequestBuilders
-            .get("/getParentIdByNameAndPhoneAndChatId?fullName="+null
-                +"&phone="+adoptiveParent.getPhone()+"&chatId="+adoptiveParent.getChatId())
+            .get("/getParentIdByNameAndPhoneAndChatId?fullName=" + null
+                + "&phone=" + adoptiveParent.getPhone() + "&chatId=" + adoptiveParent.getChatId())
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest()); //receive
@@ -257,6 +252,7 @@ class AdoptiveParentControllerTest {
     public AdoptiveParentMapper adoptiveParentMapper() {
       return new AdoptiveParentMapperImpl();
     }
+
     @Bean
     public ReportMapper reportMapper() {
       return new ReportMapperImpl();

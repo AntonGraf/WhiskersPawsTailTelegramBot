@@ -85,16 +85,13 @@ public class MessageHandler implements MainHandler {
         switch (state) {
 
           case THE_FIRST_STATE:
-            return sendMessage = registrationHandler
+            return registrationHandler
                 .handlerWithStatusTheFirstState(message, adoptiveParent, message.getText(), chatId);
           case ONLY_NAME:
-            return sendMessage = registrationHandler
+            return registrationHandler
                 .handlerWithStatusOnlyName(message, adoptiveParent, message.getText(), chatId);
-          case SUCCESS_REG:
-            //
-            break;
           case START_SEND_REPORT:
-            return sendMessage = reportAddHandler.handler(message);
+            return reportAddHandler.handler(message);
         }
       }
 
