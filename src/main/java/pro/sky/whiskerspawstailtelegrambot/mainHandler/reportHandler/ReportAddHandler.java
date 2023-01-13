@@ -1,5 +1,22 @@
 package pro.sky.whiskerspawstailtelegrambot.mainHandler.reportHandler;
 
+import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.CANCEL_RETURN_MAIN_MENU_TEXT;
+import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.CANCEL_TEXT;
+import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.DESCRIPTION_SEND_REPORT_TEXT;
+import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.DIET_SEND_REPORT_TEXT;
+import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.ENTER_ERROR_ID_TEXT;
+import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.FEELINGS_SEND_REPORT_TEXT;
+import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.NO_PHOTO_SEND_REPORT_TEXT;
+import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.NO_TEXT_SEND_REPORT_TEXT;
+import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.PHOTO_SEND_REPORT_TEXT;
+import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.SHOW_ALL_YOUR_PET_TEXT;
+import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.YOU_HAVE_NO_ADOPTED_PETS_TEXT;
+import static pro.sky.whiskerspawstailtelegrambot.util.StateReport.NOT_STARTED;
+import static pro.sky.whiskerspawstailtelegrambot.util.StateReport.WAIT_DIET_REPORT;
+import static pro.sky.whiskerspawstailtelegrambot.util.StateReport.WAIT_ID_PET_REPORT;
+import static pro.sky.whiskerspawstailtelegrambot.util.StateReport.WAIT_PHOTO_REPORT;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,12 +28,13 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import pro.sky.whiskerspawstailtelegrambot.record.DogRecord;
+import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.ReportService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
 import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
-import pro.sky.whiskerspawstailtelegrambot.util.StateReport;
 
 /**
  * обработка репорт на будующее
@@ -43,38 +61,54 @@ public class ReportAddHandler {
     String textMessage = message.getText();
     long chatId = message.getChatId();
 
-    switch (textMessage) {
-
-      case (AllText.CANCEL_TEXT)://реакция на кнопку отмена - возврат в главное меню, изменение всех статусов на FREE
-        reportService.updateStateAdoptiveParentByChatId(chatId, StateAdoptiveParent.FREE);
-        return sendMessage = formReplyMessages.replyMessage(message,
-            AllText.CANCEL_RETURN_MAIN_MENU_TEXT, configKeyboard.initKeyboardOnClickStart());
+    FillingReportRecord fillingReportRecord = new FillingReportRecord();
+    DogRecord dogRecord = fillingReportRecord.checkCorrectDogId(textMessage, reportService);
+    if (dogRecord == null) {
+      sendMessage = formReplyMessages.replyMessage(message, ENTER_ERROR_ID_TEXT,
+          configKeyboard.initKeyboardOnClickStart());
     }
 
-    StateReport stateReport = reportService.getStateReportByPetId(chatId);
+    switch (textMessage) {
 
-      switch (stateReport) {
+    }
 
-        case START_SEND_REPORT:
-          return sendMessage = formReplyMessages.replyMessage(message,
-              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, configKeyboard.formReplyKeyboardInOneRow(AllText.CANCEL_TEXT));
+    String stateReport = reportService.getStateReportByPetId(chatId) == null ? NOT_STARTED
+        : reportService.getStateReportByPetId(chatId);
 
-        case WAIT_PHOTO_REPORT:
-          return sendMessage = reportService.changeStateAdoptiveParent(message,
-              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
+    switch (stateReport) {
 
-        case WAIT_HEALTH_REPORT:
-          return sendMessage = reportService.changeStateAdoptiveParent(message,
-              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
+//      case NOT_STARTED:
+//        FillingReportRecord fillingReportRecord = new FillingReportRecord();
+//        saveReportInDb(message, fillingReportRecord.newReport());
+//        sendMessage = formReplyMessages.replyMessage(message, PHOTO_SEND_REPORT_TEXT,
+//            configKeyboard.formReplyKeyboardInOneRow(CANCEL_TEXT));
+//        return sendMessage;
 
-        case WAIT_DIET_REPORT:
-          return sendMessage = reportService.changeStateAdoptiveParent(message,
-              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
+      case NOT_STARTED:
+        sendMessage = clickButton_SEND_REPORT(message);
+        return sendMessage;
 
-        case WAIT_HABITS_REPORT:
-          return sendMessage = reportService.changeStateAdoptiveParent(message,
-              AllText.CANCEL_RETURN_MAIN_MENU_TEXT, StateAdoptiveParent.FREE);
-      }
+      case WAIT_ID_PET_REPORT:
+        sendMessage = formReplyMessages.replyMessage(message, PHOTO_SEND_REPORT_TEXT,
+            configKeyboard.formReplyKeyboardInOneRowInline(SHOW_ALL_YOUR_PET_TEXT,
+                CANCEL_TEXT));
+
+      case WAIT_PHOTO_REPORT:
+        return sendMessage = formReplyMessages.replyMessage(message, DIET_SEND_REPORT_TEXT,
+            configKeyboard.formReplyKeyboardInOneRow(CANCEL_TEXT));
+
+      case WAIT_DIET_REPORT:
+        return sendMessage = formReplyMessages.replyMessage(message, FEELINGS_SEND_REPORT_TEXT,
+            configKeyboard.formReplyKeyboardInOneRow(CANCEL_TEXT));
+//
+//      case WAIT_FEELINGS_REPORT:
+//        return sendMessage = reportService.changeStateAdoptiveParent(message,
+//            FEELINGS_SEND_REPORT_TEXT, StateAdoptiveParent.FREE);
+//
+//      case WAIT_HABITS_REPORT:
+//        return sendMessage = reportService.changeStateAdoptiveParent(message,
+//            HABITS_SEND_REPORT_TEXT, StateAdoptiveParent.FREE);
+    }
 
     return sendMessage;
 
@@ -87,18 +121,25 @@ public class ReportAddHandler {
    *
    * @param message сообщение из update
    */
-  public SendMessage clickButton_SHOW_ALL_YOUR_PET(Message message) {
-    log.info("Вызов метода " + new Throwable()
-        .getStackTrace()[0]
-        .getMethodName() + " класса " + this.getClass().getName());
-    String allPetByChatId = reportService.showAllAdoptedPets(message.getChatId());
-    InlineKeyboardMarkup inlineKeyboardMarkup = configKeyboard.formReplyKeyboardInOneRowInline(
-        AllText.SHOW_ALL_YOUR_PET_TEXT,
-        AllText.SEND_REPORT_TEXT, AllText.CANCEL_TEXT);
-
-    return sendMessage = formReplyMessages.replyMessage(message,
-        allPetByChatId, inlineKeyboardMarkup);
-  }
+//  public SendMessage clickButton_SHOW_ALL_YOUR_PET(Message message) {
+//    log.info("Вызов метода " + new Throwable()
+//        .getStackTrace()[0]
+//        .getMethodName() + " класса " + this.getClass().getName());
+//    String allPetByChatId = reportService.showAllAdoptedPets(message.getChatId());
+//    String[] buttonsPets = new String[allPetByChatId.length() + 1];
+//    buttonsPets = allPetByChatId.split(AllText.DELIMITER_FOR_PARSER_PETS);
+//    buttonsPets[buttonsPets.length - 1] = CANCEL_TEXT;
+//
+////    InlineKeyboardMarkup inlineKeyboardMarkup = configKeyboard.formReplyKeyboardInOneRowInline(
+////    );
+//
+//    int numberPerLine = 1;
+//    InlineKeyboardMarkup inlineKeyboardMarkup = configKeyboard.formReplyKeyboardAnyRowInline(
+//        numberPerLine, buttonsPets);
+//
+//    return sendMessage = formReplyMessages.replyMessage(message,
+//        DESCRIPTION_SEND_REPORT_TEXT, inlineKeyboardMarkup);
+//  }
 
   /**
    * Метод обрабатывает нажатие на кнопку показать всех отправить отчет и изменят статус
@@ -110,15 +151,22 @@ public class ReportAddHandler {
     log.info("Вызов метода " + new Throwable()
         .getStackTrace()[0]
         .getMethodName() + " класса " + this.getClass().getName());
+    String allPetByChatId = reportService.showAllAdoptedPets(message.getChatId());
+    if (allPetByChatId == null) {
+      return sendMessage = formReplyMessages.replyMessage(message,
+          YOU_HAVE_NO_ADOPTED_PETS_TEXT, configKeyboard.initKeyboardOnClickStart());
+    }
 
-    long chatId = message.getChatId();
+    List<String> buttonsPets = new ArrayList<>(
+        List.of(allPetByChatId.split(AllText.DELIMITER_FOR_PARSER_PETS)));
+    buttonsPets.add(CANCEL_TEXT);
 
-    ReplyKeyboardMarkup replyKeyboardMarkup = configKeyboard.formReplyKeyboardInOneRow(
-        AllText.CANCEL_TEXT);
+    int numberPerLine = 1;
+    InlineKeyboardMarkup inlineKeyboardMarkup = configKeyboard.formReplyKeyboardAnyRowInline(
+        numberPerLine, buttonsPets);
 
-    reportService.updateStateAdoptiveParentByChatId(chatId, StateAdoptiveParent.START_SEND_REPORT);
     return sendMessage = formReplyMessages.replyMessage(message,
-        AllText.DESCRIPTION_SEND_REPORT_TEXT, replyKeyboardMarkup);
+        DESCRIPTION_SEND_REPORT_TEXT, inlineKeyboardMarkup);
   }
 
   //endregion
@@ -134,7 +182,7 @@ public class ReportAddHandler {
         .getMethodName() + " класса " + this.getClass().getName());
 
     ReplyKeyboardMarkup replyKeyboardMarkup = configKeyboard.formReplyKeyboardInOneRow(
-        AllText.CANCEL_TEXT);
+        CANCEL_TEXT);
 
     String textMessage = message.getText();
     List<PhotoSize> photoSizes = message.getPhoto();
@@ -145,16 +193,17 @@ public class ReportAddHandler {
 
     if (!isTextOk) {
       return sendMessage = formReplyMessages.replyMessage(message,
-          AllText.NO_TEXT_SEND_REPORT_TEXT,
+          NO_TEXT_SEND_REPORT_TEXT,
           configKeyboard.initKeyboardOnClickStart());
     }
     if (!isPhotoOk) {
       return sendMessage = formReplyMessages.replyMessage(message,
-          AllText.NO_PHOTO_SEND_REPORT_TEXT,
+          NO_PHOTO_SEND_REPORT_TEXT,
           configKeyboard.initKeyboardOnClickStart());
     }
 
-    return sendMessage = saveReportInDb(message);
+//    return sendMessage = saveReportInDb(message);
+    return null;
   }
 
   public boolean checkTextInSentReport(String textMessage) {
@@ -183,14 +232,14 @@ public class ReportAddHandler {
    *
    * @param message сообщение из update
    */
-  public SendMessage saveReportInDb(Message message) {
+  public SendMessage saveReportInDb(Message message, ReportRecord reportRecord) {
 
     long chatId = message.getChatId();
 //    reportService.addReport();
 
     reportService.updateStateAdoptiveParentByChatId(chatId, StateAdoptiveParent.FREE);
     return sendMessage = formReplyMessages.replyMessage(message,
-        AllText.CANCEL_RETURN_MAIN_MENU_TEXT, configKeyboard.initKeyboardOnClickStart());
+        CANCEL_RETURN_MAIN_MENU_TEXT, configKeyboard.initKeyboardOnClickStart());
 
   }
 

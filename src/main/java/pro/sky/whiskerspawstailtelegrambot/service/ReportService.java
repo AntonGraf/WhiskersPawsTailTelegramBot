@@ -11,7 +11,6 @@ import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.record.DogRecord;
 import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
 import pro.sky.whiskerspawstailtelegrambot.repository.ReportRepository;
-import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FilterAdoptedPets;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
@@ -123,7 +122,7 @@ public class ReportService {
     ParserToBot parserToBot = new ParserToBot();
     String allAdoptedPets = parserToBot.parserPet(dogRecords);
 
-    return allAdoptedPets == null ? AllText.YOU_HAVE_NO_ADOPTED_PETS_TEXT : allAdoptedPets;
+    return allAdoptedPets;
   }
 
 
@@ -165,15 +164,24 @@ public class ReportService {
    * @param petId id животного
    * @return Состояние отчета из бд или null
    */
-  public StateReport getStateReportByPetId(long petId) {
+  public String getStateReportByPetId(long petId) {
 
     ReportRecord reportRecord = getReportByPetId(petId);
     StateReport stateReport;
     if (reportRecord != null) {
-      return StateReport.valueOf(reportRecord.getStateReport());
+      return reportRecord.getStateReport();
     }
     return null;
   }
 
+  public DogRecord getDogById(long petId) {
+    DogRecord dogRecord;
+    try {
+      dogRecord = dogService.findDog(petId);
+    } catch (Exception e) {
+      dogRecord = null;
+    }
+    return dogRecord;
+  }
 
 }

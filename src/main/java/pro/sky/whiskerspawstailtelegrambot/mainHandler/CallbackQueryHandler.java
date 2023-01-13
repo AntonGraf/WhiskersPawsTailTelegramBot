@@ -49,18 +49,13 @@ public class CallbackQueryHandler {
     String chatId = message.getChatId().toString();
     switch (textMessage) {
 
-      case (AllText.CANCEL_TEXT)://реакция на кнопку отмена - возврат в главное меню, изменение всех статусов на FREE
-        adoptiveParentService.updateStateAdoptiveParentByChatId(Long.parseLong(chatId),
-            StateAdoptiveParent.FREE);
-        return sendMessage = formReplyMessages.replyMessage(message,
-            AllText.CANCEL_RETURN_MAIN_MENU_TEXT,
-            configKeyboard.initKeyboardOnClickStart());
-
-      case (AllText.SHOW_ALL_YOUR_PET_TEXT):     // нажатие кнопки показать всех взятых животных
-        sendMessage = reportAddHandler.clickButton_SHOW_ALL_YOUR_PET(message);
-        break;
+//      case (AllText.SHOW_ALL_YOUR_PET_TEXT):     // нажатие кнопки показать всех взятых животных
+//        sendMessage = reportAddHandler.clickButton_SHOW_ALL_YOUR_PET(message);
+//        break;
 
       case (AllText.SEND_REPORT_TEXT):     // нажатие кнопки отправить отчет
+        adoptiveParentService.updateStateAdoptiveParentByChatId(Long.parseLong(chatId),
+            StateAdoptiveParent.START_SEND_REPORT);
         sendMessage = reportAddHandler.clickButton_SEND_REPORT(message);
         break;
 
@@ -70,5 +65,7 @@ public class CallbackQueryHandler {
     }
     return sendMessage;
   }
+
+
 
 }

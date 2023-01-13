@@ -195,10 +195,11 @@ public class AdoptiveParentService {
   }
 
   /**
+   *
    * Обновить state пользователя по его chatId
    * @param chatId long chatId
    * @param state стейт на который нужно обновить
-   *
+   * @return Обновленный adoptiveParentRecord или null
    */
   public AdoptiveParentRecord updateStateAdoptiveParentByChatId(long chatId, StateAdoptiveParent state){
     AdoptiveParentRecord adoptiveParentRecord = getAdoptiveParentByChatId(chatId);
