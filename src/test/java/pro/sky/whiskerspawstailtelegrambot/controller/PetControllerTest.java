@@ -68,6 +68,7 @@ class PetControllerTest {
 
     MockMultipartFile file = new MockMultipartFile("data", "photo.jpeg",
         MediaType.MULTIPART_FORM_DATA_VALUE, "photo.jpeg".getBytes());
+
     Pet pet = new Pet();
     pet.setId(id);
     pet.setFullName(fullName);
@@ -82,14 +83,14 @@ class PetControllerTest {
     when(petService.findPet(id)).thenReturn(record);
 
     MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    mockMvc.perform(multipart("/dogs/add").file(file)//post
+    mockMvc.perform(multipart(HttpMethod.POST, "/pets/add").file(file)//post
         .param("name", "dogName")
         .param("age", "1111")
         .param("des", "DogDescription")
         .accept(MediaType.MULTIPART_FORM_DATA_VALUE))
         .andDo(print())
         .andExpect(status().isOk());
-    mockMvc.perform(multipart(HttpMethod.PUT,"/dogs").file(file)
+    mockMvc.perform(multipart(HttpMethod.PUT,"/pets").file(file)
             .param("id", "1")//put изменение
             .param("name", fullName)
             .param("age", age)
@@ -98,34 +99,34 @@ class PetControllerTest {
         .andDo(print())
         .andExpect(status().isOk());
     mockMvc.perform(MockMvcRequestBuilders//put изменение усыновителя
-        .put("/dogs/parent")
-            .param("dogId", "1")
+        .put("/pets/parent")
+            .param("petId", "1")
             .param("id", "2")
             .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.MULTIPART_FORM_DATA_VALUE))
         .andDo(print())
         .andExpect(status().isOk());
     mockMvc.perform(MockMvcRequestBuilders//del
-            .delete("/dogs")
+            .delete("/pets")
             .param("id", "2")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.MULTIPART_FORM_DATA_VALUE))
         .andDo(print())
         .andExpect(status().isOk());
     mockMvc.perform(MockMvcRequestBuilders//get
-            .get("/dogs")
+            .get("/pets")
             .param("id", "1")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(status().isOk());
     mockMvc.perform(MockMvcRequestBuilders//getAll
-            .get("/dogs/all")
+            .get("/pets/all")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(status().isOk());
-    mockMvc.perform(multipart(HttpMethod.GET,"/dogs/photo").file(file)
+    mockMvc.perform(multipart(HttpMethod.GET,"/pets/photo").file(file)
             .param("id", "1")//get фото
             .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
             .accept(MediaType.MULTIPART_FORM_DATA_VALUE))
@@ -138,7 +139,7 @@ class PetControllerTest {
   @TestConfiguration
   static class TestConfig {
     @Bean
-    public PetMapper dogMapper() {
+    public PetMapper petMapper() {
       return new PetMapperImpl();
     }
   }
