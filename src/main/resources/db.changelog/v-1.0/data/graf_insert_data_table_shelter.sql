@@ -6,8 +6,8 @@ INSERT INTO public.shelter
                             rule_of_meeting,
                             rec_of_transportation,
                             home_improvement_for_puppy,
-                            home_improvement_for_dog,
-                            home_improvement_for_dog_with_disabilities,
+                            home_improvement_for_pet,
+                            home_improvement_for_pet_with_disabilities,
                             cynologist_advice
                             )
 VALUES (

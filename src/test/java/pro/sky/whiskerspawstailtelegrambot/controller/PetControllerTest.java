@@ -8,9 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.mockito.ArgumentMatchers.any;
 
-import java.util.List;
-import java.util.Optional;
-import net.minidev.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +15,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -27,27 +23,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import pro.sky.whiskerspawstailtelegrambot.TelegramBotUpdatesListener;
-import pro.sky.whiskerspawstailtelegrambot.entity.Dog;
-import pro.sky.whiskerspawstailtelegrambot.mapper.AdoptiveParentMapper;
-import pro.sky.whiskerspawstailtelegrambot.mapper.DogMapper;
-import pro.sky.whiskerspawstailtelegrambot.mapper.DogMapperImpl;
-import pro.sky.whiskerspawstailtelegrambot.mapper.ReportMapper;
-import pro.sky.whiskerspawstailtelegrambot.mapper.VolunteerMapper;
-import pro.sky.whiskerspawstailtelegrambot.mapper.VolunteerMapperImpl;
-import pro.sky.whiskerspawstailtelegrambot.record.DogRecord;
-import pro.sky.whiskerspawstailtelegrambot.repository.AdoptiveParentRepo;
-import pro.sky.whiskerspawstailtelegrambot.repository.DogRepository;
-import pro.sky.whiskerspawstailtelegrambot.repository.ShelterRepo;
-import pro.sky.whiskerspawstailtelegrambot.repository.VolunteerRepo;
-import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
-import pro.sky.whiskerspawstailtelegrambot.service.DogService;
-import pro.sky.whiskerspawstailtelegrambot.service.ShelterService;
-import pro.sky.whiskerspawstailtelegrambot.service.VolunteerService;
+import pro.sky.whiskerspawstailtelegrambot.entity.Pet;
+import pro.sky.whiskerspawstailtelegrambot.mapper.PetMapper;
+import pro.sky.whiskerspawstailtelegrambot.mapper.PetMapperImpl;
+import pro.sky.whiskerspawstailtelegrambot.record.PetRecord;
+import pro.sky.whiskerspawstailtelegrambot.repository.PetRepository;
+import pro.sky.whiskerspawstailtelegrambot.service.PetService;
 
-@WebMvcTest(DogController.class)
+@WebMvcTest(PetController.class)
 @AutoConfigureMockMvc
-class DogControllerTest {
+class PetControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -55,19 +40,19 @@ class DogControllerTest {
   @Autowired
   private WebApplicationContext webApplicationContext;
   @InjectMocks
-  private DogController dogController;
+  private PetController petController;
 
   @MockBean
-  private DogService dogService;
+  private PetService petService;
 
   @MockBean
-  private DogRepository dogRepository;
+  private PetRepository petRepository;
 
   @Autowired
-  private DogMapper dogMapper;
+  private PetMapper petMapper;
 
   @MockBean
-  DogRecord dogRecord;
+  PetRecord petRecord;
 
 
 
@@ -83,18 +68,18 @@ class DogControllerTest {
 
     MockMultipartFile file = new MockMultipartFile("data", "photo.jpeg",
         MediaType.MULTIPART_FORM_DATA_VALUE, "photo.jpeg".getBytes());
-    Dog dog = new Dog();
-    dog.setId(id);
-    dog.setFullName(fullName);
-    dog.setAge(age);
-    dog.setDescription(description);
-    dog.setPhoto(file.getBytes());
-    dog.setFileSize(file.getSize());
-    dog.setMediaType("image/jpeg");
+    Pet pet = new Pet();
+    pet.setId(id);
+    pet.setFullName(fullName);
+    pet.setAge(age);
+    pet.setDescription(description);
+    pet.setPhoto(file.getBytes());
+    pet.setFileSize(file.getSize());
+    pet.setMediaType("image/jpeg");
 
 
-    DogRecord record = dogMapper.toRecord(dog);
-    when(dogService.findDog(id)).thenReturn(record);
+    PetRecord record = petMapper.toRecord(pet);
+    when(petService.findPet(id)).thenReturn(record);
 
     MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     mockMvc.perform(multipart("/dogs/add").file(file)//post
@@ -153,8 +138,8 @@ class DogControllerTest {
   @TestConfiguration
   static class TestConfig {
     @Bean
-    public DogMapper dogMapper() {
-      return new DogMapperImpl();
+    public PetMapper dogMapper() {
+      return new PetMapperImpl();
     }
   }
 }

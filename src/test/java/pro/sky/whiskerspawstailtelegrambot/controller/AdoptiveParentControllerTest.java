@@ -23,13 +23,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
-import pro.sky.whiskerspawstailtelegrambot.entity.Dog;
+import pro.sky.whiskerspawstailtelegrambot.entity.Pet;
 import pro.sky.whiskerspawstailtelegrambot.mapper.AdoptiveParentMapper;
 import pro.sky.whiskerspawstailtelegrambot.mapper.AdoptiveParentMapperImpl;
 import pro.sky.whiskerspawstailtelegrambot.mapper.ReportMapper;
 import pro.sky.whiskerspawstailtelegrambot.mapper.ReportMapperImpl;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
-import pro.sky.whiskerspawstailtelegrambot.record.DogRecord;
+import pro.sky.whiskerspawstailtelegrambot.record.PetRecord;
 import pro.sky.whiskerspawstailtelegrambot.repository.AdoptiveParentRepo;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 
@@ -43,8 +43,8 @@ class AdoptiveParentControllerTest {
   AdoptiveParentRecord adoptiveParentPositive;
   AdoptiveParentRecord adoptiveParentWithEmptyName;
   Long anyLong = 1L;
-  List<DogRecord> listdogs;
-  List<Dog> listOfdog;
+  List<PetRecord> listdogs;
+  List<Pet> listOfdog;
   AdoptiveParent adoptiveParent;
   JSONObject parentObject;
   JSONObject parentObjectNegative;

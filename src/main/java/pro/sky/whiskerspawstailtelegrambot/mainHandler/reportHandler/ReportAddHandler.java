@@ -28,7 +28,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import pro.sky.whiskerspawstailtelegrambot.record.DogRecord;
+import pro.sky.whiskerspawstailtelegrambot.record.PetRecord;
 import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.ReportService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
@@ -62,8 +62,8 @@ public class ReportAddHandler {
     long chatId = message.getChatId();
 
     FillingReportRecord fillingReportRecord = new FillingReportRecord();
-    DogRecord dogRecord = fillingReportRecord.checkCorrectDogId(textMessage, reportService);
-    if (dogRecord == null) {
+    PetRecord petRecord = fillingReportRecord.checkCorrectPetId(textMessage, reportService);
+    if (petRecord == null) {
       sendMessage = formReplyMessages.replyMessage(message, ENTER_ERROR_ID_TEXT,
           configKeyboard.initKeyboardOnClickStart());
     }

@@ -42,9 +42,9 @@ public class ShelterService {
             case (5):
                 return shelterRepo.findById(numberShelter).orElseThrow(ElemNotFound::new).getHomeImprovementForPuppy();
             case (6):
-                return shelterRepo.findById(numberShelter).orElseThrow(ElemNotFound::new).getHomeImprovementForDog();
+                return shelterRepo.findById(numberShelter).orElseThrow(ElemNotFound::new).getHomeImprovementForPet();
             case (7):
-                return shelterRepo.findById(numberShelter).orElseThrow(ElemNotFound::new).getHomeImprovementForDogWithDisabilities();
+                return shelterRepo.findById(numberShelter).orElseThrow(ElemNotFound::new).getHomeImprovementForPetWithDisabilities();
             case (8):
                 return shelterRepo.findById(numberShelter).orElseThrow(ElemNotFound::new).getCynologistAdvice();
             default:

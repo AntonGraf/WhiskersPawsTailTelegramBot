@@ -2,7 +2,7 @@ package pro.sky.whiskerspawstailtelegrambot.util;
 
 import org.springframework.stereotype.Component;
 import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
-import pro.sky.whiskerspawstailtelegrambot.record.DogRecord;
+import pro.sky.whiskerspawstailtelegrambot.record.PetRecord;
 import pro.sky.whiskerspawstailtelegrambot.record.VolunteerRecord;
 
 import java.util.Collection;
@@ -37,24 +37,24 @@ public class ParserToBot {
     return stringBuilder.toString();
   }
 
-  public String parserPet(Collection<DogRecord> dogRecords) {
-    if (dogRecords.isEmpty()) {
+  public String parserPet(Collection<PetRecord> petRecords) {
+    if (petRecords.isEmpty()) {
       return null;
     }
 
     StringBuilder stringBuilder = new StringBuilder();
     int count = 0;
-    for (DogRecord dogRecord : dogRecords) {
+    for (PetRecord petRecord : petRecords) {
       stringBuilder.append(++count)
           .append(") ")
           .append("ID: ")
-          .append(dogRecord.getId())
+          .append(petRecord.getId())
           .append('\n')
           .append("Имя: ")
-          .append(dogRecord.getFullName())
+          .append(petRecord.getFullName())
           .append('\n')
           .append("Возраст: ")
-          .append(dogRecord.getAge())
+          .append(petRecord.getAge())
           .append(".")
           .append('\n')
           .append(AllText.DELIMITER_FOR_PARSER_PETS);

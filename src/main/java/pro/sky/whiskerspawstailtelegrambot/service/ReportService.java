@@ -8,7 +8,7 @@ import pro.sky.whiskerspawstailtelegrambot.entity.Report;
 import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
 import pro.sky.whiskerspawstailtelegrambot.mapper.ReportMapper;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
-import pro.sky.whiskerspawstailtelegrambot.record.DogRecord;
+import pro.sky.whiskerspawstailtelegrambot.record.PetRecord;
 import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
 import pro.sky.whiskerspawstailtelegrambot.repository.ReportRepository;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
@@ -23,18 +23,18 @@ import pro.sky.whiskerspawstailtelegrambot.util.StateReport;
 @Transactional
 public class ReportService {
 
-  private final DogService dogService;
+  private final PetService petService;
   private final FormReplyMessages formReplyMessages;
   private final ReportRepository reportRepository;
   private final AdoptiveParentService adoptiveParentService;
   private final ConfigKeyboard configKeyboard;
   private final ReportMapper reportMapper;
 
-  public ReportService(DogService dogService,
+  public ReportService(PetService petService,
       FormReplyMessages formReplyMessages, ReportRepository reportRepository,
       AdoptiveParentService adoptiveParentService,
       ConfigKeyboard configKeyboard, ReportMapper reportMapper) {
-    this.dogService = dogService;
+    this.petService = petService;
     this.formReplyMessages = formReplyMessages;
     this.reportRepository = reportRepository;
     this.adoptiveParentService = adoptiveParentService;
@@ -62,7 +62,7 @@ public class ReportService {
    */
   public ReportRecord getReportByPetId(long petId) {
 
-    Report report = reportRepository.getReportByDog_id(petId);
+    Report report = reportRepository.getReportByPet_id(petId);
     ReportRecord reportRecord = null;
     if (report != null) {
       reportRecord = reportMapper.toRecord(report);
@@ -78,7 +78,7 @@ public class ReportService {
    */
   public ReportRecord addNewReportInDbForPetByPetId(long petId) {
     Report report = new Report();
-    report.setDog_id(petId);
+    report.setPet_id(petId);
     reportRepository.save(report);
     return reportMapper.toRecord(report);
   }
@@ -93,7 +93,7 @@ public class ReportService {
   public ReportRecord updateReportByReportId(long id, ReportRecord newReportRecord) {
 
     ReportRecord oldReportRecord = getReportById(id);
-    oldReportRecord.setPhotoDog(newReportRecord.getPhotoDog());
+    oldReportRecord.setPhotoPet(newReportRecord.getPhotoPet());
     oldReportRecord.setDiet(newReportRecord.getDiet());
     oldReportRecord.setReportAboutFeelings(newReportRecord.getReportAboutFeelings());
     oldReportRecord.setReportAboutHabits(newReportRecord.getReportAboutHabits());
@@ -114,13 +114,13 @@ public class ReportService {
         .getStackTrace()[0]
         .getMethodName() + " класса " + this.getClass().getName());
 
-    Collection<DogRecord> dogRecords = dogService.findAllDog();
+    Collection<PetRecord> petRecords = petService.findAllPet();
 
     FilterAdoptedPets filterAdoptedPets = new FilterAdoptedPets();
-    dogRecords = filterAdoptedPets.byChatId(chatId, dogRecords);
+    petRecords = filterAdoptedPets.byChatId(chatId, petRecords);
 
     ParserToBot parserToBot = new ParserToBot();
-    String allAdoptedPets = parserToBot.parserPet(dogRecords);
+    String allAdoptedPets = parserToBot.parserPet(petRecords);
 
     return allAdoptedPets;
   }
@@ -174,14 +174,14 @@ public class ReportService {
     return null;
   }
 
-  public DogRecord getDogById(long petId) {
-    DogRecord dogRecord;
+  public PetRecord getPetById(long petId) {
+    PetRecord petRecord;
     try {
-      dogRecord = dogService.findDog(petId);
+      petRecord = petService.findPet(petId);
     } catch (Exception e) {
-      dogRecord = null;
+      petRecord = null;
     }
-    return dogRecord;
+    return petRecord;
   }
 
 }

@@ -1,8 +1,8 @@
--- Связывает таблицы shelter и dog
-ALTER TABLE dog ADD COLUMN shelter_id bigint;
+-- Связывает таблицы shelter и pet
+ALTER TABLE pet ADD COLUMN shelter_id bigint;
 
-ALTER TABLE dog
-    ADD CONSTRAINT fk_dogs_shelters FOREIGN KEY (shelter_id) REFERENCES shelter (id)
+ALTER TABLE pet
+    ADD CONSTRAINT fk_pets_shelters FOREIGN KEY (shelter_id) REFERENCES shelter (id)
     ON DELETE CASCADE
     ON UPDATE CASCADE;
 
@@ -14,10 +14,10 @@ ALTER TABLE volunteer
         ON DELETE CASCADE
         ON UPDATE CASCADE;
 
--- Связывает таблицы dog и adoptive_parent
-ALTER TABLE dog ADD COLUMN adoptive_parent_id bigint;
+-- Связывает таблицы pet и adoptive_parent
+ALTER TABLE pet ADD COLUMN adoptive_parent_id bigint;
 
-ALTER TABLE dog
-    ADD CONSTRAINT fk_dogs_adoptive_parents FOREIGN KEY (adoptive_parent_id) REFERENCES adoptive_parent (id)
+ALTER TABLE pet
+    ADD CONSTRAINT fk_pets_adoptive_parents FOREIGN KEY (adoptive_parent_id) REFERENCES adoptive_parent (id)
         ON DELETE CASCADE
         ON UPDATE CASCADE;

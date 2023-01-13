@@ -5,11 +5,11 @@ import org.springframework.stereotype.Repository;
 import pro.sky.whiskerspawstailtelegrambot.entity.Report;
 
 /**
- * Репозиторий для собак
+ * Репозиторий для питомцев
  */
 @Repository
 public interface ReportRepository extends JpaRepository<Report, Long> {
 
-   Report getReportByDog_id(Long id);
+   Report getReportByPet_id(Long id);
 
 }

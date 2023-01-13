@@ -46,22 +46,22 @@ public class Report {
   /**
    * Фото животного
    */
-  @Column(name = "photo_dog")
-  byte[] photoDog;
+  @Column(name = "photo_pet")
+  byte[] photoPet;
 
   /**
-   * id собаки
+   * id питомца
    */
-  @Column(name = "dog_id")
-  Long dog_id;
+  @Column(name = "pet_id")
+  Long pet_id;
 
   /**
-   * Присоединение к собаке
+   * Присоединение к питомцу
    */
   @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "dog_id", referencedColumnName = "id", insertable = false, updatable = false)
+  @JoinColumn(name = "pet_id", referencedColumnName = "id", insertable = false, updatable = false)
   @JsonBackReference
-  Dog dog;
+  Pet pet;
 
   /**
    * Этапы заполнения отчета

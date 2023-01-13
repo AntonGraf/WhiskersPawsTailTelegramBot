@@ -42,7 +42,7 @@ public class AdoptiveParentController {
     }
 
     //пока спрятали
-    @Operation(summary = "Получить массив отчетов по идентификатору родитетеля и собаки",
+    @Operation(summary = "Получить массив отчетов по идентификатору родитетеля и питомца",
             hidden = true)
     @ApiResponses({
             @ApiResponse(
@@ -65,28 +65,28 @@ public class AdoptiveParentController {
                     }
             )
     })
-    @RequestMapping(value = "/getReportByParentAndDog", method = RequestMethod.GET)
-    public ResponseEntity<Collection<ReportRecord>> getReportByParentAndDog(
+    @RequestMapping(value = "/getReportByParentAndPet", method = RequestMethod.GET)
+    public ResponseEntity<Collection<ReportRecord>> getReportByParentAndPet(
             @NotBlank(message = "parentId is empty")
             @Min(value = 1, message = "Идентификатор родителя должен быть больше 0")
             @RequestParam(name = "parentId")
             @Parameter(description = "Идентификатор родителя",
                     example = "1")
             long parentId,
-            @NotBlank(message = "dogId is empty")
-            @Min(value = 1, message = "Идентификатор собаки должен быть больше 0")
-            @RequestParam(name = "dogId")
-            @Parameter(description = "Идентификатор собаки",
+            @NotBlank(message = "petId is empty")
+            @Min(value = 1, message = "Идентификатор питомца должен быть больше 0")
+            @RequestParam(name = "petId")
+            @Parameter(description = "Идентификатор питомца",
                     example = "1")
-            long dogId) {
-        return ResponseEntity.ok(service.getReportByParentAndDog(parentId, dogId));
+            long petId) {
+        return ResponseEntity.ok(service.getReportByParentAndPet(parentId, petId));
     }
 
     @Operation(summary = "Получить усыновителя по id")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
-                    description = "Get AdoptiveParent by current parentId,list of dog and reports",
+                    description = "Get AdoptiveParent by current parentId,list of pet and reports",
                     content = {
                             @Content(
                                     mediaType = "application/json",

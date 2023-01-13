@@ -2,7 +2,6 @@ package pro.sky.whiskerspawstailtelegrambot.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.google.common.base.Objects;
-import java.util.Arrays;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -48,9 +47,9 @@ public class Shelter {
     //Рекомендации по обустройству дома для щенка
     String homeImprovementForPuppy;
     //Рекомендации по обустройству дома для взрослой собаки
-    String homeImprovementForDog;
+    String homeImprovementForPet;
     //Рекомендации по обустройству дома для взрослой собаки с ограниченными возможностями
-    String homeImprovementForDogWithDisabilities;
+    String homeImprovementForPetWithDisabilities;
     //Советы кинолога по первичному общению с собакой
     String cynologistAdvice;
     //Список рекомендуемых приютом кинологов
@@ -66,7 +65,7 @@ public class Shelter {
     //Список собак, которые принадлежат приюту
     @OneToMany(mappedBy = "shelter", fetch=FetchType.EAGER)
     @JsonBackReference
-    Set<Dog> dogs;
+    Set<Pet> pets;
     //Список волонтеров приюта
     @OneToMany(mappedBy = "shelter", fetch=FetchType.EAGER)
     @JsonBackReference

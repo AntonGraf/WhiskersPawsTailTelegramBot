@@ -1,8 +1,6 @@
 package pro.sky.whiskerspawstailtelegrambot.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.common.base.Objects;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -12,7 +10,7 @@ import java.util.List;
 
 
 /**
- * Собака. В база данных dog .
+ * Питомцем. В базе данных pet .
  */
 @Getter
 @Setter
@@ -21,14 +19,14 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class Dog {
+public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
 
     /**
-     * Кличка собаки
+     * Кличка питомца
      */
     @Column(name = "name")
     String fullName;
@@ -40,7 +38,7 @@ public class Dog {
 
 
     /**
-     * Описание собаки
+     * Описание питомца
      */
     String description;
 
@@ -72,7 +70,7 @@ public class Dog {
 
 
     /**
-     * Приют, к которому принадлежит собака
+     * Приют, к которому принадлежит питомцем
      */
 //    @ManyToOne(cascade = CascadeType.ALL)
     @ManyToOne
@@ -81,7 +79,7 @@ public class Dog {
     Shelter shelter;
 
     /**
-     * Хозяин собаки
+     * Хозяин питомца
      */
 //    @ManyToOne(cascade = CascadeType.ALL)
     @ManyToOne
@@ -91,9 +89,9 @@ public class Dog {
 
 
     /**
-     * Отчеты хозяина для данной собаки
+     * Отчеты хозяина для данному питомцу
      */
-    @OneToMany(mappedBy = "dog", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "pet", fetch=FetchType.EAGER)
 //    @JsonManagedReference // Мешает заполнению через сваггер
     @JsonIgnore
     List<Report> reports;
@@ -106,10 +104,10 @@ public class Dog {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Dog dog = (Dog) o;
-        return age == dog.age && Objects.equal(id, dog.id)
-            && Objects.equal(fullName, dog.fullName)
-            && Objects.equal(description, dog.description);
+        Pet pet = (Pet) o;
+        return age == pet.age && Objects.equal(id, pet.id)
+            && Objects.equal(fullName, pet.fullName)
+            && Objects.equal(description, pet.description);
     }
 
     @Override

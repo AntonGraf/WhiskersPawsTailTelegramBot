@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
-import pro.sky.whiskerspawstailtelegrambot.entity.Dog;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -42,7 +41,7 @@ public class AdoptiveParentRecord implements Serializable {
     @JsonIgnore
     Long chatId;
     @JsonIgnore
-    List<DogRecord> dogs;
+    List<PetRecord> pets;
 
 
 }

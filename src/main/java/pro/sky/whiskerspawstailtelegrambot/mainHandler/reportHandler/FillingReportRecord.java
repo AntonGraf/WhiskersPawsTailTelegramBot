@@ -2,7 +2,7 @@ package pro.sky.whiskerspawstailtelegrambot.mainHandler.reportHandler;
 
 import static pro.sky.whiskerspawstailtelegrambot.util.StateReport.WAIT_ID_PET_REPORT;
 
-import pro.sky.whiskerspawstailtelegrambot.record.DogRecord;
+import pro.sky.whiskerspawstailtelegrambot.record.PetRecord;
 import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.ReportService;
 import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
@@ -22,13 +22,13 @@ public class FillingReportRecord {
 
   }
 
-  public DogRecord checkCorrectDogId(String textMessage, ReportService reportService){
+  public PetRecord checkCorrectPetId(String textMessage, ReportService reportService){
 
     ParserToBot parserToBot = new ParserToBot();
-    Long dogId = parserToBot.parserStringPetId(textMessage);
+    Long petId = parserToBot.parserStringPetId(textMessage);
 
-    DogRecord dogRecord = dogId != null ? reportService.getDogById(dogId) : null;
-   return dogRecord;
+    PetRecord petRecord = petId != null ? reportService.getPetById(petId) : null;
+   return petRecord;
 
   }
 

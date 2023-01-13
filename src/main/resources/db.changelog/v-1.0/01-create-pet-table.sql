@@ -1,4 +1,4 @@
-CREATE TABLE dog
+CREATE TABLE pet
 (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(256),

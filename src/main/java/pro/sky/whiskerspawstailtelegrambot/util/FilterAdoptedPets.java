@@ -2,13 +2,11 @@ package pro.sky.whiskerspawstailtelegrambot.util;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
-import liquibase.pro.packaged.T;
-import pro.sky.whiskerspawstailtelegrambot.entity.Dog;
-import pro.sky.whiskerspawstailtelegrambot.record.DogRecord;
+import pro.sky.whiskerspawstailtelegrambot.record.PetRecord;
 
 public class FilterAdoptedPets {
 
-  public Collection<DogRecord> byChatId(long chatId, Collection<DogRecord> collectionPets){
+  public Collection<PetRecord> byChatId(long chatId, Collection<PetRecord> collectionPets){
 
     collectionPets = collectionPets
         .stream()

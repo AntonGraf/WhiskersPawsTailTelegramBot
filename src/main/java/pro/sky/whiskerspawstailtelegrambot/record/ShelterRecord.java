@@ -30,13 +30,13 @@ public class ShelterRecord implements Serializable {
     String ruleOfMeeting;
     List<String> listOfDoc;
     String recOfTransportation;
-    String homeImprovementForPuppy;
-    String homeImprovementForDog;
-    String homeImprovementForDogWithDisabilities;
+    String homeImprovementForYoungPet;
+    String homeImprovementForPet;
+    String homeImprovementForPetWithDisabilities;
     String cynologistAdvice;
     List<String> cynologist;
     List<String> listOfReasonForRejection;
-    Set<DogRecord> dogs;
+    Set<PetRecord> pets;
     Set<VolunteerRecord> volunteers;
     byte[] locationMap;
 }

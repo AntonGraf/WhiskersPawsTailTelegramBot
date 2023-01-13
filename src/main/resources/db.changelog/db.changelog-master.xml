@@ -10,9 +10,9 @@
     </preConditions>
 
     <changeSet id="1" author="sergei_lupaev">
-        <tagDatabase tag="CreateTableDog"/>
+        <tagDatabase tag="CreateTablePet"/>
     </changeSet>
-    <include file="v-1.0/01-create-dog-table.sql" relativeToChangelogFile="true"/>
+    <include file="v-1.0/01-create-pet-table.sql" relativeToChangelogFile="true"/>
 
     <changeSet id="2" author="igor_gritsuk">
         <tagDatabase tag="CreateTableVolunteer"/>
@@ -55,9 +55,9 @@
     <include file="v-1.0/08_add_column_to_table.sql" relativeToChangelogFile="true"/>
 
     <changeSet id="10" author="sergei_lupaev">
-        <tagDatabase tag="DataForTableDog"/>
+        <tagDatabase tag="DataForTablePet"/>
     </changeSet>
-    <include file="v-1.0/data/insert_data_for_dog_table.sql" relativeToChangelogFile="true"/>
+    <include file="v-1.0/data/insert_data_for_pet_table.sql" relativeToChangelogFile="true"/>
 
     <changeSet id="11" author="anton graf">
     </changeSet>
@@ -77,7 +77,7 @@
     <include file="v-1.0/IgorBr_06_change_default_value_column_state_report_in_report_table.xml" relativeToChangelogFile="true"/>
 
     <changeSet id="15" author="sergei_lupaev">
-        <tagDatabase tag="ChengeTableDog"/>
+        <tagDatabase tag="ChengeTablePet"/>
     </changeSet>
-    <include file="v-1.0/02-chenge-dog-table.sql" relativeToChangelogFile="true"/>
+    <include file="v-1.0/02-chenge-pet-table.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

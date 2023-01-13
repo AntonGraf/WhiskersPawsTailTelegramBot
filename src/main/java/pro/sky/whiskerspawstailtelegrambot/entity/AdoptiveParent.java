@@ -58,11 +58,11 @@ public class AdoptiveParent {
     Long chatId;
 
     /**
-     * Список собак
+     * Список питомцев
      */
     @OneToMany(mappedBy = "adoptiveParent", fetch = FetchType.EAGER)
     @JsonBackReference
-    List<Dog> dogs;
+    List<Pet> pets;
 
     @Override
     public boolean equals(Object o) {

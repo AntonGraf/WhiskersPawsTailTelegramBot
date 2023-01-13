@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
-import pro.sky.whiskerspawstailtelegrambot.entity.Dog;
 
 import java.io.Serializable;
 
@@ -24,8 +23,8 @@ import java.io.Serializable;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ReportRecord implements Serializable {
     Long id;
-    Long dog_id;
-    byte[] photoDog;
+    Long pet_id;
+    byte[] photoPet;
     String diet;
     String reportAboutFeelings;
     String reportAboutHabits;

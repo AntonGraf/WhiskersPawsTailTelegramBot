@@ -28,8 +28,8 @@ CREATE TABLE shelter
     rule_of_meeting                            text,
     rec_of_transportation                      text,
     home_improvement_for_puppy                 text,
-    home_improvement_for_dog                   text,
-    home_improvement_for_dog_with_disabilities text,
+    home_improvement_for_pet                   text,
+    home_improvement_for_pet_with_disabilities text,
     cynologist_advice                          text,
     PRIMARY KEY (id)
 )

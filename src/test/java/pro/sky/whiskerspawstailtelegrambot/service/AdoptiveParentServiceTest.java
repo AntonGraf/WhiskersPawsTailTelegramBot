@@ -9,11 +9,11 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
-import pro.sky.whiskerspawstailtelegrambot.entity.Dog;
+import pro.sky.whiskerspawstailtelegrambot.entity.Pet;
 import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
 import pro.sky.whiskerspawstailtelegrambot.mapper.AdoptiveParentMapper;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
-import pro.sky.whiskerspawstailtelegrambot.record.DogRecord;
+import pro.sky.whiskerspawstailtelegrambot.record.PetRecord;
 import pro.sky.whiskerspawstailtelegrambot.repository.AdoptiveParentRepo;
 
 import java.util.ArrayList;
@@ -39,8 +39,8 @@ class AdoptiveParentServiceTest {
 
     String ANYSTRING;
     long ANYLONG;
-    List<Dog> dogs;
-    List<DogRecord> dogRecords;
+    List<Pet> pets;
+    List<PetRecord> petRecords;
     AdoptiveParentRecord adoptiveParentTestPositive;
     AdoptiveParent adoptiveParent;
 
@@ -48,18 +48,19 @@ class AdoptiveParentServiceTest {
     void init(){
         ANYSTRING = "anystring";
         ANYLONG = 1L;
-        dogs = new ArrayList<>();
-        dogRecords = new ArrayList<>();
-        adoptiveParentTestPositive = new AdoptiveParentRecord(1l, "fullName", "phone", true, "start", 0l, dogRecords);
-        adoptiveParent = new AdoptiveParent(1l, "fullName", "phone", true, "start", 0l, dogs);
+        pets = new ArrayList<>();
+        petRecords = new ArrayList<>();
+        adoptiveParentTestPositive = new AdoptiveParentRecord(1l, "fullName", "phone", true, "start", 0l,
+            petRecords);
+        adoptiveParent = new AdoptiveParent(1l, "fullName", "phone", true, "start", 0l, pets);
     }
 
     @AfterEach
     void clearAll(){
         ANYSTRING = null;
         ANYLONG = 0;
-        dogs.clear();
-        dogRecords.clear();
+        pets.clear();
+        petRecords.clear();
         adoptiveParentTestPositive = null;
         adoptiveParent = null;
     }

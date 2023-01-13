@@ -30,17 +30,17 @@ public class AdoptiveParentService {
   }
 
   /**
-   * Получить отчет по идентификатору усыновителя и собаки
+   * Получить отчет по идентификатору усыновителя и питомца
    *
    * @param parentId идентификатор усыновителя
-   * @param dogId    идентификатор собаки
+   * @param petId    идентификатор питомца
    * @return коллекция отчетов
    */
-  public Collection<ReportRecord> getReportByParentAndDog(long parentId, long dogId) {
-    log.info("Was invoked method for get list of report by current parentId and dogId");
-    return getAdoptiveParentByID(parentId).getDogs()
+  public Collection<ReportRecord> getReportByParentAndPet(long parentId, long petId) {
+    log.info("Was invoked method for get list of report by current parentId and petId");
+    return getAdoptiveParentByID(parentId).getPets()
         .stream()
-        .filter(x -> x.getId() == dogId)
+        .filter(x -> x.getId() == petId)
         .findFirst()
         .orElseThrow(ElemNotFound::new)
         .getReports();
@@ -120,7 +120,7 @@ public class AdoptiveParentService {
     oldParent.setPhone(adoptiveParentRecord.getPhone());
     oldParent.setParent(adoptiveParentRecord.isParent());
     oldParent.setState(adoptiveParentRecord.getState());
-    oldParent.setDogs(adoptiveParentRecord.getDogs());
+    oldParent.setPets(adoptiveParentRecord.getPets());
     log.debug("check before save {}", oldParent);
     return adoptiveParentMapper.toRecord(
         adoptiveParentRepo.save(adoptiveParentMapper.toEntity(oldParent)));

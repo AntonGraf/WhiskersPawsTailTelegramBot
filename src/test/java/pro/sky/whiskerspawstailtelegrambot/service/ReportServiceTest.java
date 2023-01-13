@@ -28,9 +28,9 @@ import pro.sky.whiskerspawstailtelegrambot.entity.Report;
 import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
 import pro.sky.whiskerspawstailtelegrambot.mapper.ReportMapper;
 import pro.sky.whiskerspawstailtelegrambot.mapper.ReportMapperImpl;
-import pro.sky.whiskerspawstailtelegrambot.record.DogRecord;
+import pro.sky.whiskerspawstailtelegrambot.record.PetRecord;
 import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
-import pro.sky.whiskerspawstailtelegrambot.repository.DogRepository;
+import pro.sky.whiskerspawstailtelegrambot.repository.PetRepository;
 import pro.sky.whiskerspawstailtelegrambot.repository.ReportRepository;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
@@ -48,9 +48,9 @@ class ReportServiceTest {
   ReportService reportService;
 
   @Mock
-  DogService dogService;
+  PetService petService;
   @Mock
-  DogRepository dogRepository;
+  PetRepository petRepository;
 
   ReportRecord reportRecord;
   ReportRecord updateReportRecord;
@@ -72,7 +72,7 @@ class ReportServiceTest {
       data = bos.toByteArray();
     }
     reportRecord.setId(1l);
-    reportRecord.setDog_id(1l);
+    reportRecord.setPet_id(1l);
 //    reportRecord.setPhotoDog(data);
     reportRecord.setDiet("test ");
     reportRecord.setReportAboutFeelings("test ");
@@ -80,7 +80,7 @@ class ReportServiceTest {
     reportRecord.setStateReport("FINISHED");
 
     updateReportRecord.setId(1l);
-    updateReportRecord.setDog_id(1l);
+    updateReportRecord.setPet_id(1l);
 //    updateReportRecord.setPhotoDog(data);
     updateReportRecord.setDiet("update test ");
     updateReportRecord.setReportAboutFeelings("update test ");
@@ -88,7 +88,7 @@ class ReportServiceTest {
     updateReportRecord.setStateReport("NOT_STARTED");
 
     report.setId(1l);
-    report.setDog_id(1l);
+    report.setPet_id(1l);
 //    report.setPhotoDog(data);
     report.setDiet("test ");
     report.setReportAboutFeelings("test ");
@@ -96,7 +96,7 @@ class ReportServiceTest {
     report.setStateReport("FINISHED");
 
     updateReport.setId(1l);
-    updateReport.setDog_id(1l);
+    updateReport.setPet_id(1l);
 //    newReport.setPhotoDog(data);
     updateReport.setDiet("update test ");
     updateReport.setReportAboutFeelings("update test ");
@@ -122,32 +122,32 @@ class ReportServiceTest {
 
   @Test
   void getReportByPetId() {
-    when(reportRepository.getReportByDog_id(anyLong())).thenReturn(report);
+    when(reportRepository.getReportByPet_id(anyLong())).thenReturn(report);
     when(reportMapper.toRecord(any(Report.class))).thenReturn(reportRecord);
 
     assertThat(reportService.getReportByPetId(1l)).isEqualTo(reportRecord);
-    verify(reportRepository, times(1)).getReportByDog_id(any());
+    verify(reportRepository, times(1)).getReportByPet_id(any());
   }
 
   @Test
   void getReportByPetIdNegative() {
     assertThat(reportService.getReportByPetId(2)).isNull();
-    verify(reportRepository, times(1)).getReportByDog_id(any());
+    verify(reportRepository, times(1)).getReportByPet_id(any());
   }
 
   @Test
   void addNewReportInDbForPetByPetId() {
-    when(reportRepository.getReportByDog_id(anyLong())).thenReturn(report);
+    when(reportRepository.getReportByPet_id(anyLong())).thenReturn(report);
     when(reportMapper.toRecord(any(Report.class))).thenReturn(reportRecord);
 
     assertThat(reportService.getReportByPetId(1l)).isEqualTo(reportRecord);
-    verify(reportRepository, times(1)).getReportByDog_id(any());
+    verify(reportRepository, times(1)).getReportByPet_id(any());
   }
 
   @Test
   void addNewReportInDbForPetByPetIdNegative() {
     assertThat(reportService.getReportByPetId(2)).isNull();
-    verify(reportRepository, times(1)).getReportByDog_id(any());
+    verify(reportRepository, times(1)).getReportByPet_id(any());
   }
 
   @Test
@@ -174,34 +174,34 @@ class ReportServiceTest {
   @Test
   void showAllAdoptedPets() {
 
-    DogRecord dogRecord = initDogReport(initAdoptiveParent(111));
+    PetRecord petRecord = initDogReport(initAdoptiveParent(111));
 
-    Collection<DogRecord> dogRecords = new ArrayList<>();
-    dogRecords.add(dogRecord);
+    Collection<PetRecord> petRecords = new ArrayList<>();
+    petRecords.add(petRecord);
 
     ParserToBot parserToBot = new ParserToBot();
-    String allAdoptedPets = parserToBot.parserPet(dogRecords);
-    when(dogService.findAllDog()).thenReturn(dogRecords);
+    String allAdoptedPets = parserToBot.parserPet(petRecords);
+    when(petService.findAllPet()).thenReturn(petRecords);
 
     assertThat(reportService.showAllAdoptedPets(111)).isEqualTo(
         allAdoptedPets);
-    verify(dogService, times(1)).findAllDog();
+    verify(petService, times(1)).findAllPet();
   }
 
   @Test
   void showAllAdoptedPetsNegative() {
-    DogRecord dogRecord = initDogReport(initAdoptiveParent(111));
+    PetRecord petRecord = initDogReport(initAdoptiveParent(111));
 
-    Collection<DogRecord> dogRecords = new ArrayList<>();
-    dogRecords.add(dogRecord);
+    Collection<PetRecord> petRecords = new ArrayList<>();
+    petRecords.add(petRecord);
 
     ParserToBot parserToBot = new ParserToBot();
-    String allAdoptedPets = parserToBot.parserPet(dogRecords);
-    when(dogService.findAllDog()).thenReturn(dogRecords);
+    String allAdoptedPets = parserToBot.parserPet(petRecords);
+    when(petService.findAllPet()).thenReturn(petRecords);
 
     assertThat(reportService.showAllAdoptedPets(222)).isEqualTo(
         AllText.YOU_HAVE_NO_ADOPTED_PETS_TEXT);
-    verify(dogService, times(1)).findAllDog();
+    verify(petService, times(1)).findAllPet();
   }
 
   @Test
@@ -235,12 +235,12 @@ class ReportServiceTest {
     return adoptiveParent;
   }
 
-  DogRecord initDogReport(AdoptiveParent adoptiveParent) {
+  PetRecord initDogReport(AdoptiveParent adoptiveParent) {
 
-    DogRecord dogRecord = new DogRecord();
-    dogRecord.setId(1l);
-    dogRecord.setFullName("dog 1");
-    dogRecord.setAdoptiveParent(adoptiveParent);
-    return dogRecord;
+    PetRecord petRecord = new PetRecord();
+    petRecord.setId(1l);
+    petRecord.setFullName("dog 1");
+    petRecord.setAdoptiveParent(adoptiveParent);
+    return petRecord;
   }
 }
