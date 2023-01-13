@@ -16,8 +16,10 @@ import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -29,8 +31,10 @@ import pro.sky.whiskerspawstailtelegrambot.TelegramBotUpdatesListener;
 import pro.sky.whiskerspawstailtelegrambot.entity.Dog;
 import pro.sky.whiskerspawstailtelegrambot.mapper.AdoptiveParentMapper;
 import pro.sky.whiskerspawstailtelegrambot.mapper.DogMapper;
+import pro.sky.whiskerspawstailtelegrambot.mapper.DogMapperImpl;
 import pro.sky.whiskerspawstailtelegrambot.mapper.ReportMapper;
 import pro.sky.whiskerspawstailtelegrambot.mapper.VolunteerMapper;
+import pro.sky.whiskerspawstailtelegrambot.mapper.VolunteerMapperImpl;
 import pro.sky.whiskerspawstailtelegrambot.record.DogRecord;
 import pro.sky.whiskerspawstailtelegrambot.repository.AdoptiveParentRepo;
 import pro.sky.whiskerspawstailtelegrambot.repository.DogRepository;
@@ -52,53 +56,30 @@ class DogControllerTest {
   private WebApplicationContext webApplicationContext;
   @InjectMocks
   private DogController dogController;
-//  @InjectMocks
-//  private AdoptiveParentController adoptiveParentController;
-//  @InjectMocks
-//  private VolunteerController volunteerController;
+
   @MockBean
   private DogService dogService;
-//  @MockBean
-//  private AdoptiveParentService adoptiveParentService;
-//  @MockBean
-//  private VolunteerService volunteerService;
-//  @MockBean
-//  private ShelterService shelterService;
-//  @MockBean
-//  private AdoptiveParentRepo adoptiveParentRepo;
-//  @MockBean
-//  private ShelterRepo shelterRepo;
+
   @MockBean
   private DogRepository dogRepository;
-//  @MockBean
-//  private VolunteerRepo volunteerRepo;
-//  @Autowired
-//  private AdoptiveParentMapper adoptiveParentMapper;
-  @MockBean
+
+  @Autowired
   private DogMapper dogMapper;
-//  @Autowired
-//  private VolunteerMapper volunteerMapper;
-//  @Autowired
-//  private ReportMapper reportMapper;
+
   @MockBean
   DogRecord dogRecord;
-//  @MockBean
-//  TelegramBotUpdatesListener telegramBotUpdatesListener;
+
 
 
   @Test
-  public void dogTest1() throws Exception {
+  public void dogTest() throws Exception {
+
+
     final Long id = 1L;
     final Long dogId = 1L;
     final String fullName = "Dog";
     final String age = "5";
     final String description = "DogDescription";
-//
-//    JSONObject jsonObject = new JSONObject();
-//    jsonObject.put("id", id);
-//    jsonObject.put("fullName", fullName);
-//    jsonObject.put("age", age);
-//    jsonObject.put("description", description);
 
     MockMultipartFile file = new MockMultipartFile("data", "photo.jpeg",
         MediaType.MULTIPART_FORM_DATA_VALUE, "photo.jpeg".getBytes());
@@ -107,26 +88,13 @@ class DogControllerTest {
     dog.setFullName(fullName);
     dog.setAge(age);
     dog.setDescription(description);
+    dog.setPhoto(file.getBytes());
+    dog.setFileSize(file.getSize());
+    dog.setMediaType("image/jpeg");
 
 
-//    DogRecord record = dogMapper.toRecord(dog);
-    DogRecord record = new DogRecord();
-    record.setId(id);
-    record.setFullName(fullName);
-    record.setAge(age);
-    record.setDescription(description);
-    record.setPhoto(file.getBytes());
-    record.setFileSize(file.getSize());
-    record.setMediaType("image/jpeg");
-
-
-//    when(dogRepository.save(any(Dog.class))).thenReturn(dog);
-//    when(dogRepository.findById(any(Long.class))).thenReturn(Optional.of(dog));
-//    when(dogRepository.findAll()).thenReturn(List.of());
-//    when(dogService.findDog(any(Long.class))).thenReturn(record);
+    DogRecord record = dogMapper.toRecord(dog);
     when(dogService.findDog(id)).thenReturn(record);
-
-
 
     MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     mockMvc.perform(multipart("/dogs/add").file(file)//post
@@ -179,10 +147,14 @@ class DogControllerTest {
         .andDo(print())
         .andExpect(status().isOk());
 
+  }
 
 
-
-
-
+  @TestConfiguration
+  static class TestConfig {
+    @Bean
+    public DogMapper dogMapper() {
+      return new DogMapperImpl();
+    }
   }
 }
