@@ -6,11 +6,13 @@ package pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard;
 public abstract class AllText {
 
   public static final String START_TEXT = "/start";
-  public static final String START_MENU_TEXT = "init to conversation";
+  public static final String START_MENU_TEXT = "Начать";
   public static final String CALL_TO_VOLUNTEER_TEXT = "/calltovolunteer";
+  public static final String SHOW_ME_ID = "/id";
   public static final String INFO_SHELTER_TEXT = "Информация о приюте";
   public static final String WELCOME_MESSAGE_TEXT = "Добро пожаловать в чат бот приюта для животных, для получения информации воспользуйтесь кнопками или командами меню";
-  public static final String CALL_VOLUNTEER_TEXT = "call to volunteer";
+  public static final String CALL_VOLUNTEER_TEXT = "Волонтерская помощь";
+  public static final String SHOW_ID = "Напомнить свой Id";
   public static final String UNKNOWN_COMMAND_TEXT = "Воспользуйтесь кнопками, либо командами меню";
   public static final String SEND_PET_REPORT_TEXT = "Отправить отчет о питомце";
   public static final String SEND_REPORT_TEXT = "Отправить отчет";
@@ -40,6 +42,8 @@ public abstract class AllText {
     public static final String REG_FULL_NAME = "Как к Вам обращаться?";
     public static final String REG_PHONE = "По какому номеру с Вами связаться?";
     public static final String ALREADY_REGISTERED = "Вы уже зарегестрированы";
+    public static final String SHOW_ID_FAILED = "Для получения Id зарегистрируйтесь";
+    public static final String SHOW_ID_OK = "Ваш Id:\t";
 
     //кнопки для регистрации
 

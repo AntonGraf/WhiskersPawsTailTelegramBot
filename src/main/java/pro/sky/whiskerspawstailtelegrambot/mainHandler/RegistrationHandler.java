@@ -31,7 +31,17 @@ public class RegistrationHandler {
     this.configKeyboard = configKeyboard;
   }
 
-  public SendMessage handlerWithStatusTheFirstState(Message message,AdoptiveParentRecord adoptiveParent,
+  /**
+   * Метод в который мы попадаем при заполнении имени
+   * Здесь мы апдейтим поле имя в бд и ставим следующий статус
+   * @param message
+   * @param adoptiveParent
+   * @param text
+   * @param chatId
+   * @return сообщение о некорректном вводе, либо продвижение дальше, то есть ввод телефона
+   */
+  public SendMessage handlerWithStatusTheFirstState(Message message,
+      AdoptiveParentRecord adoptiveParent,
       String text, String chatId) {
     if (text.length() > 6 && !text.equals(AllText.REGISTRATION_CANCEL)) {
       //обновление имени и статуса
@@ -46,6 +56,15 @@ public class RegistrationHandler {
     }
   }
 
+  /**
+   * Метод, где мы вводим телефон и в который мы попадаем, когда вводим корректное имя
+   * Здесь мы апдейтим телефон и ставим статус FREE, если все ок
+   * @param message
+   * @param adoptiveParent
+   * @param text
+   * @param chatId
+   * @return сообщение о некорректном вводе, либо продвижение дальше, то есть открытие меню
+   */
   public SendMessage handlerWithStatusOnlyName(Message message, AdoptiveParentRecord adoptiveParent,
       String text, String chatId) {
     if (text.length() > 6 && !text.equals(AllText.REGISTRATION_CANCEL)) {
@@ -56,7 +75,6 @@ public class RegistrationHandler {
       return formReplyMessages.replyMessage(message,
           AllText.REGISTRATION_SUCCESS + adoptiveParentOld.getId(),
           configKeyboard.initKeyboardOnClickStart());
-
     } else if (text.equals(AllText.REGISTRATION_CANCEL)) {
       adoptiveParentService.deleteAdoptiveParentByID(adoptiveParent.getId());
       return formReplyMessages.replyMessage(message, AllText.REGISTRATION_INIT,
@@ -71,7 +89,7 @@ public class RegistrationHandler {
     return new SendMessage(chatId, textMessage);
   }
 
-  //добавляет нового пользвователя в таблиц при нажатии кнопки регистрация. Меняет статус и ракладку
+  //добавляет нового пользователя в таблиц при нажатии кнопки регистрация. Меняет статус и ракладку
   //отправляет новое сообщение
   SendMessage addToTable(Message message, String chatId) {
     AdoptiveParentRecord adoptiveParentRecord = new AdoptiveParentRecord();

@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.service.ShelterService;
 import pro.sky.whiskerspawstailtelegrambot.service.VolunteerService;
@@ -67,10 +68,12 @@ public class StandardReplyHandler {
 
       case (AllText.START_TEXT):
         if (adoptiveParentService.getStateAdoptiveParentByChatId(Long.parseLong(chatId)) != null) {
+          //приветсвенное сообщение, вылетает только после регистрации
           return sendMessage = formReplyMessages.replyMessage(message,
               AllText.WELCOME_MESSAGE_TEXT,
               configKeyboard.initKeyboardOnClickStart());
         }
+        //если не было регистрации, то просто повторяем цикл
         return sendMessage = formReplyMessages.replyMessage(message, AllText.REGISTRATION_INIT,
             configKeyboard.formReplyKeyboardInOneRowInline(AllText.REGISTRATION_BUTTON));
 
@@ -100,11 +103,13 @@ public class StandardReplyHandler {
         //добавляем в бд и ставим статус ферст стэйт в методе addToTable,
         //так же там меняем клаву на кнопку отмена регистрации
         //при следующем сообщении регистрация будет продолжаться в методе messengerHandler, пока не зарегается до конца,
-        //либо отменет регистрацию
+        //либо отменет регистрацию и все заново
         if (adoptiveParentService.getStateAdoptiveParentByChatId(Long.parseLong(chatId)) != null) {
+          //проверяем если есть в бд, то просто сообщение, что вы уже зареганы
           return new SendMessage(chatId, AllText.ALREADY_REGISTERED);
         }
         return registrationHandler.addToTable(message, chatId);
+
       //------------------> регистрация
 
       case (AllText.HOW_TAKE_DOG):
@@ -115,6 +120,15 @@ public class StandardReplyHandler {
         return sendMessage = formReplyMessages.replyMessage(message,
                 AllText.INFO,
             configKeyboard.initKeyboardOnClickStart());
+
+      case (AllText.SHOW_ME_ID):
+        AdoptiveParentRecord adoptiveParentRecord =
+            adoptiveParentService.getAdoptiveParentByChatId(Long.parseLong(chatId));
+        if (adoptiveParentRecord != null) {
+          //проверяем если есть в бд, то просто id
+          return new SendMessage(chatId, AllText.SHOW_ID_OK + adoptiveParentRecord.getId());
+        }
+        return new SendMessage(chatId, AllText.SHOW_ID_FAILED);
 
       default:
         return sendMessage = new SendMessage(chatId, AllText.UNKNOWN_COMMAND_TEXT);
