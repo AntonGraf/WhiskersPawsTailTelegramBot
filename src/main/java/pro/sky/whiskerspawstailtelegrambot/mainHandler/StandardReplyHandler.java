@@ -62,7 +62,7 @@ public class StandardReplyHandler {
     log.debug("Вызов метода handler класса" + this.getClass().getName());
     String chatId = message.getChatId().toString();
     String textMessage = message.getText();
-    if (isDigit(textMessage.charAt(0))){menuInfo(message);} // Проверка команды на цифру и передача в цифровой метод
+    if (isDigit(textMessage.charAt(1))){menuInfo(message);} // Проверка команды на цифру и передача в цифровой метод
 
     //здесь инжект текст кнопок, любой текст крч
     switch (textMessage) {
@@ -135,37 +135,37 @@ public class StandardReplyHandler {
     String number = message.getText();
     SendMessage sendMessage = null;
     switch (number) {
-      case ("1"): // Выбор информации из списка меню информации
+      case ("/1"): // Выбор информации из списка меню информации
         sendMessage = formReplyMessages.replyMessage(message,
             shelterService.getOfShelterMessage((byte) 1),
             configKeyboard.initKeyboardOnClickStart());
         break;
-      case ("2"):
+      case ("/2"):
         sendMessage = formReplyMessages.replyMessage(message,
             shelterService.getOfShelterMessage((byte) 2),
             configKeyboard.initKeyboardOnClickStart());
         break;
-      case ("3"):
+      case ("/3"):
         sendMessage = formReplyMessages.replyMessage(message,
             shelterService.getOfShelterMessage((byte) 3),
             configKeyboard.initKeyboardOnClickStart());
         break;
-      case ("4"):
+      case ("/4"):
         sendMessage = formReplyMessages.replyMessage(message,
             shelterService.getOfShelterMessage((byte) 4),
             configKeyboard.initKeyboardOnClickStart());
         break;
-      case ("5"):
+      case ("/5"):
         sendMessage = formReplyMessages.replyMessage(message,
             shelterService.getOfShelterMessage((byte) 5),
             configKeyboard.initKeyboardOnClickStart());
         break;
-      case ("6"):
+      case ("/6"):
         sendMessage = formReplyMessages.replyMessage(message,
             shelterService.getOfShelterMessage((byte) 6),
             configKeyboard.initKeyboardOnClickStart());
         break;
-      case ("7"):
+      case ("/7"):
         sendMessage = formReplyMessages.replyMessage(message,
             shelterService.getOfShelterMessage((byte) 7),
             configKeyboard.initKeyboardOnClickStart());

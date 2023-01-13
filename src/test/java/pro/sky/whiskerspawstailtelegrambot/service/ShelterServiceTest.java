@@ -21,6 +21,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.mockito.Mockito.*;
 
+/**
+ * Юнит тесты на сервис приюта
+ */
 @ExtendWith(MockitoExtension.class)
 public class ShelterServiceTest {
    Long numberShelter = 1L;
@@ -34,14 +37,10 @@ public class ShelterServiceTest {
             "fff",exampleList,"ggg","jjj","nnn",
             "ccc","kkk",exampleList,
             exampleList,null,null,new  byte[]{1,2,3});
-//    Shelter shelter1 = new Shelter(1L,"ttt","uuu","jjj","iii","ppp","ttt",
-//            null,exampleList,"ggg","jjj","nnn",
-//            "ccc","kkk",exampleList,
-//            exampleList,null,null,new Byte[]{1,2,3});
+
 
     @Test
     void getOfShelterMessagePositiveTest(){
-       // System.out.println(shelterRepo.findById(numberShelter).orElseThrow(ElemNotFound::new).getRuleOfMeeting());
         when(shelterRepo.findById(numberShelter)).thenReturn(Optional.ofNullable(shelter));
         assertThat(shelterService.getOfShelterMessage((byte) 3)).isEqualTo("fff");
         verify(shelterRepo, times(1)).findById(numberShelter);
@@ -49,7 +48,6 @@ public class ShelterServiceTest {
     }
     @Test
     void getOfShelterMessageNegativeTest(){
-       // when(shelterRepo.findById(numberShelter)).thenReturn(Optional.ofNullable(shelter1));
         assertThatExceptionOfType(ElemNotFound.class).isThrownBy(() -> shelterService.getOfShelterMessage((byte) 3));
     }
 
