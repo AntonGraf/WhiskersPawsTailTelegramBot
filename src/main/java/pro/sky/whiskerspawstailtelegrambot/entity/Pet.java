@@ -2,6 +2,7 @@ package pro.sky.whiskerspawstailtelegrambot.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Objects;
+import java.time.LocalDateTime;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -67,6 +68,11 @@ public class Pet {
     @Lob
     @Column(name = "photo")
     byte[] photo;
+    @Column(name = "test_period")
+    boolean testPeriod;
+
+    @Column(name = "test_period_time")
+    LocalDateTime localDateTime;
 
 
     /**
