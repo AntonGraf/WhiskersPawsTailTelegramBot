@@ -47,7 +47,6 @@ public class TelegramBotUpdatesListener extends SpringWebhookBot {
   public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
     try {
       execute(messageHandler.handler(update));
-      execute(messageHandler.handler(update));
     } catch (TelegramApiException e) {
       e.printStackTrace();
     }
