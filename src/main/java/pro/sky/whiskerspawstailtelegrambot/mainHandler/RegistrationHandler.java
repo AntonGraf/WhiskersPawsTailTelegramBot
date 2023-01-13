@@ -71,7 +71,7 @@ public class RegistrationHandler {
       AdoptiveParentRecord adoptiveParentOld = adoptiveParentService
           .getAdoptiveParentByChatId(Long.parseLong(chatId));
       updatePhone(adoptiveParentOld, text);
-      updateState(adoptiveParent);
+      updateState(adoptiveParentOld);
       return formReplyMessages.replyMessage(message,
           AllText.REGISTRATION_SUCCESS + adoptiveParentOld.getId(),
           configKeyboard.initKeyboardOnClickStart());
@@ -104,33 +104,21 @@ public class RegistrationHandler {
 
 
   private void updateName(AdoptiveParentRecord adoptiveParent, String name) {
-    AdoptiveParentRecord newAdoptiveParent = new AdoptiveParentRecord();
-    newAdoptiveParent.setFullName(name);
-    newAdoptiveParent.setPhone("somePhone");
-    newAdoptiveParent.setState(StateAdoptiveParent.ONLY_NAME.name());
-    newAdoptiveParent.setChatId(adoptiveParent.getChatId());
-    adoptiveParentService.updateAdoptiveParent(adoptiveParent.getId(),
-        newAdoptiveParent);
+    adoptiveParent.setFullName(name);
+    adoptiveParent.setState(StateAdoptiveParent.ONLY_NAME.name());
+    adoptiveParentService.updateAdoptiveParent(adoptiveParent.getId(), adoptiveParent);
   }
 
   private void updatePhone(AdoptiveParentRecord adoptiveParent, String phone) {
-    AdoptiveParentRecord adoptiveParentRecord = new AdoptiveParentRecord();
-    adoptiveParentRecord.setFullName(adoptiveParent.getFullName());
-    adoptiveParentRecord.setPhone(phone);
-    adoptiveParentRecord.setState(StateAdoptiveParent.SUCCESS_REG.name());
-    adoptiveParentRecord.setChatId(adoptiveParent.getChatId());
-    adoptiveParentService.updateAdoptiveParent(adoptiveParent.getId(),
-        adoptiveParentRecord);
+    adoptiveParent.setState(StateAdoptiveParent.SUCCESS_REG.name());
+    adoptiveParent.setPhone(phone);
+    adoptiveParentService.updateAdoptiveParent(adoptiveParent.getId(), adoptiveParent);
   }
 
   private void updateState(AdoptiveParentRecord adoptiveParent) {
-    AdoptiveParentRecord adoptiveParentRecord = new AdoptiveParentRecord();
-    adoptiveParentRecord.setFullName(adoptiveParent.getFullName());
-    adoptiveParentRecord.setPhone(adoptiveParent.getPhone());
-    adoptiveParentRecord.setState(StateAdoptiveParent.FREE.name());
-    adoptiveParentRecord.setChatId(adoptiveParent.getChatId());
+    adoptiveParent.setState(StateAdoptiveParent.FREE.name());
     adoptiveParentService.updateAdoptiveParent(adoptiveParent.getId(),
-        adoptiveParentRecord);
+        adoptiveParent);
   }
 
 
