@@ -1,4 +1,4 @@
-package pro.sky.whiskerspawstailtelegrambot.mainHandler.MessageHandler;
+package pro.sky.whiskerspawstailtelegrambot.handlers.messageHandler;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,9 +12,9 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import pro.sky.whiskerspawstailtelegrambot.entity.Shelter;
-import pro.sky.whiskerspawstailtelegrambot.mainHandler.RegistrationHandler;
-import pro.sky.whiskerspawstailtelegrambot.mainHandler.StandardReplyHandler;
-import pro.sky.whiskerspawstailtelegrambot.mainHandler.reportHandler.ReportAddHandler;
+import pro.sky.whiskerspawstailtelegrambot.handlers.RegistrationHandler;
+import pro.sky.whiskerspawstailtelegrambot.handlers.StandardReplyHandler;
+import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.ReportAddHandler;
 import pro.sky.whiskerspawstailtelegrambot.record.VolunteerRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.service.ShelterService;
@@ -76,7 +76,7 @@ class StandardReplyHandlerTest {
 
         excepted.setReplyMarkup(inlineKeyboardMarkup);
 
-        SendMessage outMessage = out.handler(testMessage);
+        SendMessage outMessage = out.startHandler(testMessage);
 
         assertEquals(excepted, outMessage);
 
@@ -96,7 +96,7 @@ class StandardReplyHandlerTest {
 
         excepted.setReplyMarkup(replyKeyboardMarkup);
 
-        SendMessage outMessage = out.handler(testMessage);
+        SendMessage outMessage = out.startHandler(testMessage);
 
         assertEquals(excepted, outMessage);
 
@@ -113,7 +113,7 @@ class StandardReplyHandlerTest {
 
         excepted.setReplyMarkup(replyKeyboardMarkup);
 
-        SendMessage outMessage = out.handler(testMessage);
+        SendMessage outMessage = out.startHandler(testMessage);
 
         assertEquals(excepted, outMessage);
 
@@ -130,7 +130,7 @@ class StandardReplyHandlerTest {
         SendMessage excepted = new SendMessage(String.valueOf(chatId),
                 parserToBot.parserVolunteer(getTestVolunteerRecordList()));
 
-        SendMessage outMessage = out.handler(testMessage);
+        SendMessage outMessage = out.startHandler(testMessage);
 
         assertEquals(excepted, outMessage);
 
@@ -149,7 +149,7 @@ class StandardReplyHandlerTest {
 
         excepted.setReplyMarkup(replyKeyboardMarkup);
 
-        SendMessage outMessage = out.handler(testMessage);
+        SendMessage outMessage = out.startHandler(testMessage);
 
         assertEquals(excepted, outMessage);
     }
@@ -166,7 +166,7 @@ class StandardReplyHandlerTest {
 
         SendMessage excepted = new SendMessage(String.valueOf(chatId),AllText.ALREADY_REGISTERED);
 
-        SendMessage outMessage = out.handler(testMessage);
+        SendMessage outMessage = out.startHandler(testMessage);
 
         assertEquals(excepted, outMessage);
 
@@ -190,7 +190,7 @@ class StandardReplyHandlerTest {
                 .thenReturn(excepted);
 
 
-        SendMessage outMessage = out.handler(testMessage);
+        SendMessage outMessage = out.startHandler(testMessage);
 
         assertEquals(excepted, outMessage);
 
@@ -207,7 +207,7 @@ class StandardReplyHandlerTest {
         ReplyKeyboardMarkup replyKeyboardMarkup = configKeyboard.initKeyboardOnClickStart();
         excepted.setReplyMarkup(replyKeyboardMarkup);
 
-        SendMessage outMessage = out.handler(testMessage);
+        SendMessage outMessage = out.startHandler(testMessage);
 
         assertEquals(excepted, outMessage);
     }
@@ -223,7 +223,7 @@ class StandardReplyHandlerTest {
         ReplyKeyboardMarkup replyKeyboardMarkup = configKeyboard.initKeyboardOnClickStart();
         excepted.setReplyMarkup(replyKeyboardMarkup);
 
-        SendMessage outMessage = out.handler(testMessage);
+        SendMessage outMessage = out.startHandler(testMessage);
 
         assertEquals(excepted, outMessage);
     }
@@ -236,7 +236,7 @@ class StandardReplyHandlerTest {
         testMessage.setChat(new Chat(chatId, "private"));
 
         SendMessage excepted = new SendMessage(String.valueOf(chatId), AllText.UNKNOWN_COMMAND_TEXT);
-        SendMessage outMessage = out.handler(testMessage);
+        SendMessage outMessage = out.startHandler(testMessage);
 
         assertEquals(excepted, outMessage);
     }

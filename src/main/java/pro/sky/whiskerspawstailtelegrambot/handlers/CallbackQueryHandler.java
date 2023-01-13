@@ -1,16 +1,15 @@
-package pro.sky.whiskerspawstailtelegrambot.mainHandler;
+package pro.sky.whiskerspawstailtelegrambot.handlers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import pro.sky.whiskerspawstailtelegrambot.mainHandler.reportHandler.ReportAddHandler;
+import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.ReportAddHandler;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
-import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
 
 /**
  *  Обработка сообщений от inline клавиатуры

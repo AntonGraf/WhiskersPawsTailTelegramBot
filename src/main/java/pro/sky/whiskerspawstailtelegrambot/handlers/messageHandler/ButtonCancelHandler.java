@@ -1,4 +1,4 @@
-package pro.sky.whiskerspawstailtelegrambot.mainHandler.MessageHandler;
+package pro.sky.whiskerspawstailtelegrambot.handlers.messageHandler;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;

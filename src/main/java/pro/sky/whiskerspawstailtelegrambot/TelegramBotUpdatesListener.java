@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
-import pro.sky.whiskerspawstailtelegrambot.mainHandler.MainHandler;
+import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.mainHandler.MainHandler;
 
 /**
  * наш бот
@@ -28,7 +28,7 @@ public class TelegramBotUpdatesListener extends SpringWebhookBot {
     String botUserName;
     String botToken;
 
-    @Qualifier("MessageHandler")
+    @Qualifier("MainHandler")
     @Autowired
     MainHandler messageHandler;
 
@@ -47,7 +47,7 @@ public class TelegramBotUpdatesListener extends SpringWebhookBot {
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
         try {
-            execute(messageHandler.handler(update));
+            execute(messageHandler.process(update));
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }

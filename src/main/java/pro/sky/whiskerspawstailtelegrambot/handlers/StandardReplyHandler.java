@@ -1,10 +1,10 @@
-package pro.sky.whiskerspawstailtelegrambot.mainHandler;
+package pro.sky.whiskerspawstailtelegrambot.handlers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import pro.sky.whiskerspawstailtelegrambot.mainHandler.reportHandler.ReportAddHandler;
+import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.ReportAddHandler;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.service.ShelterService;
@@ -13,7 +13,6 @@ import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
 import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
-import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
 
 import static org.glassfish.grizzly.http.util.Ascii.isDigit;
 
@@ -55,7 +54,7 @@ public class StandardReplyHandler {
    * @param message сообщение из Update
    * @return SendMessage
    */
-  public SendMessage handler(Message message) {
+  public SendMessage startHandler(Message message) {
 
     SendMessage sendMessage = null;
 

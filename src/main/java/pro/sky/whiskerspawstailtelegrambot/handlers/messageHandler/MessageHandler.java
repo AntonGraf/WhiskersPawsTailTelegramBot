@@ -1,10 +1,9 @@
-package pro.sky.whiskerspawstailtelegrambot.mainHandler.MessageHandler;
+package pro.sky.whiskerspawstailtelegrambot.handlers.messageHandler;
 
 
 import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.CANCEL_TEXT;
 import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.REGISTRATION_CANCEL;
 
-import java.util.Objects;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -12,11 +11,12 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import pro.sky.whiskerspawstailtelegrambot.mainHandler.CallbackQueryHandler;
-import pro.sky.whiskerspawstailtelegrambot.mainHandler.MainHandler;
-import pro.sky.whiskerspawstailtelegrambot.mainHandler.RegistrationHandler;
-import pro.sky.whiskerspawstailtelegrambot.mainHandler.StandardReplyHandler;
-import pro.sky.whiskerspawstailtelegrambot.mainHandler.reportHandler.ReportAddHandler;
+import pro.sky.whiskerspawstailtelegrambot.handlers.CallbackQueryHandler;
+import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.mainHandler.GetBaseInfoFromUpdate;
+import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.mainHandler.MainHandler;
+import pro.sky.whiskerspawstailtelegrambot.handlers.RegistrationHandler;
+import pro.sky.whiskerspawstailtelegrambot.handlers.StandardReplyHandler;
+import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.ReportAddHandler;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
@@ -56,7 +56,7 @@ public class MessageHandler implements MainHandler {
    * @return отправляем ответ
    */
   @Override
-  public SendMessage handler(Update update) {
+  public SendMessage process(Update update) {
 
     GetBaseInfoFromUpdate getBaseInfoFromUpdate = new GetBaseInfoFromUpdate(update);
 
@@ -113,7 +113,7 @@ public class MessageHandler implements MainHandler {
        * если он находится в свободном состоянии (например не в состоянии регистрации или отправки отчета)
        */
       if (update.getMessage().hasText()) {
-        return sendMessage = standardReplyHandler.handler(message);
+        return sendMessage = standardReplyHandler.startHandler(message);
       }
 
     } catch (Exception e) {

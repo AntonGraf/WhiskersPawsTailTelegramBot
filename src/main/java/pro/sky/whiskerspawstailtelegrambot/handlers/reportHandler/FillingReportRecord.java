@@ -1,4 +1,4 @@
-package pro.sky.whiskerspawstailtelegrambot.mainHandler.reportHandler;
+package pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler;
 
 import static pro.sky.whiskerspawstailtelegrambot.util.StateReport.WAIT_ID_PET_REPORT;
 
@@ -9,6 +9,8 @@ import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
 
 
 public class FillingReportRecord {
+
+
 
   /**
    * Метод создает отчет и меняет  StateReport на WAIT_ID_PET_REPORT
