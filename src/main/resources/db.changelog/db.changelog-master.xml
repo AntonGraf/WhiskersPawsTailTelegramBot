@@ -80,4 +80,5 @@
         <tagDatabase tag="ChengeTablePet"/>
     </changeSet>
     <include file="v-1.0/02-chenge-pet-table.sql" relativeToChangelogFile="true"/>
+    <include file="v-1.0/03-add-columne-pet-table.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

@@ -13,7 +13,7 @@ import pro.sky.whiskerspawstailtelegrambot.entity.Pet;
 public interface PetRepository extends JpaRepository<Pet, Long> {
 
   @Modifying
-  @Query(nativeQuery = true, value = "UPDATE pet SET adoptive_parent_id = :adoptiveParentId WHERE id = :petId")
+  @Query(nativeQuery = true, value = "UPDATE pet SET adoptive_parent_id = :adoptiveParentId,  test_period = TRUE, test_period_time = now() WHERE id = :petId")
   void addIdAdoptiveParent (Long petId, Long adoptiveParentId);
 
 
