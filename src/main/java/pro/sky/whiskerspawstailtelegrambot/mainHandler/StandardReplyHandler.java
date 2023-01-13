@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import pro.sky.whiskerspawstailtelegrambot.mainHandler.reportHandler.ReportAddHandler;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.service.ShelterService;
@@ -77,24 +78,18 @@ public class StandardReplyHandler {
         return sendMessage = formReplyMessages.replyMessage(message, AllText.REGISTRATION_INIT,
             configKeyboard.formReplyKeyboardInOneRowInline(AllText.REGISTRATION_BUTTON));
 
-      case (AllText.CANCEL_TEXT)://реакция на кнопку отмена - возврат в главное меню, изменение всех статусов на FREE
-        adoptiveParentService.updateStateAdoptiveParentByChatId(Long.parseLong(chatId),
-            StateAdoptiveParent.FREE);
-        return sendMessage = formReplyMessages.replyMessage(message,
-            AllText.CANCEL_RETURN_MAIN_MENU_TEXT,
-            configKeyboard.initKeyboardOnClickStart());
-
       case (AllText.CALL_TO_VOLUNTEER_TEXT): //ответ на позвать волонтера, просто инфа про волонтеров
-
         return new SendMessage(chatId,
             parserToBot.parserVolunteer(volunteerService.getAllVolunteers()));
 
       //region реализация логики Отправить отчет о питомце
+      /*
+      Менется стейт ПОЛЬЗОВАТЕЛЯ на начало отправки отчета
+       */
       case (AllText.SEND_PET_REPORT_TEXT):     // нажатие кнопки Отправить отчет о питомце
-        return sendMessage = formReplyMessages.replyMessage(message,
-            AllText.MENU_SEND_PET_REPORT_TEXT,
-            configKeyboard.formReplyKeyboardInOneRowInline(AllText.SHOW_ALL_YOUR_PET_TEXT,
-                AllText.SEND_REPORT_TEXT, AllText.CANCEL_TEXT));
+      adoptiveParentService.updateStateAdoptiveParentByChatId(Long.parseLong(chatId),
+            StateAdoptiveParent.START_SEND_REPORT);
+        return sendMessage = reportAddHandler.clickButton_SEND_REPORT(message);
       //endregion
 
       //------------------> регистрация
@@ -135,39 +130,48 @@ public class StandardReplyHandler {
     }
 
   }
-  private SendMessage menuInfo( Message message){
+
+  private SendMessage menuInfo(Message message) {
     String number = message.getText();
     SendMessage sendMessage = null;
     switch (number) {
       case ("1"): // Выбор информации из списка меню информации
-        sendMessage = formReplyMessages.replyMessage(message, shelterService.getOfShelterMessage((byte) 1),
-                configKeyboard.initKeyboardOnClickStart());
+        sendMessage = formReplyMessages.replyMessage(message,
+            shelterService.getOfShelterMessage((byte) 1),
+            configKeyboard.initKeyboardOnClickStart());
         break;
       case ("2"):
-        sendMessage = formReplyMessages.replyMessage(message, shelterService.getOfShelterMessage((byte) 2),
-                configKeyboard.initKeyboardOnClickStart());
+        sendMessage = formReplyMessages.replyMessage(message,
+            shelterService.getOfShelterMessage((byte) 2),
+            configKeyboard.initKeyboardOnClickStart());
         break;
       case ("3"):
-        sendMessage = formReplyMessages.replyMessage(message, shelterService.getOfShelterMessage((byte) 3),
-                configKeyboard.initKeyboardOnClickStart());
+        sendMessage = formReplyMessages.replyMessage(message,
+            shelterService.getOfShelterMessage((byte) 3),
+            configKeyboard.initKeyboardOnClickStart());
         break;
       case ("4"):
-        sendMessage = formReplyMessages.replyMessage(message, shelterService.getOfShelterMessage((byte) 4),
-                configKeyboard.initKeyboardOnClickStart());
+        sendMessage = formReplyMessages.replyMessage(message,
+            shelterService.getOfShelterMessage((byte) 4),
+            configKeyboard.initKeyboardOnClickStart());
         break;
       case ("5"):
-        sendMessage = formReplyMessages.replyMessage(message, shelterService.getOfShelterMessage((byte) 5),
-                configKeyboard.initKeyboardOnClickStart());
+        sendMessage = formReplyMessages.replyMessage(message,
+            shelterService.getOfShelterMessage((byte) 5),
+            configKeyboard.initKeyboardOnClickStart());
         break;
       case ("6"):
-        sendMessage = formReplyMessages.replyMessage(message, shelterService.getOfShelterMessage((byte) 6),
-                configKeyboard.initKeyboardOnClickStart());
+        sendMessage = formReplyMessages.replyMessage(message,
+            shelterService.getOfShelterMessage((byte) 6),
+            configKeyboard.initKeyboardOnClickStart());
         break;
       case ("7"):
-        sendMessage = formReplyMessages.replyMessage(message, shelterService.getOfShelterMessage((byte) 7),
-                configKeyboard.initKeyboardOnClickStart());
+        sendMessage = formReplyMessages.replyMessage(message,
+            shelterService.getOfShelterMessage((byte) 7),
+            configKeyboard.initKeyboardOnClickStart());
         break;
     }
     return sendMessage;
 
-  }}
+  }
+}

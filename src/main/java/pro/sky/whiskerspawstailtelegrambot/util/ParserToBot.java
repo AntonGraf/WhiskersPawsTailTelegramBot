@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
 import pro.sky.whiskerspawstailtelegrambot.record.DogRecord;
 import pro.sky.whiskerspawstailtelegrambot.record.VolunteerRecord;
-import pro.sky.whiskerspawstailtelegrambot.service.VolunteerService;
 
 import java.util.Collection;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
@@ -38,10 +37,11 @@ public class ParserToBot {
     return stringBuilder.toString();
   }
 
-  public String parserDog(Collection<DogRecord> dogRecords) {
+  public String parserPet(Collection<DogRecord> dogRecords) {
     if (dogRecords.isEmpty()) {
       return null;
     }
+
     StringBuilder stringBuilder = new StringBuilder();
     int count = 0;
     for (DogRecord dogRecord : dogRecords) {
@@ -55,8 +55,20 @@ public class ParserToBot {
           .append('\n')
           .append("Возраст: ")
           .append(dogRecord.getAge())
-          .append('\n').append('\n');
+          .append(".")
+          .append('\n')
+          .append(AllText.DELIMITER_FOR_PARSER_PETS);
     }
     return stringBuilder.toString();
+  }
+
+  public Long parserStringPetId(String textMessage) {
+    if (textMessage == null) {
+      return null;
+    }
+    int index =  textMessage.indexOf("ID: ");
+    String id = textMessage.substring(index, index + 1);
+
+    return Long.parseLong(id);
   }
 }

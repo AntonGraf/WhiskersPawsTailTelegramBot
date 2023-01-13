@@ -44,6 +44,7 @@ public class ConfigKeyboard extends Button {
 
   /**
    * Метод формирует клавиатуры из переданного текста
+   *
    * @param textButtons текст кнопок, список может быть любой длинны
    * @return клавиатуру с текстом кнопок из textButtons
    */
@@ -62,7 +63,7 @@ public class ConfigKeyboard extends Button {
     return keyboardMarkup;
   }
 
-  public ReplyKeyboardMarkup initKeyboardOnClickRegistration(){
+  public ReplyKeyboardMarkup initKeyboardOnClickRegistration() {
 
     ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
     List<KeyboardRow> KEYBOARD_BUTTONS_ROW_INFO_REPORT = new ArrayList<>();
@@ -93,5 +94,27 @@ public class ConfigKeyboard extends Button {
     return inlineKeyboardMarkup;
   }
 
+  public InlineKeyboardMarkup formReplyKeyboardAnyRowInline(int numberPerLine,
+      List<String> textButtons) {
+
+    InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+    List<List<InlineKeyboardButton>> listRow = new ArrayList<>();
+    List<InlineKeyboardButton> row;
+    int i = 0, j = 0;
+    while (i < textButtons.size()) {
+      row = new ArrayList<>();
+      while (i < textButtons.size() && j < numberPerLine) {
+        InlineKeyboardButton button = new InlineKeyboardButton(textButtons.get(i));
+        button.setCallbackData(textButtons.get(i));
+        row.add(button);
+        i++;
+        j++;
+      }
+      listRow.add(row);
+      j = 0;
+    }
+    inlineKeyboardMarkup.setKeyboard(listRow);
+    return inlineKeyboardMarkup;
+  }
 
 }
