@@ -16,8 +16,10 @@ import pro.sky.whiskerspawstailtelegrambot.mainHandler.MainHandler;
 import pro.sky.whiskerspawstailtelegrambot.mainHandler.RegistrationHandler;
 import pro.sky.whiskerspawstailtelegrambot.mainHandler.StandardReplyHandler;
 import pro.sky.whiskerspawstailtelegrambot.mainHandler.reportHandler.ReportAddHandler;
+import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
+import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
 
 
 /**
@@ -73,10 +75,10 @@ public class MessageHandler implements MainHandler {
             chatId);
       }
 
-//        Long idChat = Long.parseLong(chatId);
-//        AdoptiveParentRecord adoptiveParentRecord = adoptiveParentService.getAdoptiveParentByChatId(
-//            idChat);
-//        StateAdoptiveParent state = adoptiveParentService.getStateAdoptiveParentByChatId(idChat);
+        Long idChat = Long.parseLong(chatId);
+        AdoptiveParentRecord adoptiveParentRecord = adoptiveParentService.getAdoptiveParentByChatId(
+            idChat);
+        StateAdoptiveParent state = adoptiveParentService.getStateAdoptiveParentByChatId(idChat);
 
 
       //Обязательно проверяем вначале CallbackQuery. Т.к. Message у них отличается
@@ -90,26 +92,26 @@ public class MessageHandler implements MainHandler {
        если состояни отличное от FREE,
         то обрабатываем состояние.
        */
-//      if (state != null) {
-//
-//        switch (state) {
-//
-//          case THE_FIRST_STATE:
-//            return sendMessage = registrationHandler
-//                .handlerWithStatusTheFirstState(message, adoptiveParentRecord, message.getText(),
-//                    chatId);
-//          case ONLY_NAME:
-//            return sendMessage = registrationHandler
-//                .handlerWithStatusOnlyName(message, adoptiveParentRecord, message.getText(),
-//                    chatId);
-//          case SUCCESS_REG:
-//            //
-//            break;
-//          //проверяется стейт ПОЛЬЗОВАТЕЛЯ на отправку отчета
-//          case START_SEND_REPORT:
-//            return sendMessage = reportAddHandler.handler(message);
-//        }
-//      }
+      if (state != null) {
+
+        switch (state) {
+
+          case THE_FIRST_STATE:
+            return sendMessage = registrationHandler
+                .handlerWithStatusTheFirstState(message, adoptiveParentRecord, message.getText(),
+                    chatId);
+          case ONLY_NAME:
+            return sendMessage = registrationHandler
+                .handlerWithStatusOnlyName(message, adoptiveParentRecord, message.getText(),
+                    chatId);
+          case SUCCESS_REG:
+            //
+            break;
+          //проверяется стейт ПОЛЬЗОВАТЕЛЯ на отправку отчета
+          case START_SEND_REPORT:
+            return sendMessage = reportAddHandler.handler(message);
+        }
+      }
 
       /*
        * Обработка стандартных сообщений от пользователя,

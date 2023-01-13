@@ -175,6 +175,13 @@ public class AdoptiveParentService {
         .getMethodName() + " класса " + this.getClass().getName());
     return adoptiveParentMapper.toRecord(adoptiveParentRepo.getAdoptiveParentByChatId(chatId));
   }
+//  public AdoptiveParentRecord getAdoptiveParentByChatId2(long chatId) {
+//    log.info("Вызов метода " + new Throwable()
+//        .getStackTrace()[0]
+//        .getMethodName() + " класса " + this.getClass().getName());
+//    return adoptiveParentMapper.toRecord(adoptiveParentRepo.getAdoptiveParentByChatId2(chatId));
+//  }
+
 
   /**
    * Получить state AdoptiveParent по chatId
@@ -193,6 +200,17 @@ public class AdoptiveParentService {
     }
     return null;
   }
+//  public StateAdoptiveParent getStateAdoptiveParentByChatId2(long chatId) {
+//    log.info("Вызов метода " + new Throwable()
+//        .getStackTrace()[0]
+//        .getMethodName() + " класса " + this.getClass().getName());
+//    AdoptiveParentRecord adoptiveParentRecord = getAdoptiveParentByChatId(chatId);
+//    if (adoptiveParentRecord != null) {
+//      String state = adoptiveParentRecord.getState();
+//      return StateAdoptiveParent.valueOf(state);
+//    }
+//    return null;
+//  }
 
   /**
    *
