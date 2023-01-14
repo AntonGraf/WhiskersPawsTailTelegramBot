@@ -37,13 +37,10 @@ public class Pet {
      */
     String age;
 
-
     /**
      * Описание питомца
      */
     String description;
-
-
     /**
      * Путь по которому будеть храниться фото
      */
@@ -68,12 +65,24 @@ public class Pet {
     @Lob
     @Column(name = "photo")
     byte[] photo;
+
+    /**
+     * Вид питомца Dog/Cat
+     */
+    @Column(name = "pet_type")
+    String petType;
+
+    /**
+     * Усыновление да/нет
+     */
     @Column(name = "test_period")
     boolean testPeriod;
 
+    /**
+     * Дата начала тестового периода
+     */
     @Column(name = "test_period_time")
     LocalDateTime testPeriodTime;
-
 
     /**
      * Приют, к которому принадлежит питомцем
@@ -92,7 +101,6 @@ public class Pet {
     @JsonIgnore
     @JoinColumn(name = "adoptive_parent_id")
     AdoptiveParent adoptiveParent;
-
 
     /**
      * Отчеты хозяина для данному питомцу

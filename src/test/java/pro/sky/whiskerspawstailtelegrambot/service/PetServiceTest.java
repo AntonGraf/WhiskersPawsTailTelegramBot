@@ -102,16 +102,16 @@ class PetServiceTest {
         PetRecord petRecord = mapper.toRecord(pet);
         String age = petRecord.getAge();
        PetService petService = mock(PetService.class);
-        doNothing().when(petService).editPet(petRecord.getId(), null, "1", null, null);
-        Assertions.assertThatNoException().isThrownBy(() -> petService.editPet(pet.getId(), null, "1", null, null));
-        verify(petService, times(1)).editPet(pet.getId(), null, "1", null, null);
+        doNothing().when(petService).editPet(petRecord.getId(), null, "1", null, null, null);
+        Assertions.assertThatNoException().isThrownBy(() -> petService.editPet(pet.getId(), null, "1", null, null, null));
+        verify(petService, times(1)).editPet(pet.getId(), null, "1", null, null, null);
 
     }
 
     @Test
     void editPetNegativeTest() {
         lenient().when(petRepository.findById(anyLong())).thenThrow(ElemNotFound.class);
-        assertThrows(ElemNotFound.class, () -> out.editPet(1L, "", "1", "", getTestPhoto()));
+        assertThrows(ElemNotFound.class, () -> out.editPet(1L, "", "1", "", "Cat", getTestPhoto()));
     }
 
     @Test

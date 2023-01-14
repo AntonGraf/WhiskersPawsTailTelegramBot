@@ -2,6 +2,7 @@ package pro.sky.whiskerspawstailtelegrambot.controller;
 
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -156,8 +157,9 @@ public class PetController {
       @RequestParam(required = false, name = "name") String fullName,
       @RequestParam(required = false, name = "age") String age,
       @RequestParam(required = false, name = "des") String description,
+      @RequestParam(name = "type") @Parameter(description = "Dog or Cat") String petType,
       @RequestParam(required = false, name = "photo") MultipartFile photo) throws IOException {
-    petService.addPet(fullName, age, description, photo);
+    petService.addPet(fullName, age, description, petType, photo);
     return ResponseEntity.ok().build();
   }
 
@@ -189,8 +191,9 @@ public class PetController {
       @RequestParam(required = false, name = "name") String fullName,
       @RequestParam(required = false, name = "age") String age,
       @RequestParam(required = false, name = "des") String description,
+      @RequestParam(name = "type") @Parameter(description = "Dog or Cat") String petType,
       @RequestParam(required = false) MultipartFile photo) throws IOException {
-    petService.editPet(id, fullName, age, description, photo);
+    petService.editPet(id, fullName, age, description,petType, photo);
     return ResponseEntity.ok().build();
   }
 

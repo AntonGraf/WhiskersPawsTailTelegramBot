@@ -87,7 +87,7 @@ public class  PetService {
      * @param photo
      * @throws IOException
      */
-    public void editPet(Long petId, String fullName, String age, String description, MultipartFile photo) throws IOException { //Put
+    public void editPet(Long petId, String fullName, String age, String description, String petType, MultipartFile photo) throws IOException { //Put
         log.info("Изменение данных питомца в БД");
         Pet pet = petMapper.toEntity(findPet(petId));
         if (fullName != null && !fullName.isEmpty() && !fullName.isBlank()) {
@@ -98,6 +98,9 @@ public class  PetService {
         }
         if (description != null && !description.isEmpty() && !description.isBlank()) {
             pet.setDescription(description);
+        }
+        if (petType != null && !petType.isEmpty() && !petType.isBlank()) {
+            pet.setPetType(petType);
         }
         petRepository.save(pet);
         PetRecord petRecord = petMapper.toRecord(pet);
@@ -162,7 +165,7 @@ public class  PetService {
      * @param photo
      * @throws IOException
      */
-    public void addPet(String fullName, String age, String description, MultipartFile photo) throws IOException { //Post
+    public void addPet(String fullName, String age, String description, String petType, MultipartFile photo) throws IOException { //Post
         log.info("Добавление питомца в БД");
         Pet pet = new Pet();
         if (fullName != null && !fullName.isEmpty() && !fullName.isBlank()) {
@@ -173,6 +176,9 @@ public class  PetService {
         }
         if (description != null && !description.isEmpty() && !description.isBlank()) {
             pet.setDescription(description);
+        }
+        if (petType != null && !petType.isEmpty() && !petType.isBlank()) {
+            pet.setPetType(petType);
         }
         petRepository.save(pet);
         PetRecord petRecord = petMapper.toRecord(pet);
