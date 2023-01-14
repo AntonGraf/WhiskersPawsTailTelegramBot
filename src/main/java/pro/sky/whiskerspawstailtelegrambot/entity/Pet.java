@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -67,6 +68,11 @@ public class Pet {
     @Lob
     @Column(name = "photo")
     byte[] photo;
+    @Column(name = "test_period")
+    boolean testPeriod;
+
+    @Column(name = "test_period_time")
+    LocalDateTime testPeriodTime;
 
 
     /**

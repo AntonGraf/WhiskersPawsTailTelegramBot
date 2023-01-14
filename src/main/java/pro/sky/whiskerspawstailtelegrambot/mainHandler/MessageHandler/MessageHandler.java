@@ -4,11 +4,11 @@ package pro.sky.whiskerspawstailtelegrambot.mainHandler.MessageHandler;
 import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.CANCEL_TEXT;
 import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.REGISTRATION_CANCEL;
 
-import java.util.Objects;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -70,22 +70,24 @@ public class MessageHandler implements MainHandler {
 
     try {
 
-      if (textMessage != null && (textMessage.equals(CANCEL_TEXT) || textMessage.equals(
-          REGISTRATION_CANCEL))) {
+      if (textMessage != null && (textMessage.equals(CANCEL_TEXT))) {
         return sendMessage = new ButtonCancelHandler().clickCancel(message, adoptiveParentService,
+            chatId);
+      } else if (textMessage != null && textMessage.equals(
+          REGISTRATION_CANCEL)) {
+        return sendMessage = new ButtonCancelHandler().clickCancelInRegistration(message, adoptiveParentService,
             chatId);
       }
 
-        Long idChat = Long.parseLong(chatId);
-        AdoptiveParentRecord adoptiveParentRecord = adoptiveParentService.getAdoptiveParentByChatId(
-            idChat);
-        StateAdoptiveParent state = adoptiveParentService.getStateAdoptiveParentByChatId(idChat);
-
+      Long idChat = Long.parseLong(chatId);
+      AdoptiveParentRecord adoptiveParentRecord = adoptiveParentService.getAdoptiveParentByChatId(
+          idChat);
+      StateAdoptiveParent state = adoptiveParentService.getStateAdoptiveParentByChatId(idChat);
 
       //Обязательно проверяем вначале CallbackQuery. Т.к. Message у них отличается
       // Проверям CallbackQuery от inline клавиатуры, и обрабатываем
       if (isCallbackQuery) {
-        return sendMessage = callbackQueryHandler.handler(callbackQuery);
+        return callbackQueryHandler.handler(callbackQuery);
       }
 
         /*
@@ -99,10 +101,12 @@ public class MessageHandler implements MainHandler {
 
           case THE_FIRST_STATE:
             return registrationHandler
-                .handlerWithStatusTheFirstState(message, adoptiveParentRecord, message.getText(), chatId);
+                .handlerWithStatusTheFirstState(message, adoptiveParentRecord, message.getText(),
+                    chatId);
           case ONLY_NAME:
             return registrationHandler
-                .handlerWithStatusOnlyName(message, adoptiveParentRecord, message.getText(), chatId);
+                .handlerWithStatusOnlyName(message, adoptiveParentRecord, message.getText(),
+                    chatId);
           case START_SEND_REPORT:
             return sendMessage = reportAddHandler.handler(message);
         }
@@ -122,6 +126,10 @@ public class MessageHandler implements MainHandler {
     }
     return sendMessage;
   }
+
+
+
+
 
 }
 

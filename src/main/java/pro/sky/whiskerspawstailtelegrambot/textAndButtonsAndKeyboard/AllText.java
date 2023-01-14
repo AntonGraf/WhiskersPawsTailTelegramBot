@@ -84,6 +84,21 @@ public abstract class AllText {
 
   //кнопки для регистрации
 
+  //Показать всех животных
+  public static final String SHOW_ALL_ANIMAL = "Показать всех животных";
+  public static final String CHOOSE_CATEGORY = "Выберите категорию";
+
+  public static final String DOG = "Собаки";
+
+  public static final String CAT = "Кошки";
+
+  public static final String PIG = "Свиньи";
+
+  public static final String BIRD = "Птицы";
+
+
+  //Показать всех животных
+
   public static final String INFO =
       "Выберете нужную информацию по номеру из списка:\n  /1 - Цель приюта\n\n /2 - График приюта\n\n"
           +

@@ -10,10 +10,9 @@ import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
-import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
 
 /**
- *  Обработка сообщений от inline клавиатуры
+ * Обработка сообщений от inline клавиатуры
  */
 @Slf4j
 @Component
@@ -26,7 +25,9 @@ public class CallbackQueryHandler {
   private final RegistrationHandler registrationHandler;
   private final AdoptiveParentService adoptiveParentService;
 
-  public CallbackQueryHandler(FormReplyMessages formReplyMessages, ConfigKeyboard configKeyboard, ReportAddHandler reportAddHandler,
+
+  public CallbackQueryHandler(FormReplyMessages formReplyMessages, ConfigKeyboard configKeyboard,
+      ReportAddHandler reportAddHandler,
       RegistrationHandler registrationHandler, AdoptiveParentService adoptiveParentService) {
     this.formReplyMessages = formReplyMessages;
     this.configKeyboard = configKeyboard;
@@ -35,7 +36,9 @@ public class CallbackQueryHandler {
     this.adoptiveParentService = adoptiveParentService;
   }
 
-  /** обработка CallbackQuery ответа от пользователя
+  /**
+   * обработка CallbackQuery ответа от пользователя
+   *
    * @param callbackQuery информация о нажатой пользователем кнопке кнопке
    * @return SendMessage
    */
@@ -53,19 +56,17 @@ public class CallbackQueryHandler {
 //        sendMessage = reportAddHandler.clickButton_SHOW_ALL_YOUR_PET(message);
 //        break;
 
-      case (AllText.SEND_REPORT_TEXT):     // нажатие кнопки отправить отчет
-        adoptiveParentService.updateStateAdoptiveParentByChatId(Long.parseLong(chatId),
-            StateAdoptiveParent.START_SEND_REPORT);
-        sendMessage = reportAddHandler.clickButton_SEND_REPORT(message);
-        break;
-
+//      case (AllText.SEND_REPORT_TEXT):     // нажатие кнопки отправить отчет
+//        adoptiveParentService.updateStateAdoptiveParentByChatId(Long.parseLong(chatId),
+//            StateAdoptiveParent.START_SEND_REPORT);
+//        sendMessage = reportAddHandler.clickButton_SEND_REPORT(message);
+//        break;
       case (AllText.REGISTRATION_BUTTON):     // нажатие кнопки регистрация
-        sendMessage = registrationHandler.addToTable(message,String.valueOf(message.getChatId()));
-        break;
+        return registrationHandler.addToTable(message, String.valueOf(message.getChatId()));
+
     }
     return sendMessage;
   }
-
 
 
 }

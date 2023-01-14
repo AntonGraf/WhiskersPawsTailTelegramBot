@@ -24,48 +24,48 @@ import pro.sky.whiskerspawstailtelegrambot.mainHandler.MainHandler;
 public class TelegramBotUpdatesListener extends SpringWebhookBot {
 
 
-    String webHookPath;
-    String botUserName;
-    String botToken;
+  String webHookPath;
+  String botUserName;
+  String botToken;
 
-    @Qualifier("MessageHandler")
-    @Autowired
-    MainHandler messageHandler;
+  @Qualifier("MessageHandler")
+  @Autowired
+  MainHandler messageHandler;
 
-    public TelegramBotUpdatesListener(SetWebhook webhook) {
-        super(webhook);
+  public TelegramBotUpdatesListener(SetWebhook webhook) {
+    super(webhook);
+  }
+
+
+  /**
+   * Сейчас метод просто отвечает на любое сообщение
+   *
+   * @param update уведомление от пользвателя
+   * @return ответ пользователю
+   */
+  @Override
+  public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+    try {
+      execute(messageHandler.handler(update));
+    } catch (TelegramApiException e) {
+      e.printStackTrace();
     }
+    return null;
+  }
 
 
+  @Override
+  public String getBotPath() {
+    return webHookPath;
+  }
 
-    /**
-     * Сейчас метод просто отвечает на любое сообщение
-     *
-     * @param update уведомление от пользвателя
-     * @return ответ пользователю
-     */
-    @Override
-    public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        try {
-            execute(messageHandler.handler(update));
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+  @Override
+  public String getBotUsername() {
+    return botUserName;
+  }
 
-    @Override
-    public String getBotPath() {
-        return webHookPath;
-    }
-
-    @Override
-    public String getBotUsername() {
-        return botUserName;
-    }
-
-    @Override
-    public String getBotToken() {
-        return botToken;
-    }
+  @Override
+  public String getBotToken() {
+    return botToken;
+  }
 }
