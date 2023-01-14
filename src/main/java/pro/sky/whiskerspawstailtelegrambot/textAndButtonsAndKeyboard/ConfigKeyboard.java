@@ -1,5 +1,7 @@
 package pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard;
 
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,9 +13,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Класс, где создается кнопки в боте
@@ -35,6 +34,7 @@ public class ConfigKeyboard extends Button {
     KeyboardRow row = new KeyboardRow();
     row.add(INFO_SHELTER_BUTTON);
     row.add(SEND_PET_REPORT_BUTTON);
+    row.add(SHOW_ALL_ANIMAL_BUTTON);
     KEYBOARD_BUTTONS_ROW_INFO_REPORT.add(row);
     keyboardMarkup.setResizeKeyboard(true);
     keyboardMarkup.setKeyboard(KEYBOARD_BUTTONS_ROW_INFO_REPORT);
@@ -93,6 +93,7 @@ public class ConfigKeyboard extends Button {
 
     return inlineKeyboardMarkup;
   }
+
 
   public InlineKeyboardMarkup formReplyKeyboardAnyRowInline(int numberPerLine,
       List<String> textButtons) {
