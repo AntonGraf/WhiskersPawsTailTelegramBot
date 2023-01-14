@@ -65,6 +65,7 @@ class PetControllerTest {
     final String fullName = "Dog";
     final String age = "5";
     final String description = "DogDescription";
+    final String petType = "Cat";
 
     MockMultipartFile file = new MockMultipartFile("data", "photo.jpeg",
         MediaType.MULTIPART_FORM_DATA_VALUE, "photo.jpeg".getBytes());
@@ -74,6 +75,7 @@ class PetControllerTest {
     pet.setFullName(fullName);
     pet.setAge(age);
     pet.setDescription(description);
+    pet.setPetType(petType);
     pet.setPhoto(file.getBytes());
     pet.setFileSize(file.getSize());
     pet.setMediaType("image/jpeg");
@@ -87,6 +89,7 @@ class PetControllerTest {
         .param("name", "dogName")
         .param("age", "1111")
         .param("des", "DogDescription")
+        .param("type", "Cat")
         .accept(MediaType.MULTIPART_FORM_DATA_VALUE))
         .andDo(print())
         .andExpect(status().isOk());
