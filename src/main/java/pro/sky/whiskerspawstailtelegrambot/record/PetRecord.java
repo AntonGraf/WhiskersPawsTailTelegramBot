@@ -1,19 +1,15 @@
 package pro.sky.whiskerspawstailtelegrambot.record;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
 import pro.sky.whiskerspawstailtelegrambot.entity.Pet;
 import pro.sky.whiskerspawstailtelegrambot.entity.Shelter;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -45,6 +41,10 @@ public class PetRecord implements Serializable {
     String mediaType;
 
     byte[] photo;
+
+    boolean testPeriod;
+
+    LocalDateTime testPeriodTime;
 
     @JsonIgnore
     Shelter shelter;

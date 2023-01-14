@@ -2,11 +2,11 @@ package pro.sky.whiskerspawstailtelegrambot.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Objects;
-import java.time.LocalDateTime;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -72,7 +72,7 @@ public class Pet {
     boolean testPeriod;
 
     @Column(name = "test_period_time")
-    LocalDateTime localDateTime;
+    LocalDateTime testPeriodTime;
 
 
     /**
