@@ -15,7 +15,7 @@ import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeybo
 import pro.sky.whiskerspawstailtelegrambot.util.FilterAdoptedPets;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
 import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
-import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
 import pro.sky.whiskerspawstailtelegrambot.util.StateReport;
 
 @Service
@@ -71,6 +71,20 @@ public class ReportService {
   }
 
   /**
+   * Получить незавершенный отчет по chatId пользователя
+   */
+  public ReportRecord getReportInStartStateByChatId(long chatId) {
+
+    Report report = reportRepository.getReportByChatIdAndIsReportCompletedFalse(chatId);
+
+    ReportRecord reportRecord = null;
+    if (report != null) {
+      reportRecord = reportMapper.toRecord(report);
+    }
+    return reportRecord;
+  }
+
+  /**
    * Создать новый пустой отчет и сохранить его в базе данных
    *
    * @return новй созданый отчет
@@ -101,7 +115,9 @@ public class ReportService {
    * @param newReportRecord новый отчет
    * @return обновленный отчет
    */
-  public ReportRecord updateReportByReportId(long id, ReportRecord newReportRecord) {
+  public ReportRecord updateReport(ReportRecord newReportRecord) {
+
+    long id = newReportRecord.getId();
 
     ReportRecord oldReportRecord = getReportById(id);
     oldReportRecord.setPhotoPet(newReportRecord.getPhotoPet());

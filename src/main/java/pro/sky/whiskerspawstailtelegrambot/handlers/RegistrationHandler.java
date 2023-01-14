@@ -9,7 +9,7 @@ import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
-import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
 
 /**
  * Обработка сообщений при регистрации

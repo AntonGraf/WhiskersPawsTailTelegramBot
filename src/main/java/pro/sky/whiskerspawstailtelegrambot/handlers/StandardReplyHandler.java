@@ -74,9 +74,6 @@ public class StandardReplyHandler {
       menuInfo(message);
     } // Проверка команды на цифру и передача в цифровой метод
 
-    WorkingButton workingButton = new WorkingButton(message, reportHandler,
-        stateChangeAdoptiveParentService);
-    workingButton.handleClick(message, textMessage, reportHandler);
     stateCommonHandler.startHandler(message);
 
     //здесь инжект текст кнопок, любой текст крч

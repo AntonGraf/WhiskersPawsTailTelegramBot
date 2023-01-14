@@ -7,7 +7,7 @@ import pro.sky.whiskerspawstailtelegrambot.handlers.InputMessageHandler;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.service.StateChangeAdoptiveParentService;
-import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
 
 @Component
 

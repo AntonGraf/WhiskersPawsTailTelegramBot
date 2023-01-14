@@ -38,7 +38,19 @@ public class FormReplyMessages {
         sendMessage.setReplyMarkup(inlineKeyboardMarkup);
         return sendMessage;
     }
-
+    /**
+     * сформировать ответное сообщение по chatId, с указаным текстом и inline клавиатурой
+     */
+    public SendMessage replyMessage(String chatId, String textReplyMessage, InlineKeyboardMarkup inlineKeyboardMarkup) {
+        SendMessage sendMessage = new SendMessage(chatId, textReplyMessage);
+        sendMessage.setReplyMarkup(inlineKeyboardMarkup);
+        return sendMessage;
+    }
+    public SendMessage replyMessage(String chatId, String textReplyMessage, ReplyKeyboardMarkup keyboardMarkup) {
+        SendMessage sendMessage = new SendMessage(chatId, textReplyMessage);
+        sendMessage.setReplyMarkup(keyboardMarkup);
+        return sendMessage;
+    }
     /**
      * сформировать ответное сообщение с сообщение об ошибке, с указаным текстом и inline клавиатурой
      * @param message

@@ -3,11 +3,10 @@ package pro.sky.whiskerspawstailtelegrambot.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
-import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
 import pro.sky.whiskerspawstailtelegrambot.mapper.AdoptiveParentMapper;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.repository.StateChangeAdoptiveParentRepository;
-import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
 
 @Service
 @Slf4j

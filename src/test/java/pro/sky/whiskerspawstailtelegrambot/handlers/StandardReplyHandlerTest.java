@@ -23,7 +23,7 @@
 //import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 //import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
 //import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
-//import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
+//import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
 //
 //import java.util.ArrayList;
 //import java.util.Collection;

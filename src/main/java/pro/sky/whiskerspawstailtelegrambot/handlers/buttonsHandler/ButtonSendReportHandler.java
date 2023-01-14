@@ -4,7 +4,7 @@
 //import org.telegram.telegrambots.meta.api.objects.Message;
 //import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.ReportHandler;
 //import pro.sky.whiskerspawstailtelegrambot.service.StateChangeAdoptiveParentService;
-//import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
+//import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
 //
 ///**
 // * обработчик кнопки Отправить отчет

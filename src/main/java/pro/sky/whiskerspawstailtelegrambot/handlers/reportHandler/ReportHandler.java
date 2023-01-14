@@ -3,18 +3,9 @@ package pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler;
 import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.CANCEL_RETURN_MAIN_MENU_TEXT;
 import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.CANCEL_TEXT;
 import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.DESCRIPTION_SEND_REPORT_TEXT;
-import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.DIET_SEND_REPORT_TEXT;
-import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.ENTER_ERROR_ID_TEXT;
-import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.FEELINGS_SEND_REPORT_TEXT;
 import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.NO_PHOTO_SEND_REPORT_TEXT;
 import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.NO_TEXT_SEND_REPORT_TEXT;
-import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.PHOTO_SEND_REPORT_TEXT;
-import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.SHOW_ALL_YOUR_PET_TEXT;
 import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.YOU_HAVE_NO_ADOPTED_PETS_TEXT;
-import static pro.sky.whiskerspawstailtelegrambot.util.StateReport.NOT_STARTED;
-import static pro.sky.whiskerspawstailtelegrambot.util.StateReport.WAIT_DIET_REPORT;
-import static pro.sky.whiskerspawstailtelegrambot.util.StateReport.WAIT_ID_PET_REPORT;
-import static pro.sky.whiskerspawstailtelegrambot.util.StateReport.WAIT_PHOTO_REPORT;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +20,14 @@ import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import pro.sky.whiskerspawstailtelegrambot.handlers.stateHandlers.StateCommonHandlerImpl;
-import pro.sky.whiskerspawstailtelegrambot.record.PetRecord;
 import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.service.ReportService;
+import pro.sky.whiskerspawstailtelegrambot.service.StateChangeAdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
-import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
 
 /**
  * обработка репорт на будующее
@@ -51,6 +42,7 @@ public class ReportHandler {
   private SendMessage sendMessage = null;
   private final AdoptiveParentService adoptiveParentService;
   private final StateCommonHandlerImpl stateCommonHandler;
+  StateChangeAdoptiveParentService stateChangeAdoptiveParentService;
 
 
   public ReportHandler(FormReplyMessages formReplyMessages, ReportService reportService,
@@ -63,82 +55,58 @@ public class ReportHandler {
     this.stateCommonHandler = stateCommonHandler;
   }
 
-  public SendMessage handler(Message message) {
+  public SendMessage workingState(Message message, StateAdoptiveParent stateAdoptiveParent) {
 
-    SendMessage sendMessage = null;
-    String textMessage = message.getText();
-    long chatId = message.getChatId();
+    long chatIdL = message.getChatId();
+    String chatId = message.getChatId().toString();
+    ReportRecord reportRecord = getAndUpdateReportRecord(chatIdL, message);
 
-    FillingReportRecord fillingReportRecord = new FillingReportRecord();
-    PetRecord petRecord = fillingReportRecord.checkCorrectPetId(textMessage, reportService);
-    if (petRecord == null) {
-      sendMessage = formReplyMessages.replyMessage(message, ENTER_ERROR_ID_TEXT,
-          configKeyboard.initKeyboardOnClickStart());
-    }
+    WorkingState workingState = new WorkingState(message, reportService,
+        stateChangeAdoptiveParentService);
 
-    switch (textMessage) {
+    sendMessage = workingState.work(reportRecord, stateAdoptiveParent);
 
-    }
-
-//    String stateReport = reportService.getStateReportByPetId(chatId) == null ? NOT_STARTED
-//        : reportService.getStateReportByPetId(chatId);
-    String stateReport = null;
-    switch (stateReport) {
-
-//      case NOT_STARTED:
-//        FillingReportRecord fillingReportRecord = new FillingReportRecord();
-//        saveReportInDb(message, fillingReportRecord.newReport());
-//        sendMessage = formReplyMessages.replyMessage(message, PHOTO_SEND_REPORT_TEXT,
-//            configKeyboard.formReplyKeyboardInOneRow(CANCEL_TEXT));
-//        return sendMessage;
-
-      case NOT_STARTED:
-        sendMessage = clickButton_SEND_REPORT(message);
-        return sendMessage;
-
-      case WAIT_ID_PET_REPORT:
-        sendMessage = formReplyMessages.replyMessage(message, PHOTO_SEND_REPORT_TEXT,
-            configKeyboard.formReplyKeyboardInOneRowInline(SHOW_ALL_YOUR_PET_TEXT,
-                CANCEL_TEXT));
-
-      case WAIT_PHOTO_REPORT:
-        return sendMessage = formReplyMessages.replyMessage(message, DIET_SEND_REPORT_TEXT,
-            configKeyboard.formReplyKeyboardInOneRow(CANCEL_TEXT));
-
-      case WAIT_DIET_REPORT:
-        return sendMessage = formReplyMessages.replyMessage(message, FEELINGS_SEND_REPORT_TEXT,
-            configKeyboard.formReplyKeyboardInOneRow(CANCEL_TEXT));
-//
-//      case WAIT_FEELINGS_REPORT:
-//        return sendMessage = reportService.changeStateAdoptiveParent(message,
-//            FEELINGS_SEND_REPORT_TEXT, StateAdoptiveParent.FREE);
-//
-//      case WAIT_HABITS_REPORT:
-//        return sendMessage = reportService.changeStateAdoptiveParent(message,
-//            HABITS_SEND_REPORT_TEXT, StateAdoptiveParent.FREE);
-    }
-
-    return sendMessage;
 
   }
 
   //region clickButton
 
+  public ReportRecord getAndUpdateReportRecord(long chatId, Message message) {
+
+    ReportRecord reportRecord = reportService.getReportInStartStateByChatId(chatId);
+
+    if (message.hasPhoto() || message.hasDocument()) {
+
+      return reportRecord;
+    }
+
+    String textMessage = message.getText();
+
+
+  }
+
+  public ReportRecord updateReport(ReportRecord reportRecord) {
+
+    reportRecord.setPhotoPet(newReportRecord.getPhotoPet());
+    reportRecord.setDiet(newReportRecord.getDiet());
+    reportRecord.setReportAboutFeelings(newReportRecord.getReportAboutFeelings());
+    reportRecord.setReportAboutHabits(newReportRecord.getReportAboutHabits());
+    reportRecord.setStateReport(newReportRecord.getStateReport());
+
+    return reportMapper.toRecord(reportRepository.save(reportMapper.toEntity(oldReportRecord)));
+  }
 
   /**
    * Метод обрабатывает нажатие на кнопку показать всех отправить отчет и изменят статус
    * пользователя на ожидание отправки отчета
-   *
-   * @param messageFromStandardHandler сообщение из update
    */
-  public SendMessage clickButton_SEND_REPORT(Message messageFromStandardHandler) {
+  public SendMessage clickButton_SEND_REPORT(String chatId) {
     log.info("Вызов метода " + new Throwable()
         .getStackTrace()[0]
         .getMethodName() + " класса " + this.getClass().getName());
 
-    SendMessage sendMessage = clickButton_SHOW_Id_YOUR_PET(messageFromStandardHandler);
+    SendMessage sendMessage = clickButton_SHOW_ID_YOUR_PET(chatId);
     reportService.addNewBlankReportInDbForPetByPetId();
-    formReplyMessages.setSuccessful(true);
     return sendMessage;
 
   }
@@ -192,14 +160,6 @@ public class ReportHandler {
 
   }
 
-  public void checkPhotoInSentReport() {
-
-  }
-
-  public boolean isStatusUpdate() {
-
-    return true;
-  }
 
   /**
    * метод сохраняет отчет в БД
@@ -221,7 +181,7 @@ public class ReportHandler {
    *
    * @param message сообщение из update
    */
-  public SendMessage clickButton_SHOW_Id_YOUR_PET(Message message) {
+  public SendMessage clickButton_SHOW_ID_YOUR_PET(String chatId) {
     log.info("Вызов метода " + new Throwable()
         .getStackTrace()[0]
         .getMethodName() + " класса " + this.getClass().getName());

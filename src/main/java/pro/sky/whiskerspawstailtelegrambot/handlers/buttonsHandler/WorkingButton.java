@@ -1,54 +1,56 @@
 package pro.sky.whiskerspawstailtelegrambot.handlers.buttonsHandler;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.ReportHandler;
 import pro.sky.whiskerspawstailtelegrambot.service.StateChangeAdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
-import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
 
 
 public class WorkingButton {
 
   private StateChangeAdoptiveParentService stateChangeAdoptiveParentService;
 
-  private Message message;
+
   private ReportHandler handler;
-  long chatId;
+  String chatId;
+  long chatIdL;
   FormReplyMessages formReplyMessages;
   ConfigKeyboard configKeyboard;
-  public WorkingButton(Message message, ReportHandler handler,
+
+  public WorkingButton(String chatId, ReportHandler handler,
       StateChangeAdoptiveParentService stateChangeAdoptiveParentService) {
     this.stateChangeAdoptiveParentService = stateChangeAdoptiveParentService;
-    this.message = message;
     this.handler = handler;
-    chatId = message.getChatId();
     formReplyMessages = new FormReplyMessages();
     configKeyboard = new ConfigKeyboard();
+    this.chatId = chatId;
+    chatIdL = Long.parseLong(chatId);
   }
 
-  public void handleClick(Message message, String textMessage, ReportHandler reportHandler) {
+  public SendMessage handleClick(String textMessage) {
+
+    SendMessage sendMessage = null;
 
     switch (textMessage) {
 
       case AllText.CANCEL_TEXT:
-        clickCancel();
+        sendMessage = clickCancel();
         break;
       case AllText.REGISTRATION_BUTTON:
-        clickRegistration();
+        sendMessage = clickRegistration();
         break;
       case AllText.SEND_PET_REPORT_TEXT:
-        clickSendReport();
+        sendMessage = clickSendReport();
         break;
       case AllText.START_TEXT:
-        clickStartText();
+        sendMessage = clickStartText();
         break;
 
     }
-
-
+    return sendMessage;
   }
 
   /**
@@ -57,15 +59,14 @@ public class WorkingButton {
    *
    * @return
    */
-  public SendMessage clickCancel() {
+  private SendMessage clickCancel() {
 
-    stateChangeAdoptiveParentService.updateStateAdoptiveParentByChatId(chatId,
+    stateChangeAdoptiveParentService.updateStateAdoptiveParentByChatId(chatIdL,
         StateAdoptiveParent.FREE);
 
-    return formReplyMessages.replyMessage(message,
+    return formReplyMessages.replyMessage(chatId,
         AllText.CANCEL_RETURN_MAIN_MENU_TEXT,
         configKeyboard.initKeyboardOnClickStart());
-
   }
 
   /**
@@ -74,7 +75,7 @@ public class WorkingButton {
    *
    * @return
    */
-  public SendMessage clickRegistration() {
+  private SendMessage clickRegistration() {
 
     SendMessage sendMessage = new SendMessage();
     FormReplyMessages formReplyMessages = new FormReplyMessages();
@@ -83,7 +84,7 @@ public class WorkingButton {
 //    adoptiveParentService.updateStateAdoptiveParentByChatId(Long.parseLong(chatId),
 //        StateAdoptiveParent.FREE);
 
-    return formReplyMessages.replyMessage(message,
+    return formReplyMessages.replyMessage(chatId,
         AllText.REG_FULL_NAME,
         configKeyboard.initKeyboardOnClickRegistration());
   }
@@ -92,28 +93,26 @@ public class WorkingButton {
    * реакция на кнопку отмена - возврат в главное меню, изменение любого статуса пользователя на
    * FREE
    */
-  public SendMessage clickSendReport() {
+  private SendMessage clickSendReport() {
 
-    SendMessage sendMessage = handler.clickButton_SEND_REPORT(message);
-    stateChangeAdoptiveParentService.updateStateAdoptiveParentByChatId(chatId,
-        StateAdoptiveParent.START_SEND_REPORT);
+    SendMessage sendMessage = handler.clickButton_SEND_REPORT(chatId);
+    stateChangeAdoptiveParentService.updateStateAdoptiveParentByChatId(chatIdL,
+        StateAdoptiveParent.START_REPORT_1);
 
     return sendMessage;
   }
 
-  public SendMessage clickStartText() {
-    if (stateChangeAdoptiveParentService.getStateAdoptiveParentByChatId(chatId)
+  private SendMessage clickStartText() {
+    if (stateChangeAdoptiveParentService.getStateAdoptiveParentByChatId(chatIdL)
         != null) {
       //приветсвенное сообщение, вылетает только после регистрации
-      return formReplyMessages.replyMessage(message,
+      return formReplyMessages.replyMessage(chatId,
           AllText.WELCOME_MESSAGE_TEXT,
           configKeyboard.initKeyboardOnClickStart());
     }
-    return formReplyMessages.replyMessage(message,AllText.REGISTRATION_INIT,
+    return formReplyMessages.replyMessage(chatId, AllText.REGISTRATION_INIT,
         configKeyboard.formReplyKeyboardInOneRowInline(AllText.REGISTRATION_BUTTON));
   }
-
-
 
 
 }

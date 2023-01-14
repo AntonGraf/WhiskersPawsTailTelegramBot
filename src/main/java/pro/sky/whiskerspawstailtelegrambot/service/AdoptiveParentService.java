@@ -11,7 +11,7 @@ import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
 import pro.sky.whiskerspawstailtelegrambot.repository.AdoptiveParentRepo;
 
 import java.util.Collection;
-import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
 
 /**
  * Сервис слой для усыновителя

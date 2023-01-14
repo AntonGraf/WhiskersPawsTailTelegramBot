@@ -74,7 +74,8 @@
     <changeSet id="14" author="IgorBr">
     </changeSet>
     <include file="v-1.0/IgorBr_05_add_column_state_report_in_report_table.xml" relativeToChangelogFile="true"/>
-    <include file="v-1.0/IgorBr_06_change_default_value_column_state_report_in_report_table.xml" relativeToChangelogFile="true"/>
+<!--    <include file="v-1.0/IgorBr_06_change_default_value_column_state_report_in_report_table.xml" relativeToChangelogFile="true"/>-->
+    <include file="v-1.0/IgorBr_07_add_column_chat_id_in_report_table.xml" relativeToChangelogFile="true"/>
 
     <changeSet id="15" author="sergei_lupaev">
         <tagDatabase tag="ChengeTablePet"/>

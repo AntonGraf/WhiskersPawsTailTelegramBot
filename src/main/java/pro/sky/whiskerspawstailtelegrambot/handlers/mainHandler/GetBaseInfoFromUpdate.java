@@ -18,6 +18,8 @@ public class GetBaseInfoFromUpdate {
   boolean isCallbackQuery;
   CallbackQuery callbackQuery;
 
+  Message MessageFromCallbackQuery;
+
   public GetBaseInfoFromUpdate(Update update) {
     init(update);
   }
@@ -26,7 +28,7 @@ public class GetBaseInfoFromUpdate {
 
     if (update.getCallbackQuery() != null) {
       callbackQuery = update.getCallbackQuery();
-//      message = callbackQuery.getMessage();
+      MessageFromCallbackQuery = callbackQuery.getMessage();
       textMessage = callbackQuery.getData();
       chatId = callbackQuery.getMessage().getChatId().toString();
       isCallbackQuery = true;

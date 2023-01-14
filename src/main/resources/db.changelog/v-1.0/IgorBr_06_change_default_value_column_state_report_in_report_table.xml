@@ -8,6 +8,6 @@
 
   <changeSet id="change_default_value_column_state_report_in_report_table" author="IgorBr">
     <addDefaultValue tableName="report" columnName="state_report"
-    defaultValue="WAIT_ID_PET_REPORT"/>
+    defaultValueBoolean="false"/>
   </changeSet>
 </databaseChangeLog>
