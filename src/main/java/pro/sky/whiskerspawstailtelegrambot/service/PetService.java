@@ -29,7 +29,7 @@ import pro.sky.whiskerspawstailtelegrambot.repository.PetRepository;
 @Service
 @Slf4j
 @Transactional
-public class PetService {
+public class  PetService {
 
   @Value("${pet.photo.dir.path}")
   private String petDir;
@@ -46,11 +46,10 @@ public class PetService {
 
   /**
    * Получение питомца в БД по id
-   *
    * @param petId
    * @return возвращает питомца
    */
-  public PetRecord findPet(long petId) { //Get
+  public PetRecord findPet(Long petId) { //Get
     log.info("Поиск питомца в БД" + petId);
     Pet pet = petRepository.findById(petId).orElseThrow(ElemNotFound::new);
     return petMapper.toRecord(pet);
@@ -58,7 +57,6 @@ public class PetService {
 
   /**
    * Коллекция всех питомцев в БД
-   *
    * @return список всех питомцев хранящиеся в БД
    */
   public Collection<PetRecord> findAllPet() { //GetAll
@@ -72,7 +70,7 @@ public class PetService {
    *
    * @param petId
    */
-  public PetRecord removePet(long petId) { //Delete
+  public PetRecord removePet(Long petId) { //Delete
     log.info("Поиск питомца в БД");
     PetRecord petRecord = findPet(petId);
     petRepository.deleteById(petRecord.getId());
@@ -89,8 +87,7 @@ public class PetService {
    * @param photo
    * @throws IOException
    */
-  public void editPet(Long petId, String fullName, String age, String description,
-      MultipartFile photo) throws IOException { //Put
+  public void editPet(Long petId, String fullName, String age, String description, String petType, MultipartFile photo) throws IOException { //Put
     log.info("Изменение данных питомца в БД");
     Pet pet = petMapper.toEntity(findPet(petId));
     if (fullName != null && !fullName.isEmpty() && !fullName.isBlank()) {
@@ -102,6 +99,9 @@ public class PetService {
     if (description != null && !description.isEmpty() && !description.isBlank()) {
       pet.setDescription(description);
     }
+    if (petType != null && !petType.isEmpty() && !petType.isBlank()) {
+      pet.setPetType(petType);
+    }
     petRepository.save(pet);
     PetRecord petRecord = petMapper.toRecord(pet);
     if (photo != null) {
@@ -111,7 +111,6 @@ public class PetService {
 
   /**
    * Добавление id усыновителя в БД в таблицу Pet
-   *
    * @param petId
    * @param adoptiveParentId
    */
@@ -124,12 +123,11 @@ public class PetService {
 
   /**
    * загрузка фотографии питомца в БД
-   *
    * @param petId
    * @param file
    * @throws IOException
    */
-  public void uploadPhoto(long petId, MultipartFile file) throws IOException { //Put фото
+  public void uploadPhoto(Long petId, MultipartFile file) throws IOException { //Put фото
     PetRecord petRecord = findPet(petId);
     Path filePath = Path.of(petDir, petId + "." + getExtension(file.getOriginalFilename()));
     Files.createDirectories(filePath.getParent());
@@ -152,7 +150,6 @@ public class PetService {
 
   /**
    * вспомогательный медот для загрузки фотографий
-   *
    * @return расширение файла
    */
   private String getExtension(String fileName) {
@@ -168,8 +165,7 @@ public class PetService {
    * @param photo
    * @throws IOException
    */
-  public void addPet(String fullName, String age, String description, MultipartFile photo)
-      throws IOException { //Post
+  public void addPet(String fullName, String age, String description, String petType, MultipartFile photo) throws IOException { //Post
     log.info("Добавление питомца в БД");
     Pet pet = new Pet();
     if (fullName != null && !fullName.isEmpty() && !fullName.isBlank()) {
@@ -181,12 +177,20 @@ public class PetService {
     if (description != null && !description.isEmpty() && !description.isBlank()) {
       pet.setDescription(description);
     }
+    if (petType != null && !petType.isEmpty() && !petType.isBlank()) {
+      pet.setPetType(petType);
+    }
     petRepository.save(pet);
     PetRecord petRecord = petMapper.toRecord(pet);
     if (photo != null) {
       uploadPhoto(petRecord.getId(), photo);
     }
+
+
   }
+
+
+
 
 
 }

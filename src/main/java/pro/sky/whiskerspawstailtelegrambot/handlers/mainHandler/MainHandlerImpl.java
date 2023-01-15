@@ -7,13 +7,12 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import pro.sky.whiskerspawstailtelegrambot.handlers.CallbackQueryHandler;
-import pro.sky.whiskerspawstailtelegrambot.handlers.StandardReplyHandler;
 import pro.sky.whiskerspawstailtelegrambot.handlers.buttonsHandler.StateChangingButtons;
 import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.ReportHandler;
+import pro.sky.whiskerspawstailtelegrambot.handlers.stateHandlers.StandardReplyHandler;
 import pro.sky.whiskerspawstailtelegrambot.handlers.stateHandlers.StateHandler;
 import pro.sky.whiskerspawstailtelegrambot.service.StateService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
-import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
 
 @Slf4j
 @Component("MainHandler")

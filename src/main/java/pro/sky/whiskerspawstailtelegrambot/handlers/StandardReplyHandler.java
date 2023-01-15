@@ -1,19 +1,23 @@
-package pro.sky.whiskerspawstailtelegrambot.mainHandler;
+package pro.sky.whiskerspawstailtelegrambot.handlers.stateHandlers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import pro.sky.whiskerspawstailtelegrambot.mainHandler.reportHandler.ReportAddHandler;
+import pro.sky.whiskerspawstailtelegrambot.handlers.RegistrationHandler;
+import pro.sky.whiskerspawstailtelegrambot.handlers.mainHandler.GetBaseInfoFromUpdate;
+import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.ReportHandler;
+import pro.sky.whiskerspawstailtelegrambot.handlers.stateHandlers.StateHandler;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.service.ShelterService;
+import pro.sky.whiskerspawstailtelegrambot.service.StateService;
 import pro.sky.whiskerspawstailtelegrambot.service.VolunteerService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
 import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
-import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
 
 import static org.glassfish.grizzly.http.util.Ascii.isDigit;
 
@@ -93,7 +97,7 @@ public class StandardReplyHandler {
         return sendMessage = formReplyMessages.replyMessage(message,
             AllText.INFO,
             configKeyboard.initKeyboardOnClickStart());
-
+      //------------------> Показать Id
       case (AllText.SHOW_ME_ID):
         AdoptiveParentRecord adoptiveParentRecord =
             adoptiveParentService.getAdoptiveParentByChatId(Long.parseLong(chatId));
@@ -103,13 +107,7 @@ public class StandardReplyHandler {
         }
         return new SendMessage(chatId, AllText.SHOW_ID_FAILED);
 
-      default:
-        return sendMessage = new SendMessage(chatId, AllText.UNKNOWN_COMMAND_TEXT);
-    }
-    //------------------> Показать Id
-
     //------------------> Показать Всех животных
-
       case (AllText.SHOW_ALL_ANIMAL):
 
         return sendMessage = formReplyMessages.replyMessage(message, AllText.CHOOSE_CATEGORY,
@@ -162,6 +160,6 @@ public class StandardReplyHandler {
     }
   }
 
-  }
+
 
 }
