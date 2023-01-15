@@ -9,9 +9,10 @@ import pro.sky.whiskerspawstailtelegrambot.handlers.mainHandler.GetBaseInfoFromU
 import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.ReportHandler;
 import pro.sky.whiskerspawstailtelegrambot.handlers.stateHandlers.StateHandler;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
+import pro.sky.whiskerspawstailtelegrambot.service.PetService;
+import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
-import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
 
 /**
  * Обработка сообщений от inline клавиатуры
@@ -29,17 +30,20 @@ public class CallbackQueryHandler {
 
   private final StateHandler stateHandler;
 
+  private final PetService petService;
+
 
   public CallbackQueryHandler(FormReplyMessages formReplyMessages, ConfigKeyboard configKeyboard,
       ReportHandler reportHandler,
       RegistrationHandler registrationHandler, AdoptiveParentService adoptiveParentService,
-      StateHandler stateHandler) {
+      StateHandler stateHandler, PetService petService) {
     this.formReplyMessages = formReplyMessages;
     this.configKeyboard = configKeyboard;
     this.reportHandler = reportHandler;
     this.registrationHandler = registrationHandler;
     this.adoptiveParentService = adoptiveParentService;
     this.stateHandler = stateHandler;
+    this.petService = petService;
   }
 
   /**
@@ -62,8 +66,23 @@ public class CallbackQueryHandler {
 //todo обработка inline клавиатуры
     switch (textMessage) {
 
-//      case :
-//        break;
+      case ("Кошки"):
+          sendMessage = formReplyMessages
+              .replyMessageWithTypeAnimal(chatId, AllText.CAT_ONE,petService.findAllPet());
+          break;
+      case ("Собаки"):
+        sendMessage = formReplyMessages
+            .replyMessageWithTypeAnimal(chatId,AllText.DOG_ONE,petService.findAllPet());
+        break;
+      case ("Свиньи"):
+        sendMessage = formReplyMessages
+            .replyMessageWithTypeAnimal(chatId,AllText.PIG_ONE,petService.findAllPet());
+        break;
+      case ("Птицы"):
+        sendMessage = formReplyMessages
+            .replyMessageWithTypeAnimal(chatId,AllText.BIRD_ONE,petService.findAllPet());
+        break;
+
     }
     return sendMessage;
   }

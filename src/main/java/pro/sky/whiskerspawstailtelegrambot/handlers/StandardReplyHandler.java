@@ -1,22 +1,19 @@
-package pro.sky.whiskerspawstailtelegrambot.handlers.stateHandlers;
+package pro.sky.whiskerspawstailtelegrambot.handlers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import pro.sky.whiskerspawstailtelegrambot.handlers.RegistrationHandler;
 import pro.sky.whiskerspawstailtelegrambot.handlers.mainHandler.GetBaseInfoFromUpdate;
-import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.ReportHandler;
+import pro.sky.whiskerspawstailtelegrambot.handlers.stateHandlers.StateHandler;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.service.ShelterService;
-import pro.sky.whiskerspawstailtelegrambot.service.StateService;
 import pro.sky.whiskerspawstailtelegrambot.service.VolunteerService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
 import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
-import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
 
 /**
  * Обработчик стандартных сообщений от пользователя, в том числе и из обычной клавиатуры
@@ -81,7 +78,7 @@ public class StandardReplyHandler {
       //------------------> Показать Id
       case (AllText.SHOW_ME_ID):
         AdoptiveParentRecord adoptiveParentRecord =
-            adoptiveParentService.getAdoptiveParentByChatId(chatId);
+            adoptiveParentService.getAdoptiveParentByChatId(baseInfo.getChatIdL());
         if (adoptiveParentRecord != null) {
           //проверяем если есть в бд, то просто id
           return new SendMessage(chatId, AllText.SHOW_ID_OK + adoptiveParentRecord.getId());
@@ -91,7 +88,8 @@ public class StandardReplyHandler {
       //------------------> Показать Всех животных
       case (AllText.SHOW_ALL_ANIMAL):
 
-        return sendMessage = formReplyMessages.replyMessage(message, AllText.CHOOSE_CATEGORY,
+        return sendMessage = formReplyMessages.replyMessage(baseInfo.getChatId(),
+            AllText.CHOOSE_CATEGORY,
             configKeyboard
                 .formReplyKeyboardInOneRowInline
                     (AllText.CAT,
@@ -101,42 +99,42 @@ public class StandardReplyHandler {
 
       //------------------> Показать Всех животных
       case ("/1"): // Выбор информации из списка меню информации
-        return sendMessage = formReplyMessages.replyMessage(message,
+        return sendMessage = formReplyMessages.replyMessage(baseInfo.getChatId(),
             shelterService.getOfShelterMessage((byte) 1),
             configKeyboard.initKeyboardOnClickStart());
 
       case ("/2"):
 
-        return sendMessage = formReplyMessages.replyMessage(message,
+        return sendMessage = formReplyMessages.replyMessage(baseInfo.getChatId(),
             shelterService.getOfShelterMessage((byte) 2),
             configKeyboard.initKeyboardOnClickStart());
       case ("/3"):
-        return sendMessage = formReplyMessages.replyMessage(message,
+        return sendMessage = formReplyMessages.replyMessage(baseInfo.getChatId(),
             shelterService.getOfShelterMessage((byte) 3),
             configKeyboard.initKeyboardOnClickStart());
 
       case ("/4"):
-        return sendMessage = formReplyMessages.replyMessage(message,
+        return sendMessage = formReplyMessages.replyMessage(baseInfo.getChatId(),
             shelterService.getOfShelterMessage((byte) 4),
             configKeyboard.initKeyboardOnClickStart());
       case ("/5"):
-        return sendMessage = formReplyMessages.replyMessage(message,
+        return sendMessage = formReplyMessages.replyMessage(baseInfo.getChatId(),
             shelterService.getOfShelterMessage((byte) 5),
             configKeyboard.initKeyboardOnClickStart());
       case ("/6"):
-        return sendMessage = formReplyMessages.replyMessage(message,
+        return sendMessage = formReplyMessages.replyMessage(baseInfo.getChatId(),
             shelterService.getOfShelterMessage((byte) 6),
             configKeyboard.initKeyboardOnClickStart());
       case ("/7"):
-        return sendMessage = formReplyMessages.replyMessage(message,
+        return sendMessage = formReplyMessages.replyMessage(baseInfo.getChatId(),
             shelterService.getOfShelterMessage((byte) 7),
             configKeyboard.initKeyboardOnClickStart());
       case ("/8"):
-        return sendMessage = formReplyMessages.replyMessage(message,
+        return sendMessage = formReplyMessages.replyMessage(baseInfo.getChatId(),
             shelterService.getOfShelterMessage((byte) 8),
             configKeyboard.initKeyboardOnClickStart());
       case ("/9"):
-        return sendMessage = formReplyMessages.replyMessage(message,
+        return sendMessage = formReplyMessages.replyMessage(baseInfo.getChatId(),
             shelterService.getOfShelterMessage((byte) 9),
             configKeyboard.initKeyboardOnClickStart());
 

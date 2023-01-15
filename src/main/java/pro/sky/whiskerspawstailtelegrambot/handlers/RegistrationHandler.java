@@ -59,10 +59,8 @@ public class RegistrationHandler {
    * Метод в который мы попадаем при заполнении имени Здесь мы апдейтим поле имя в бд и ставим
    * следующий статус
    *
-   * @param message
+   * @param baseInfo
    * @param adoptiveParent
-   * @param text
-   * @param chatId
    * @return сообщение о некорректном вводе, либо продвижение дальше, то есть ввод телефона
    */
   public SendMessage handlerWithStatusTheFirstState(GetBaseInfoFromUpdate baseInfo,
@@ -85,10 +83,8 @@ public class RegistrationHandler {
    * Метод, где мы вводим телефон и в который мы попадаем, когда вводим корректное имя Здесь мы
    * апдейтим телефон и ставим статус FREE, если все ок
    *
-   * @param message
+   * @param baseInfo
    * @param adoptiveParent
-   * @param text
-   * @param chatId
    * @return сообщение о некорректном вводе, либо продвижение дальше, то есть открытие меню
    */
   public SendMessage handlerWithStatusOnlyName(GetBaseInfoFromUpdate baseInfo,
