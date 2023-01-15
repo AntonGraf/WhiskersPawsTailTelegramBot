@@ -83,9 +83,9 @@ public class MainHandlerImpl implements MainHandler {
         sendMessage = standardReplyHandler.startHandler(baseInfo, message);
       }
 
-       /*  if(baseInfo.getMessage().hasPhoto() || baseInfo.getMessage().hasDocument()){//обрабатываем медиа если стаус FREE
+      if(baseInfo.getMessage().hasPhoto() || baseInfo.getMessage().hasDocument()){//обрабатываем медиа если стаус FREE
         mediaHandler.workingState(baseInfo);
-      }*/
+      }
 
     } catch (Exception e) {
       return sendMessage = new SendMessage(baseInfo.getChatId(), e.getMessage());

@@ -125,7 +125,7 @@ class AdoptiveParentControllerTest {
   @Test
   void deleteAdoptiveParentByIDNegative() throws Exception {
 
-    when(repository.findById(any(Long.class))).thenReturn(Optional.of(adoptiveParent));
+    when(repository.findById(any(Long.class))).thenReturn(Optional.empty());
 
     mockMvc.perform(MockMvcRequestBuilders.delete(
                 "/deleteAdoptiveParentByID?parentId=" + adoptiveParent.getId()) //send
