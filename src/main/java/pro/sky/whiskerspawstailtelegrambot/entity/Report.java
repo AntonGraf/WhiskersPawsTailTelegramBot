@@ -1,7 +1,7 @@
 package pro.sky.whiskerspawstailtelegrambot.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Objects;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -61,7 +61,7 @@ public class Report {
    */
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "pet_id", referencedColumnName = "id", insertable = false, updatable = false)
-  @JsonBackReference
+  @JsonIgnore
   Pet pet;
 
   /**

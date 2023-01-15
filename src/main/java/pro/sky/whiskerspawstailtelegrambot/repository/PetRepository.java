@@ -50,4 +50,7 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
     Optional<Pet> findPetByIdAndAdoptiveParentIsNull(Long petId);
 
     Collection<Pet> findPetsByTestPeriodAndTestPeriodTimeBefore(boolean testPeriod, LocalDateTime testPeriodTime);
+
+    @Query(value = "SELECT * FROM report INNER JOIN pet p on p.id = report.pet_id where photo IS NULL OR diet IS NULL ", nativeQuery = true)
+    Collection<Long> findParentsChaIdWithBadReport();
 }

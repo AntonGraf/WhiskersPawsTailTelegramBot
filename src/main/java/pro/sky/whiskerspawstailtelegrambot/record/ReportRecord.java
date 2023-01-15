@@ -1,7 +1,9 @@
 package pro.sky.whiskerspawstailtelegrambot.record;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import pro.sky.whiskerspawstailtelegrambot.entity.Pet;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -26,4 +28,6 @@ public class ReportRecord implements Serializable {
     Boolean isReportCompleted;
     Long chatId;
     LocalDateTime dateTime;
+    @JsonIgnore
+    Pet pet;
 }
