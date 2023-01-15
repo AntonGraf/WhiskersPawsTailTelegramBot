@@ -34,7 +34,7 @@ public class ShelterServiceTest {
     @Mock
     private ShelterRepo shelterRepo;
     Shelter shelter = new Shelter(1L,"ttt","uuu","jjj","iii","ppp","ttt",
-            "fff",exampleList,"ggg","jjj","nnn",
+            "fff",exampleList,"ggg","jjj","nnn", "kjkjj",
             "ccc","kkk",exampleList,
             exampleList,null,null,new  byte[]{1,2,3});
 
