@@ -88,8 +88,14 @@
     </changeSet>
     <include file="v-1.0/data/update_data_for_pet_table.sql" relativeToChangelogFile="true"/>
 
-    <changeSet id="17" author="anton_graf">
+    <changeSet id="17" author="sergei_lupaev">
+        <tagDatabase tag="addSecurityTableShelter"/>
+    </changeSet>
+    <include file="v-1.0/11_add_column_to_table_shelter.sql" relativeToChangelogFile="true"/>
+    <include file="v-1.0/data/add_colomne_for_shelter_table.sql" relativeToChangelogFile="true"/>
+
+    <changeSet id="18" author="anton_graf">
         <tagDatabase tag="addColumnDateTimeToReport"/>
     </changeSet>
-    <include file="v-1.0/17_add_date_time_column_to_report.sql" relativeToChangelogFile="true"/>
+    <include file="v-1.0/18_add_date_time_column_to_report.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

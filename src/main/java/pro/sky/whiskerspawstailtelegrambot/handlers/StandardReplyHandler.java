@@ -135,6 +135,10 @@ public class StandardReplyHandler {
         return sendMessage = formReplyMessages.replyMessage(message,
             shelterService.getOfShelterMessage((byte) 8),
             configKeyboard.initKeyboardOnClickStart());
+      case ("/9"):
+        return sendMessage = formReplyMessages.replyMessage(message,
+            shelterService.getOfShelterMessage((byte) 9),
+            configKeyboard.initKeyboardOnClickStart());
 
       default:
         return sendMessage = new SendMessage(chatId, AllText.UNKNOWN_COMMAND_TEXT);
