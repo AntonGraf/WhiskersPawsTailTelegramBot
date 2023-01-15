@@ -64,11 +64,15 @@ public class Report {
   Pet pet;
 
   /**
-   * Этапы заполнения отчета
+   * заполнения отчета true отчет успешно завершен и отправлен
    */
-  @Column(name = "state_report")
-  String stateReport;
-
+  @Column(name = "is_report_completed")
+  Boolean isReportCompleted;
+  /**
+   * чат id заполневшего отчет
+   */
+  @Column(name = "chat_id")
+  Long chatId;
 
   @Override
   public boolean equals(Object o) {

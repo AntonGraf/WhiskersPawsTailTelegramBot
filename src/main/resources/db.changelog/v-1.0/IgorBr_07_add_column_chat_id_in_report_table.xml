@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="add_column_chat_id_in_report_table" author="IgorBr">
+<addColumn tableName="report">
+    <column name="chat_id" type="bigserial" remarks="Чат id заполнившего отчет">
+      <constraints nullable="true"/>
+    </column>
+</addColumn>
+        <rollback>
+            <dropColumn tableName="report" columnName="chat_id"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

@@ -28,5 +28,6 @@ public class ReportRecord implements Serializable {
     String diet;
     String reportAboutFeelings;
     String reportAboutHabits;
-    String stateReport;
+    Boolean isReportCompleted;
+    Long chatId;
 }

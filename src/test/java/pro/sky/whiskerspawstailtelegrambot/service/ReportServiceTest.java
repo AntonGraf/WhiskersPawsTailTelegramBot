@@ -156,7 +156,7 @@ class ReportServiceTest {
     when(reportService.getReportById(anyLong())).thenReturn(reportRecord);
     when(reportRepository.save(updateReport)).thenReturn(updateReport);
 
-    assertThat(reportService.updateReportByReportId(1, updateReportRecord)).isEqualTo(
+    assertThat(reportService.updateReport(1, updateReportRecord)).isEqualTo(
         updateReportRecord);
     verify(reportRepository, times(2)).findById(any());
     verify(reportRepository, times(1)).save(any());
@@ -166,7 +166,7 @@ class ReportServiceTest {
   @Test
   void updateReportByReportIdNegative() {
     assertThatExceptionOfType(ElemNotFound.class).isThrownBy(
-        () -> reportService.updateReportByReportId(3, updateReportRecord));
+        () -> reportService.updateReport(3, updateReportRecord));
     verify(reportRepository, times(1)).findById(any());
     verify(reportRepository, times(1)).save(any());
   }

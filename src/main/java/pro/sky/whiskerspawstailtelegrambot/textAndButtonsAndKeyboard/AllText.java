@@ -22,6 +22,7 @@ public abstract class AllText {
   public static final String SELECT_YOUR_PET_TEXT = "Выберете питомца.";
   public static final String DELIMITER_FOR_PARSER_PETS = "----------------------\n";
   public static final String CANCEL_TEXT = "Отмена";
+  public static final String CANCEL_CREATE_REPORT_TEXT = "Отменить создание отчета";
   public static final String SEND_TEXT = "Отправить";
   public static final String MENU_SEND_PET_REPORT_TEXT = "В этом меню вы можете прислать отчет о вашем питомце";
 
@@ -29,9 +30,10 @@ public abstract class AllText {
   public static final String ERROR_REPLY_TEXT = "Произошла ошибка. Повторите.";
   //region report text
 //*
-  public static final String ID_SEND_REPORT_TEXT = "Начало заполнения отчета. Следуйте указаниям бота.\n Отправьте id вашего животного.";
+  public static final String START_ID_SEND_REPORT_TEXT = "Начало заполнения отчета. Следуйте указаниям бота.\n Выберете id вашего животного.";
   public static final String PHOTO_SEND_REPORT_TEXT = "Прикрепите фото питмца и отпраьте сообщение";
   public static final String ENTER_ERROR_ID_TEXT = "Вы ошиблись id, попробуйте снова";
+  public static final String ENTER_ERROR_DATA_TEXT = "Вы ввели некоректные данные для отчета, попробуйте снова или нажмите отмена";
   public static final String DIET_SEND_REPORT_TEXT = "Расскажите о питании вашего питомца.";
   public static final String FEELINGS_SEND_REPORT_TEXT = "Опишите сомачувствие вашего питомца.";
   public static final String HABITS_SEND_REPORT_TEXT = "Напишите какие изменения произошли в привычках питомца?.";
@@ -40,7 +42,7 @@ public abstract class AllText {
   public static final String YOU_HAVE_NO_ADOPTED_PETS_TEXT = "У вас нет животных требующих отправки отчета";
   //*
   public static final String DESCRIPTION_SEND_REPORT_TEXT = "Для отправки отчета, следуйте указаниям бота.\nВыберете id вашего питомца.";
-  public static final String SUCCESSFUL_MESSAGE_SEND_REPORT_TEXT =
+  public static final String FINISHED_MESSAGE_SEND_REPORT_TEXT =
       "Отчет успешно отправлен, волотеры ознакомятся с ним в ближайшее время.\n"
           + "При возникновении вопросов, они свяжутся с вами.";
   //*
@@ -104,10 +106,6 @@ public abstract class AllText {
           +
           "/3 - Правила поведения\n\n /4 - Правила перевозки\n\n /5 - Подготовка жилья\n\n" +
           "/6 - Обустройства места питомца\n\n /7 - Собаки инвалиды\n\n /8 - В первый день";
-
-
-
-
 
 
 }

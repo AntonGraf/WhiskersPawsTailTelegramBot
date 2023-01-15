@@ -24,34 +24,35 @@ import pro.sky.whiskerspawstailtelegrambot.mainHandler.MainHandler;
 public class TelegramBotUpdatesListener extends SpringWebhookBot {
 
 
-  String webHookPath;
-  String botUserName;
-  String botToken;
+    String webHookPath;
+    String botUserName;
+    String botToken;
 
-  @Qualifier("MessageHandler")
-  @Autowired
-  MainHandler messageHandler;
+    @Qualifier("MainHandler")
+    @Autowired
+    MainHandler mainHandler;
 
-  public TelegramBotUpdatesListener(SetWebhook webhook) {
-    super(webhook);
-  }
-
-
-  /**
-   * Сейчас метод просто отвечает на любое сообщение
-   *
-   * @param update уведомление от пользвателя
-   * @return ответ пользователю
-   */
-  @Override
-  public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-    try {
-      execute(messageHandler.handler(update));
-    } catch (TelegramApiException e) {
-      e.printStackTrace();
+    public TelegramBotUpdatesListener(SetWebhook webhook) {
+        super(webhook);
     }
-    return null;
-  }
+
+
+
+    /**
+     * Сейчас метод просто отвечает на любое сообщение
+     *
+     * @param update уведомление от пользвателя
+     * @return ответ пользователю
+     */
+    @Override
+    public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+        try {
+            execute(mainHandler.process(update));
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
   @Override

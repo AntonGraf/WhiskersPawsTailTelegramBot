@@ -11,7 +11,7 @@ import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
 import pro.sky.whiskerspawstailtelegrambot.repository.AdoptiveParentRepo;
 
 import java.util.Collection;
-import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
 
 /**
  * Сервис слой для усыновителя
@@ -204,7 +204,7 @@ public class AdoptiveParentService {
   public AdoptiveParentRecord updateStateAdoptiveParentByChatId(long chatId, StateAdoptiveParent state){
     AdoptiveParentRecord adoptiveParentRecord = getAdoptiveParentByChatId(chatId);
     if (adoptiveParentRecord != null) {
-      adoptiveParentRecord.setState(state.getText());
+      adoptiveParentRecord.setState(state.name());
       updateAdoptiveParent(adoptiveParentRecord.getId(),adoptiveParentRecord);
     }
     return adoptiveParentRecord;

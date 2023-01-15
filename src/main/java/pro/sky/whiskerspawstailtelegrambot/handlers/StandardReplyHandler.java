@@ -1,7 +1,5 @@
 package pro.sky.whiskerspawstailtelegrambot.mainHandler;
 
-import static org.glassfish.grizzly.http.util.Ascii.isDigit;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -15,6 +13,9 @@ import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
 import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
+import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
+
+import static org.glassfish.grizzly.http.util.Ascii.isDigit;
 
 /**
  * Обработчик стандартных сообщений от пользователя, в том числе и из обычной клавиатуры
@@ -26,26 +27,32 @@ public class StandardReplyHandler {
   private final FormReplyMessages formReplyMessages;
   private final ConfigKeyboard configKeyboard;
   private final VolunteerService volunteerService;
-  private final ReportAddHandler reportAddHandler;
+  private final ReportHandler reportHandler;
   private final ParserToBot parserToBot;
   private final ShelterService shelterService;
 
   private final AdoptiveParentService adoptiveParentService;
 
   private final RegistrationHandler registrationHandler;
+  private final StateHandler stateCommonHandler;
+
+  private final StateService stateService;
 
   public StandardReplyHandler(FormReplyMessages formReplyMessages, ConfigKeyboard configKeyboard,
-      VolunteerService volunteerService, ReportAddHandler reportAddHandler, ParserToBot parserToBot,
+      VolunteerService volunteerService, ReportHandler reportHandler, ParserToBot parserToBot,
       ShelterService shelterService, AdoptiveParentService adoptiveParentService,
-      RegistrationHandler registrationHandler) {
+      RegistrationHandler registrationHandler, StateHandler stateCommonHandler,
+      StateService stateService) {
     this.formReplyMessages = formReplyMessages;
     this.configKeyboard = configKeyboard;
     this.volunteerService = volunteerService;
-    this.reportAddHandler = reportAddHandler;
+    this.reportHandler = reportHandler;
     this.parserToBot = parserToBot;
     this.shelterService = shelterService;
     this.adoptiveParentService = adoptiveParentService;
     this.registrationHandler = registrationHandler;
+    this.stateCommonHandler = stateCommonHandler;
+    this.stateService = stateService;
   }
 
   /**
@@ -54,70 +61,38 @@ public class StandardReplyHandler {
    * @param message сообщение из Update
    * @return SendMessage
    */
-  public SendMessage handler(Message message) {
+  public SendMessage startHandler(GetBaseInfoFromUpdate baseInfo, Message message) {
 
     SendMessage sendMessage = null;
 
     log.debug("Вызов метода handler класса" + this.getClass().getName());
     String chatId = message.getChatId().toString();
     String textMessage = message.getText();
-//    if (isDigit(textMessage.charAt(1))) {
+//    if (isDigit(textMessage.charAt(0))) {
 //      menuInfo(message);
 //    } // Проверка команды на цифру и передача в цифровой метод
 
+    StateAdoptiveParent stateAdoptiveParent = stateCommonHandler
+        .getStateAdoptiveParentByChatId(baseInfo.getChatIdL());
+    if (stateAdoptiveParent != null && stateAdoptiveParent != StateAdoptiveParent.FREE) {
+      return stateCommonHandler.processByState(baseInfo, stateAdoptiveParent);
+    }
+
     //здесь инжект текст кнопок, любой текст крч
     switch (textMessage) {
-
-      case (AllText.START_TEXT):
-        if (adoptiveParentService.getStateAdoptiveParentByChatId(Long.parseLong(chatId)) != null) {
-          //приветсвенное сообщение, вылетает только после регистрации
-          return sendMessage = formReplyMessages.replyMessage(message,
-              AllText.WELCOME_MESSAGE_TEXT,
-              configKeyboard.initKeyboardOnClickStart());
-        }
-        //если не было регистрации, то просто повторяем цикл
-        return sendMessage = formReplyMessages.replyMessage(message, AllText.REGISTRATION_INIT,
-            configKeyboard.formReplyKeyboardInOneRowInline(AllText.REGISTRATION_BUTTON));
 
       case (AllText.CALL_TO_VOLUNTEER_TEXT): //ответ на позвать волонтера, просто инфа про волонтеров
         return new SendMessage(chatId,
             parserToBot.parserVolunteer(volunteerService.getAllVolunteers()));
 
-      //region реализация логики Отправить отчет о питомце
-      /*
-      Менется стейт ПОЛЬЗОВАТЕЛЯ на начало отправки отчета
-       */
-      case (AllText.SEND_PET_REPORT_TEXT):     // нажатие кнопки Отправить отчет о питомце
-        return sendMessage = reportAddHandler.clickButton_SEND_REPORT(message);
-      //endregion
-
-      //------------------> регистрация
-
-      case (AllText.REGISTRATION_BUTTON):
-        //добавляем в бд и ставим статус ферст стэйт в методе addToTable,
-        //так же там меняем клаву на кнопку отмена регистрации
-        //при следующем сообщении регистрация будет продолжаться в методе messengerHandler, пока не зарегается до конца,
-        //либо отменет регистрацию и все заново
-        if (adoptiveParentService.getStateAdoptiveParentByChatId(Long.parseLong(chatId)) != null) {
-          //проверяем если есть в бд, то просто сообщение, что вы уже зареганы
-          return new SendMessage(chatId, AllText.ALREADY_REGISTERED);
-        }
-        return registrationHandler.addToTable(message, chatId);
-
-      //------------------> регистрация
-
       case (AllText.HOW_TAKE_DOG):
         return sendMessage = formReplyMessages.replyMessage(message, AllText.HOW_TAKE_DOG_SHELTER,
             configKeyboard.initKeyboardOnClickStart());
 
-
       case (AllText.INFO_SHELTER_TEXT):
-        return  sendMessage = formReplyMessages.replyMessage(message,
+        return sendMessage = formReplyMessages.replyMessage(message,
             AllText.INFO,
             configKeyboard.initKeyboardOnClickStart());
-        
-
-      //------------------> Показать Id
 
       case (AllText.SHOW_ME_ID):
         AdoptiveParentRecord adoptiveParentRecord =
@@ -128,9 +103,12 @@ public class StandardReplyHandler {
         }
         return new SendMessage(chatId, AllText.SHOW_ID_FAILED);
 
-      //------------------> Показать Id
+      default:
+        return sendMessage = new SendMessage(chatId, AllText.UNKNOWN_COMMAND_TEXT);
+    }
+    //------------------> Показать Id
 
-      //------------------> Показать Всех животных
+    //------------------> Показать Всех животных
 
       case (AllText.SHOW_ALL_ANIMAL):
 
@@ -182,6 +160,8 @@ public class StandardReplyHandler {
       default:
         return sendMessage = new SendMessage(chatId, AllText.UNKNOWN_COMMAND_TEXT);
     }
+  }
+
   }
 
 }

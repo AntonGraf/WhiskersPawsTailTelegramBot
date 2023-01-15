@@ -1,15 +1,18 @@
-package pro.sky.whiskerspawstailtelegrambot.mainHandler;
+package pro.sky.whiskerspawstailtelegrambot.handlers;
+
+import static pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent.*;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import pro.sky.whiskerspawstailtelegrambot.handlers.mainHandler.GetBaseInfoFromUpdate;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
-import pro.sky.whiskerspawstailtelegrambot.util.StateAdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
 
 /**
  * Обработка сообщений при регистрации
@@ -31,56 +34,81 @@ public class RegistrationHandler {
     this.configKeyboard = configKeyboard;
   }
 
+
+  public SendMessage workingState(GetBaseInfoFromUpdate baseInfo,
+      StateAdoptiveParent stateAdoptiveParent) {
+
+    SendMessage sendMessage = null;
+    AdoptiveParentRecord adoptiveParentRecord = adoptiveParentService.getAdoptiveParentByChatId(
+        baseInfo.getChatIdL());
+
+    if (stateAdoptiveParent == NULL) {
+     return addToTable(baseInfo);
+    }
+    if (stateAdoptiveParent == THE_FIRST_STATE) {
+      return  handlerWithStatusTheFirstState(baseInfo, adoptiveParentRecord);
+    }
+    if (stateAdoptiveParent == ONLY_NAME) {
+      return handlerWithStatusOnlyName(baseInfo, adoptiveParentRecord);
+    }
+    return sendMessage;
+
+  }
+
   /**
-   * Метод в который мы попадаем при заполнении имени
-   * Здесь мы апдейтим поле имя в бд и ставим следующий статус
+   * Метод в который мы попадаем при заполнении имени Здесь мы апдейтим поле имя в бд и ставим
+   * следующий статус
+   *
    * @param message
    * @param adoptiveParent
    * @param text
    * @param chatId
    * @return сообщение о некорректном вводе, либо продвижение дальше, то есть ввод телефона
    */
-  public SendMessage handlerWithStatusTheFirstState(Message message,
-      AdoptiveParentRecord adoptiveParent,
-      String text, String chatId) {
+  public SendMessage handlerWithStatusTheFirstState(GetBaseInfoFromUpdate baseInfo,
+      AdoptiveParentRecord adoptiveParent) {
+    String text = baseInfo.getTextMessage();
     if (text.length() > 6 && !text.equals(AllText.REGISTRATION_CANCEL)) {
       //обновление имени и статуса
       updateName(adoptiveParent, text);
-      return newMessage(chatId, AllText.REG_PHONE);
+      return newMessage(baseInfo.getChatId(), AllText.REG_PHONE);
     } else if (text.equals(AllText.REGISTRATION_CANCEL)) {
       adoptiveParentService.deleteAdoptiveParentByID(adoptiveParent.getId());
-      return formReplyMessages.replyMessage(message, AllText.REGISTRATION_INIT,
+      return formReplyMessages.replyMessage(baseInfo.getChatId(), AllText.REGISTRATION_INIT,
           configKeyboard.formReplyKeyboardInOneRow("Регистрация"));
     } else {
-      return newMessage(chatId, "Введите правильное имя, длина больше 6 символов.");
+      return newMessage(baseInfo.getChatId(), "Введите правильное имя, длина больше 6 символов.");
     }
   }
 
   /**
-   * Метод, где мы вводим телефон и в который мы попадаем, когда вводим корректное имя
-   * Здесь мы апдейтим телефон и ставим статус FREE, если все ок
+   * Метод, где мы вводим телефон и в который мы попадаем, когда вводим корректное имя Здесь мы
+   * апдейтим телефон и ставим статус FREE, если все ок
+   *
    * @param message
    * @param adoptiveParent
    * @param text
    * @param chatId
    * @return сообщение о некорректном вводе, либо продвижение дальше, то есть открытие меню
    */
-  public SendMessage handlerWithStatusOnlyName(Message message, AdoptiveParentRecord adoptiveParent,
-      String text, String chatId) {
+  public SendMessage handlerWithStatusOnlyName(GetBaseInfoFromUpdate baseInfo,
+      AdoptiveParentRecord adoptiveParent) {
+    String text = baseInfo.getTextMessage();
     if (text.length() > 6 && !text.equals(AllText.REGISTRATION_CANCEL)) {
       AdoptiveParentRecord adoptiveParentOld = adoptiveParentService
-          .getAdoptiveParentByChatId(Long.parseLong(chatId));
+          .getAdoptiveParentByChatId(Long.parseLong(baseInfo.getChatId()));
       updatePhone(adoptiveParentOld, text);
       updateState(adoptiveParentOld);
-      return formReplyMessages.replyMessage(message,
+      return formReplyMessages.replyMessage(baseInfo.getChatId(),
           AllText.REGISTRATION_SUCCESS + adoptiveParentOld.getId(),
           configKeyboard.initKeyboardOnClickStart());
     } else if (text.equals(AllText.REGISTRATION_CANCEL)) {
       adoptiveParentService.deleteAdoptiveParentByID(adoptiveParent.getId());
-      return formReplyMessages.replyMessage(message, AllText.REGISTRATION_INIT,
+      return formReplyMessages.replyMessage(baseInfo.getChatId(), AllText.REGISTRATION_INIT,
           configKeyboard.formReplyKeyboardInOneRow("Регистрация"));
     } else {
-      return newMessage(chatId, "Введите правильный телефон, длина больше 6 символов.");
+      return newMessage(baseInfo.getChatId(),
+          "Введите правильный телефон, длина больше 6 символов.");
     }
   }
 
@@ -91,14 +119,14 @@ public class RegistrationHandler {
 
   //добавляет нового пользователя в таблиц при нажатии кнопки регистрация. Меняет статус и ракладку
   //отправляет новое сообщение
-  public SendMessage addToTable(Message message, String chatId) {
+  public SendMessage addToTable(GetBaseInfoFromUpdate baseInfo) {
     AdoptiveParentRecord adoptiveParentRecord = new AdoptiveParentRecord();
     adoptiveParentRecord.setFullName("newParent");
     adoptiveParentRecord.setPhone("somePhone");
-    adoptiveParentRecord.setState(StateAdoptiveParent.THE_FIRST_STATE.name());
-    adoptiveParentRecord.setChatId(Long.parseLong(chatId));
+    adoptiveParentRecord.setState(THE_FIRST_STATE.name());
+    adoptiveParentRecord.setChatId(Long.parseLong(baseInfo.getChatId()));
     adoptiveParentService.addAdoptiveParent(adoptiveParentRecord);
-    return formReplyMessages.replyMessage(message, AllText.REG_FULL_NAME,
+    return formReplyMessages.replyMessage(baseInfo.getChatId(), AllText.REG_FULL_NAME,
         configKeyboard.initKeyboardOnClickRegistration());
   }
 
