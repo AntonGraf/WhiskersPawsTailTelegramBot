@@ -47,6 +47,8 @@ public class ShelterService {
                 return shelterRepo.findById(numberShelter).orElseThrow(ElemNotFound::new).getHomeImprovementForPetWithDisabilities();
             case (8):
                 return shelterRepo.findById(numberShelter).orElseThrow(ElemNotFound::new).getCynologistAdvice();
+            case (9):
+                return shelterRepo.findById(numberShelter).orElseThrow(ElemNotFound::new).getSecurityInfo();
             default:
                 log.info("неверные входные данные сервивса вывода информации приюта");
                 break;

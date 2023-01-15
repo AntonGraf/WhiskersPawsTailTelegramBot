@@ -9,7 +9,6 @@ import pro.sky.whiskerspawstailtelegrambot.handlers.mainHandler.GetBaseInfoFromU
 import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.ReportHandler;
 import pro.sky.whiskerspawstailtelegrambot.handlers.stateHandlers.StateHandler;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
-import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
 import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
@@ -28,19 +27,19 @@ public class CallbackQueryHandler {
   private final RegistrationHandler registrationHandler;
   private final AdoptiveParentService adoptiveParentService;
 
-  private final StateHandler stateCommonHandler;
+  private final StateHandler stateHandler;
 
 
   public CallbackQueryHandler(FormReplyMessages formReplyMessages, ConfigKeyboard configKeyboard,
       ReportHandler reportHandler,
       RegistrationHandler registrationHandler, AdoptiveParentService adoptiveParentService,
-      StateHandler stateCommonHandler) {
+      StateHandler stateHandler) {
     this.formReplyMessages = formReplyMessages;
     this.configKeyboard = configKeyboard;
     this.reportHandler = reportHandler;
     this.registrationHandler = registrationHandler;
     this.adoptiveParentService = adoptiveParentService;
-    this.stateCommonHandler = stateCommonHandler;
+    this.stateHandler = stateHandler;
   }
 
   /**
@@ -60,11 +59,6 @@ public class CallbackQueryHandler {
     Message message = callbackQuery.getMessage();
     String chatId = message.getChatId().toString();
 
-    StateAdoptiveParent stateAdoptiveParent = stateCommonHandler
-        .getStateAdoptiveParentByChatId(baseInfo.getChatIdL());
-    if (stateAdoptiveParent != null && stateAdoptiveParent != StateAdoptiveParent.FREE) {
-      return stateCommonHandler.processByState(baseInfo, stateAdoptiveParent);
-    }
 //todo обработка inline клавиатуры
     switch (textMessage) {
 

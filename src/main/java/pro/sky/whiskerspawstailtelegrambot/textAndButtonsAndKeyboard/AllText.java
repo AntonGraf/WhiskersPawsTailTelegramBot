@@ -31,7 +31,7 @@ public abstract class AllText {
   //region report text
 //*
   public static final String START_ID_SEND_REPORT_TEXT = "Начало заполнения отчета. Следуйте указаниям бота.\n Выберете id вашего животного.";
-  public static final String PHOTO_SEND_REPORT_TEXT = "Прикрепите фото питмца и отпраьте сообщение";
+  public static final String PHOTO_SEND_REPORT_TEXT = "Прикрепите фото питомца и отпраьте сообщение";
   public static final String ENTER_ERROR_ID_TEXT = "Вы ошиблись id, попробуйте снова";
   public static final String ENTER_ERROR_DATA_TEXT = "Вы ввели некоректные данные для отчета, попробуйте снова или нажмите отмена";
   public static final String DIET_SEND_REPORT_TEXT = "Расскажите о питании вашего питомца.";
@@ -110,10 +110,10 @@ public abstract class AllText {
   //Показать всех животных
 
   public static final String INFO =
-      "Выберете нужную информацию по номеру из списка:\n  /1 - Цель приюта\n\n /2 - График приюта\n\n"
+      "Выберете нужную информацию по номеру из списка:\n/1 - Цель приюта\n\n/2 - График приюта\n\n"
           +
-          "/3 - Правила поведения\n\n /4 - Правила перевозки\n\n /5 - Подготовка жилья\n\n" +
-          "/6 - Обустройства места питомца\n\n /7 - Собаки инвалиды\n\n /8 - В первый день";
+          "/3 - Правила поведения\n\n/4 - Правила перевозки\n\n/5 - Подготовка жилья\n\n" +
+          "/6 - Обустройства места питомца\n\n/7 - Собаки инвалиды\n\n/8 - В первый день\n\n/9 - Охрана";
 
 
 }

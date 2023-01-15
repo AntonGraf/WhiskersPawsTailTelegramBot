@@ -1,10 +1,13 @@
 package pro.sky.whiskerspawstailtelegrambot.handlers.mainHandler;//package pro.sky.whiskerspawstailtelegrambot.mainHandler.messageHandler;
 
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.Document;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Getter
@@ -19,6 +22,9 @@ public class GetBaseInfoFromUpdate {
   boolean isCallbackQuery;
   CallbackQuery callbackQuery;
   Message MessageFromCallbackQuery;
+  List<PhotoSize> photos;
+  Document document;
+
 
   public GetBaseInfoFromUpdate(Update update) {
     init(update);
@@ -40,6 +46,8 @@ public class GetBaseInfoFromUpdate {
       chatIdL = message.getChatId();
       chatId = chatIdL.toString();
       isCallbackQuery = false;
+      photos = update.getMessage().getPhoto();
+      document = update.getMessage().getDocument();
     }
   }
 
