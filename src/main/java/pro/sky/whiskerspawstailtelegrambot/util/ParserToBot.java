@@ -1,6 +1,7 @@
 package pro.sky.whiskerspawstailtelegrambot.util;
 
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
 import pro.sky.whiskerspawstailtelegrambot.record.PetRecord;
 import pro.sky.whiskerspawstailtelegrambot.record.VolunteerRecord;
@@ -32,6 +33,29 @@ public class ParserToBot {
       stringBuilder.append(++count)
           .append(") ")
           .append(volunteerRecord)
+          .append('\n').append('\n');
+    }
+    return stringBuilder.toString();
+  }
+
+  public String parseToTypeOfAnimal(Collection<PetRecord> petRecords) {
+    if (petRecords.isEmpty()) {
+      throw new ElemNotFound();
+    }
+
+    StringBuilder stringBuilder = new StringBuilder();
+    int count = 0;
+    for (PetRecord petRecord : petRecords) {
+      stringBuilder.append(++count)
+          .append(") ")
+          .append("Имя :\t")
+          .append(petRecord.getFullName())
+          .append("\n")
+          .append("Возраст :\t")
+          .append(petRecord.getAge())
+          .append("\n")
+          .append("Описание животного : ")
+          .append(petRecord.getDescription())
           .append('\n').append('\n');
     }
     return stringBuilder.toString();

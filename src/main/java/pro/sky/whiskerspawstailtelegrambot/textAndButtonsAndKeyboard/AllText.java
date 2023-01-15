@@ -98,6 +98,14 @@ public abstract class AllText {
 
   public static final String BIRD = "Птицы";
 
+  public static final String DOG_ONE = "Собака";
+
+  public static final String CAT_ONE = "Кошка";
+
+  public static final String PIG_ONE = "Свинья";
+
+  public static final String BIRD_ONE = "Птица";
+
 
   //Показать всех животных
 
