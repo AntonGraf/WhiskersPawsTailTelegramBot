@@ -7,12 +7,17 @@ import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.WorkingWithRep
 import pro.sky.whiskerspawstailtelegrambot.handlers.stateHandlers.StateHandler;
 import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
 import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
-
+/**
+ * Обработка медиа
+ * @param baseInfo
+ * @return
+ */
 @Service
 public class MediaHandler {
 
   StateHandler stateHandler;
   Photo photo;
+// TODO: 15.01.2023 функционал находится в разработе)
 
   public SendMessage workingState(GetBaseInfoFromUpdate baseInfo) {
 

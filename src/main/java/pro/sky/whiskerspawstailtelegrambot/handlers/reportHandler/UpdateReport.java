@@ -46,7 +46,7 @@ public class UpdateReport {
     return null;
   }
 
-  public ReportRecord checkAndUupdatePhotoOrDoc() {
+  public ReportRecord checkAndUpdatePhotoOrDoc() {
     byte[] photo = checkingReport.checkPhotoOrDoc(message);
     if (photo != null) {
       reportRecord.setPhotoPet(photo);

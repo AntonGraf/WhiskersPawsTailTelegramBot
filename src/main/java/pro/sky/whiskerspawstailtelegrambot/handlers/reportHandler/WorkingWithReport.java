@@ -70,7 +70,7 @@ public class WorkingWithReport {
         break;
 
       case CHECK_PHOTO_WAIT_DIET_REPORT_2:
-        reportRecord = updateReport.checkAndUupdatePhotoOrDoc();
+        reportRecord = updateReport.checkAndUpdatePhotoOrDoc();
         sendMessage = checkPhotoWaitDietReport2(reportRecord);
         break;
 
