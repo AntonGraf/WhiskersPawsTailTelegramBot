@@ -7,6 +7,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 
 /**
@@ -73,6 +74,9 @@ public class Report {
    */
   @Column(name = "chat_id")
   Long chatId;
+
+  @Column(name = "date_time")
+  LocalDateTime dateTime;
 
   @Override
   public boolean equals(Object o) {

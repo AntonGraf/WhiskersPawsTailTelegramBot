@@ -1,15 +1,10 @@
 package pro.sky.whiskerspawstailtelegrambot.record;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * A DTO for the {@link pro.sky.whiskerspawstailtelegrambot.entity.Report} entity
@@ -30,4 +25,5 @@ public class ReportRecord implements Serializable {
     String reportAboutHabits;
     Boolean isReportCompleted;
     Long chatId;
+    LocalDateTime dateTime;
 }

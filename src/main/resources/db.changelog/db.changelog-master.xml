@@ -87,4 +87,9 @@
         <tagDatabase tag="addCatTablePet"/>
     </changeSet>
     <include file="v-1.0/data/update_data_for_pet_table.sql" relativeToChangelogFile="true"/>
+
+    <changeSet id="17" author="anton_graf">
+        <tagDatabase tag="addColumnDateTimeToReport"/>
+    </changeSet>
+    <include file="v-1.0/17_add_date_time_column_to_report.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
