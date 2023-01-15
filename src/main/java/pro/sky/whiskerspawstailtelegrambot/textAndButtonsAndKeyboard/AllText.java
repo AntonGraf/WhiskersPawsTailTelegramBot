@@ -31,7 +31,7 @@ public abstract class AllText {
   //region report text
 //*
   public static final String START_ID_SEND_REPORT_TEXT = "Начало заполнения отчета. Следуйте указаниям бота.\n Выберете id вашего животного.";
-  public static final String PHOTO_SEND_REPORT_TEXT = "Прикрепите фото питмца и отпраьте сообщение";
+  public static final String PHOTO_SEND_REPORT_TEXT = "Прикрепите фото питомца и отпраьте сообщение";
   public static final String ENTER_ERROR_ID_TEXT = "Вы ошиблись id, попробуйте снова";
   public static final String ENTER_ERROR_DATA_TEXT = "Вы ввели некоректные данные для отчета, попробуйте снова или нажмите отмена";
   public static final String DIET_SEND_REPORT_TEXT = "Расскажите о питании вашего питомца.";
