@@ -90,17 +90,17 @@ public class StandardReplyHandler {
             parserToBot.parserVolunteer(volunteerService.getAllVolunteers()));
 
       case (AllText.HOW_TAKE_DOG):
-        return sendMessage = formReplyMessages.replyMessage(message, AllText.HOW_TAKE_DOG_SHELTER,
+        return sendMessage = formReplyMessages.replyMessage(chatId, AllText.HOW_TAKE_DOG_SHELTER,
             configKeyboard.initKeyboardOnClickStart());
 
       case (AllText.INFO_SHELTER_TEXT):
-        return sendMessage = formReplyMessages.replyMessage(message,
+        return sendMessage = formReplyMessages.replyMessage(chatId,
             AllText.INFO,
             configKeyboard.initKeyboardOnClickStart());
       //------------------> Показать Id
       case (AllText.SHOW_ME_ID):
         AdoptiveParentRecord adoptiveParentRecord =
-            adoptiveParentService.getAdoptiveParentByChatId(Long.parseLong(chatId));
+            adoptiveParentService.getAdoptiveParentByChatId(chatId);
         if (adoptiveParentRecord != null) {
           //проверяем если есть в бд, то просто id
           return new SendMessage(chatId, AllText.SHOW_ID_OK + adoptiveParentRecord.getId());
