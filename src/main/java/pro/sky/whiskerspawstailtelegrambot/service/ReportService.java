@@ -1,6 +1,7 @@
 package pro.sky.whiskerspawstailtelegrambot.service;
 
 import java.util.Collection;
+import java.util.List;
 import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,6 @@ import pro.sky.whiskerspawstailtelegrambot.util.FilterAdoptedPets;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
 import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
 import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
-import pro.sky.whiskerspawstailtelegrambot.util.StateReport;
 
 @Service
 @Slf4j
@@ -89,29 +89,25 @@ public class ReportService {
    *
    * @return новй созданый отчет
    */
-  public ReportRecord addNewBlankReportInDbForPetByPetId() {
+  public ReportRecord addNewBlankReportWithChatId(long chatId) {
+    removeBlankReportByChatId(chatId);
     Report report = new Report();
+    report.setChatId(chatId);
+    report.setIsReportCompleted(false);
     reportRepository.save(report);
     return reportMapper.toRecord(report);
   }
 
-  /**
-   * Создать новый отчет и сохранить его в базе данных с привязкой к животному по его id
-   *
-   * @param petId Id животного
-   * @return новй созданый отчет
-   */
-  public ReportRecord addNewReportInDbForPetByPetId(long petId) {
-    Report report = new Report();
-    report.setPet_id(petId);
-    reportRepository.save(report);
-    return reportMapper.toRecord(report);
+  public void removeBlankReportByChatId(Long chatId) {
+    List<Report> report = reportRepository.getAllByIsReportCompletedFalseAndChatId(
+        chatId);
+    reportRepository.deleteAll(report);
   }
+
 
   /**
    * Обновить существующий отчет по его id
    *
-   * @param id              id отчета
    * @param newReportRecord новый отчет
    * @return обновленный отчет
    */
@@ -124,7 +120,7 @@ public class ReportService {
     oldReportRecord.setDiet(newReportRecord.getDiet());
     oldReportRecord.setReportAboutFeelings(newReportRecord.getReportAboutFeelings());
     oldReportRecord.setReportAboutHabits(newReportRecord.getReportAboutHabits());
-    oldReportRecord.setStateReport(newReportRecord.getStateReport());
+    oldReportRecord.setIsReportCompleted(newReportRecord.getIsReportCompleted());
 
     return reportMapper.toRecord(reportRepository.save(reportMapper.toEntity(oldReportRecord)));
   }
@@ -169,7 +165,7 @@ public class ReportService {
     AdoptiveParentRecord oldAPR = adoptiveParentService.getAdoptiveParentByChatId(
         chatId);
     long id = oldAPR.getId();
-    oldAPR.setState(state.getText());
+    oldAPR.setState(state.name());
 
     AdoptiveParentRecord newAPR = adoptiveParentService.updateAdoptiveParent(id, oldAPR);
     return StateAdoptiveParent.valueOf(newAPR.getState());
@@ -191,16 +187,15 @@ public class ReportService {
    * @param petId id животного
    * @return Состояние отчета из бд или null
    */
-  public StateReport getStateReportByPetId(long petId) {
-
-    ReportRecord reportRecord = getReportByPetId(petId);
-    StateReport stateReport;
-    if (reportRecord != null) {
-      return reportRecord.getStateReport();
-    }
-    return null;
-  }
-
+//  public StateReport getStateReportByPetId(long petId) {
+//
+//    ReportRecord reportRecord = getReportByPetId(petId);
+//    StateReport stateReport;
+//    if (reportRecord != null) {
+//      return reportRecord.getStateReport();
+//    }
+//    return null;
+//  }
   public PetRecord getPetById(long petId) {
     PetRecord petRecord;
     try {

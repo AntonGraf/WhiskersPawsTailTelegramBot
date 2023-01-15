@@ -13,11 +13,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class GetBaseInfoFromUpdate {
 
   String chatId;
+  Long chatIdL;
   Message message;
   String textMessage;
   boolean isCallbackQuery;
   CallbackQuery callbackQuery;
-
   Message MessageFromCallbackQuery;
 
   public GetBaseInfoFromUpdate(Update update) {
@@ -30,16 +30,17 @@ public class GetBaseInfoFromUpdate {
       callbackQuery = update.getCallbackQuery();
       MessageFromCallbackQuery = callbackQuery.getMessage();
       textMessage = callbackQuery.getData();
-      chatId = callbackQuery.getMessage().getChatId().toString();
+      chatIdL = callbackQuery.getMessage().getChatId();
+      chatId = chatIdL.toString();
       isCallbackQuery = true;
 
     } else {
       message = update.getMessage();
       textMessage = message.getText();
-      chatId = message.getChatId().toString();
+      chatIdL = message.getChatId();
+      chatId = chatIdL.toString();
       isCallbackQuery = false;
     }
-
   }
 
 

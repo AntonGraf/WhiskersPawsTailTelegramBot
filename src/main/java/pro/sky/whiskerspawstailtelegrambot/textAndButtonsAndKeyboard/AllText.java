@@ -1,7 +1,5 @@
 package pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard;
 
-import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
-
 /**
  * Текстовые поля используемые в боте
  */
@@ -24,6 +22,7 @@ public abstract class AllText {
   public static final String SELECT_YOUR_PET_TEXT = "Выберете питомца.";
   public static final String DELIMITER_FOR_PARSER_PETS = "----------------------\n";
   public static final String CANCEL_TEXT = "Отмена";
+  public static final String CANCEL_CREATE_REPORT_TEXT = "Отменить создание отчета";
   public static final String SEND_TEXT = "Отправить";
   public static final String MENU_SEND_PET_REPORT_TEXT = "В этом меню вы можете прислать отчет о вашем питомце";
 
@@ -34,6 +33,7 @@ public abstract class AllText {
   public static final String START_ID_SEND_REPORT_TEXT = "Начало заполнения отчета. Следуйте указаниям бота.\n Выберете id вашего животного.";
   public static final String PHOTO_SEND_REPORT_TEXT = "Прикрепите фото питмца и отпраьте сообщение";
   public static final String ENTER_ERROR_ID_TEXT = "Вы ошиблись id, попробуйте снова";
+  public static final String ENTER_ERROR_DATA_TEXT = "Вы ввели некоректные данные для отчета, попробуйте снова или нажмите отмена";
   public static final String DIET_SEND_REPORT_TEXT = "Расскажите о питании вашего питомца.";
   public static final String FEELINGS_SEND_REPORT_TEXT = "Опишите сомачувствие вашего питомца.";
   public static final String HABITS_SEND_REPORT_TEXT = "Напишите какие изменения произошли в привычках питомца?.";

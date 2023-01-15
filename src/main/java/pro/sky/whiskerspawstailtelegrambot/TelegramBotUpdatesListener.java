@@ -30,7 +30,7 @@ public class TelegramBotUpdatesListener extends SpringWebhookBot {
 
     @Qualifier("MainHandler")
     @Autowired
-    MainHandler messageHandler;
+    MainHandler mainHandler;
 
     public TelegramBotUpdatesListener(SetWebhook webhook) {
         super(webhook);
@@ -47,7 +47,7 @@ public class TelegramBotUpdatesListener extends SpringWebhookBot {
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
         try {
-            execute(messageHandler.process(update));
+            execute(mainHandler.process(update));
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }

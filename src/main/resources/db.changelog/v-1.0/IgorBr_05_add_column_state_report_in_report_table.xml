@@ -10,7 +10,7 @@
     <addColumn tableName="report">
       <column name="is_report_completed" type="boolean"
         remarks="true отчет успешно завершен и отправлен" defaultValueBoolean="false">
-        <constraints nullable="false"/>
+        <constraints nullable="true"/>
       </column>
     </addColumn>
     <rollback>

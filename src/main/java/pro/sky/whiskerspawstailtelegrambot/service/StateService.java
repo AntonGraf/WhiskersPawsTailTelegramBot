@@ -5,20 +5,20 @@ import org.springframework.stereotype.Service;
 import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
 import pro.sky.whiskerspawstailtelegrambot.mapper.AdoptiveParentMapper;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
-import pro.sky.whiskerspawstailtelegrambot.repository.StateChangeAdoptiveParentRepository;
+import pro.sky.whiskerspawstailtelegrambot.repository.StateRepository;
 import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
 
 @Service
 @Slf4j
-public class StateChangeAdoptiveParentService {
+public class StateService {
 
   private final AdoptiveParentMapper adoptiveParentMapper;
-  private final StateChangeAdoptiveParentRepository stateChangeRepos;
+  private final StateRepository stateChangeRepos;
 
-  public StateChangeAdoptiveParentService(AdoptiveParentMapper adoptiveParentMapper,
-      StateChangeAdoptiveParentRepository stateChangeAdoptiveParentRepository) {
+  public StateService(AdoptiveParentMapper adoptiveParentMapper,
+      StateRepository stateRepository) {
     this.adoptiveParentMapper = adoptiveParentMapper;
-    this.stateChangeRepos = stateChangeAdoptiveParentRepository;
+    this.stateChangeRepos = stateRepository;
   }
 
   /**
@@ -27,11 +27,15 @@ public class StateChangeAdoptiveParentService {
    * @param chatId chatId
    * @return AdoptiveParentRecord
    */
-  public long getAdoptiveParentIdByChatId(long chatId) {
+  public Long getAdoptiveParentIdByChatId(long chatId) {
     log.info("Вызов метода " + new Throwable()
         .getStackTrace()[0]
         .getMethodName() + " класса " + this.getClass().getName());
-    return stateChangeRepos.getAdoptiveParentByChatId(chatId).getChatId();
+    AdoptiveParent adoptiveParent = stateChangeRepos.getAdoptiveParentByChatId(chatId);
+    if(adoptiveParent != null){
+      return stateChangeRepos.getAdoptiveParentByChatId(chatId).getChatId();
+    }
+    return null;
   }
 
 
@@ -72,17 +76,18 @@ public class StateChangeAdoptiveParentService {
    *
    * @param chatId long chatId
    * @param state  стейт на который нужно обновить
-   * @return Обновленный adoptiveParentRecord или null
+   * @return
    */
   public AdoptiveParentRecord updateStateAdoptiveParentByChatId(long chatId,
       StateAdoptiveParent state) {
-    long id = getAdoptiveParentIdByChatId(chatId);
-    AdoptiveParent adoptiveParent = stateChangeRepos.findById(id).orElse(null);
+    Long id = getAdoptiveParentIdByChatId(chatId);
+    AdoptiveParent adoptiveParent = stateChangeRepos.getAdoptiveParentByChatId(chatId);
     if (adoptiveParent != null) {
       adoptiveParent.setState(state.name());
       stateChangeRepos.save(adoptiveParent);
+      return adoptiveParentMapper.toRecord(adoptiveParent);
     }
-    return adoptiveParentMapper.toRecord(adoptiveParent);
+    return null;
   }
 
 

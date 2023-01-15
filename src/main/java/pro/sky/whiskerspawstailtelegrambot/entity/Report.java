@@ -72,7 +72,7 @@ public class Report {
    * чат id заполневшего отчет
    */
   @Column(name = "chat_id")
-  String chatId;
+  Long chatId;
 
   @Override
   public boolean equals(Object o) {

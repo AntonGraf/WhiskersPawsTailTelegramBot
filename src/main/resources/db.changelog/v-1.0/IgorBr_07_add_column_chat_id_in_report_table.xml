@@ -8,8 +8,8 @@
 
     <changeSet id="add_column_chat_id_in_report_table" author="IgorBr">
 <addColumn tableName="report">
-    <column name="chat_id" type="text" remarks="Чат id заполнившего отчет">
-      <constraints nullable="false"/>
+    <column name="chat_id" type="bigserial" remarks="Чат id заполнившего отчет">
+      <constraints nullable="true"/>
     </column>
 </addColumn>
         <rollback>
