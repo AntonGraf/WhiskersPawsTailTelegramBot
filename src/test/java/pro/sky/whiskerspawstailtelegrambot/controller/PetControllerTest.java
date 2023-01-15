@@ -98,6 +98,7 @@ class PetControllerTest {
             .param("name", fullName)
             .param("age", age)
             .param("des", description)
+            .param("type", "Cat")
             .accept(MediaType.MULTIPART_FORM_DATA_VALUE))
         .andDo(print())
         .andExpect(status().isOk());
