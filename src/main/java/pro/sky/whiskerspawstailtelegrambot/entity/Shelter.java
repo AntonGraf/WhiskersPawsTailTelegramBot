@@ -53,6 +53,12 @@ public class Shelter {
     //Советы кинолога по первичному общению с собакой
     String cynologistAdvice;
     //Список рекомендуемых приютом кинологов
+
+    /**
+     * Информация об Охране
+     */
+    @Column(name = "security_info")
+    String securityInfo;
     @ElementCollection
     @CollectionTable(name = "shelter_cynologist", joinColumns = @JoinColumn(name = "shelter_id"))
     @Column(name = "cynologist")
