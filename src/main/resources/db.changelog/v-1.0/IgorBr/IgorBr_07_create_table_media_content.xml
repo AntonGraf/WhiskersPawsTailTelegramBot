@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+  <changeSet id="create new table create_table_media_content" author="IgorBr">
+    <createTable tableName="media_content">
+      <column name="id" type="bigserial" autoIncrement="true" remarks="identification">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="file_as_array_of_bytes" type="binary" remarks="массив байтов объекта">
+        <constraints nullable="true"/>
+      </column>
+    </createTable>
+    <rollback>
+      <dropTable tableName="media_content"/>
+    </rollback>
+  </changeSet>
+</databaseChangeLog>

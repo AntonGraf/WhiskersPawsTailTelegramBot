@@ -1,18 +1,17 @@
 package pro.sky.whiskerspawstailtelegrambot.handlers;
 
-import static pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent.*;
+import static pro.sky.whiskerspawstailtelegrambot.service.enums.StateAdoptiveParent.*;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import pro.sky.whiskerspawstailtelegrambot.handlers.mainHandler.GetBaseInfoFromUpdate;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
-import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.service.enums.StateAdoptiveParent;
 
 /**
  * Обработка сообщений при регистрации

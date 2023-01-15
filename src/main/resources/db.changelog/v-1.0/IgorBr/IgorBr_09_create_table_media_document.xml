@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+  <changeSet id="create new table create_table_media_document" author="IgorBr">
+    <createTable tableName="media_document">
+      <column name="id" type="bigserial" autoIncrement="true" remarks="identification">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="telegram_file_id" type="text" remarks="файл id телеграм">
+        <constraints nullable="true"/>
+      </column>
+      <column name="doc_name" type="text" remarks="имя файла">
+        <constraints nullable="true"/>
+      </column>
+      <column name="media_content_id" type="bigserial" remarks="id сущности MediaContent">
+        <constraints nullable="true"/>
+      </column>
+      <column name="mime_type" type="text" remarks="тип файла">
+        <constraints nullable="true"/>
+      </column>
+      <column name="file_size" type="integer" remarks="массив байтов объекта">
+        <constraints nullable="true"/>
+      </column>
+    </createTable>
+    <rollback>
+      <dropTable tableName="app_document"/>
+    </rollback>
+  </changeSet>
+</databaseChangeLog>

@@ -12,7 +12,6 @@ import pro.sky.whiskerspawstailtelegrambot.service.ReportService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
-import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
 
 @Slf4j
 public class FormMessageAndKeyboardIdYourPets {

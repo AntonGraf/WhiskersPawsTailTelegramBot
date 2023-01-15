@@ -40,14 +40,21 @@ public class GetBaseInfoFromUpdate {
       chatId = chatIdL.toString();
       isCallbackQuery = true;
 
+    } else if (update.getMessage().hasPhoto() || update.getMessage().hasDocument()) {
+      message = update.getMessage();
+      chatIdL = update.getMessage().getChatId();
+      chatId = chatIdL.toString();
+      textMessage = update.getMessage().getCaption();
+      photos = update.getMessage().getPhoto();
+      document = update.getMessage().getDocument();
+      isCallbackQuery = false;
+
     } else {
       message = update.getMessage();
       textMessage = message.getText();
       chatIdL = message.getChatId();
       chatId = chatIdL.toString();
       isCallbackQuery = false;
-      photos = update.getMessage().getPhoto();
-      document = update.getMessage().getDocument();
     }
   }
 

@@ -58,7 +58,7 @@ public class Report {
   /**
    * Присоединение к питомцу
    */
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.PERSIST)
   @JoinColumn(name = "pet_id", referencedColumnName = "id", insertable = false, updatable = false)
   @JsonBackReference
   Pet pet;

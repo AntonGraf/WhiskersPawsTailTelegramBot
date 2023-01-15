@@ -6,12 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import pro.sky.whiskerspawstailtelegrambot.handlers.mainHandler.GetBaseInfoFromUpdate;
+import pro.sky.whiskerspawstailtelegrambot.handlers.mediaContentHandler.MediaHandler;
 import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
+import pro.sky.whiskerspawstailtelegrambot.service.MediaService;
 import pro.sky.whiskerspawstailtelegrambot.service.ReportService;
 import pro.sky.whiskerspawstailtelegrambot.service.StateService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
-import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.service.enums.StateAdoptiveParent;
 
 @Slf4j
 public class WorkingWithReport {
@@ -27,13 +29,15 @@ public class WorkingWithReport {
   Message message;
   CheckingReport checkingReport;
   GetBaseInfoFromUpdate baseInfo;
+  private MediaService mediaService;
 
   public WorkingWithReport(GetBaseInfoFromUpdate baseInfo, ReportService reportService,
-      StateService stateService) {
+      StateService stateService, MediaService mediaService) {
     this.reportService = reportService;
     this.stateService = stateService;
     this.chatId = baseInfo.getChatId();
     this.baseInfo = baseInfo;
+    this.mediaService = mediaService;
     init();
   }
 
@@ -50,7 +54,7 @@ public class WorkingWithReport {
       StateAdoptiveParent stateAdoptiveParent) {
 
     UpdateReport updateReport = new UpdateReport(
-        reportRecord, reportService, baseInfo);
+        reportRecord, reportService, baseInfo, mediaService);
 
     SendMessage sendMessage = null;
 
@@ -128,7 +132,7 @@ public class WorkingWithReport {
     if (reportRecord != null) {
       reportService.updateReport(reportRecord);
       sendMessage = formReplyMessages.replyMessage(chatId, PHOTO_SEND_REPORT_TEXT,
-          configKeyboard.formReplyKeyboardInOneRow(CANCEL_TEXT));
+          configKeyboard.formReplyKeyboardInOneRow(CANCEL_CREATE_REPORT_TEXT));
       stateService.updateStateAdoptiveParentByChatId(chatIdL,
           StateAdoptiveParent.CHECK_PHOTO_WAIT_DIET_REPORT_2);
       return sendMessage;
@@ -140,7 +144,7 @@ public class WorkingWithReport {
     if (reportRecord != null) {
       reportService.updateReport(reportRecord);
       sendMessage = formReplyMessages.replyMessage(chatId, DIET_SEND_REPORT_TEXT,
-          configKeyboard.formReplyKeyboardInOneRow(CANCEL_TEXT));
+          configKeyboard.formReplyKeyboardInOneRow(CANCEL_CREATE_REPORT_TEXT));
       stateService.updateStateAdoptiveParentByChatId(chatIdL,
           StateAdoptiveParent.CHECK_DIET_WAIT_FEELINGS_REPORT_3);
       return sendMessage;
@@ -153,7 +157,7 @@ public class WorkingWithReport {
     if (reportRecord != null) {
       reportService.updateReport(reportRecord);
       sendMessage = formReplyMessages.replyMessage(chatId, FEELINGS_SEND_REPORT_TEXT,
-          configKeyboard.formReplyKeyboardInOneRow(CANCEL_TEXT));
+          configKeyboard.formReplyKeyboardInOneRow(CANCEL_CREATE_REPORT_TEXT));
       stateService.updateStateAdoptiveParentByChatId(chatIdL,
           StateAdoptiveParent.CHECK_FEELINGS_WAIT_HABITS_REPORT_4);
       return sendMessage;
@@ -165,7 +169,7 @@ public class WorkingWithReport {
     if (reportRecord != null) {
       reportService.updateReport(reportRecord);
       sendMessage = formReplyMessages.replyMessage(chatId, HABITS_SEND_REPORT_TEXT,
-          configKeyboard.formReplyKeyboardInOneRow(CANCEL_TEXT));
+          configKeyboard.formReplyKeyboardInOneRow(CANCEL_CREATE_REPORT_TEXT));
       stateService.updateStateAdoptiveParentByChatId(chatIdL,
           StateAdoptiveParent.CHECK_HABITS_WAIT_FINISHED_REPORT_5);
       return sendMessage;
@@ -175,12 +179,6 @@ public class WorkingWithReport {
 
   private SendMessage checkHabitsWaitFinishedReport5(ReportRecord reportRecord) {
     if (reportRecord != null) {
-//      reportService.updateReport(reportRecord);
-//      sendMessage = formReplyMessages.replyMessage(chatId, HABITS_SEND_REPORT_TEXT,
-//          configKeyboard.formReplyKeyboardInOneRow(SHOW_ALL_YOUR_PET_TEXT,
-//              CANCEL_TEXT));
-//      stateService.updateStateAdoptiveParentByChatId(chatIdL,
-//          StateAdoptiveParent.FINISHED_REPORT_6);
       reportService.updateReport(reportRecord);
       sendMessage = formReplyMessages.replyMessage(chatId, FINISHED_MESSAGE_SEND_REPORT_TEXT,
           configKeyboard.initKeyboardOnClickStart());
@@ -191,17 +189,6 @@ public class WorkingWithReport {
     return resetState(null, StateAdoptiveParent.CHECK_HABITS_WAIT_FINISHED_REPORT_5);
   }
 
-//  private SendMessage finishedReport6(ReportRecord reportRecord) {
-//    if (reportRecord != null) {
-//      reportService.updateReport(reportRecord);
-//      sendMessage = formReplyMessages.replyMessage(chatId, FINISHED_MESSAGE_SEND_REPORT_TEXT,
-//          configKeyboard.initKeyboardOnClickStart());
-//      stateService.updateStateAdoptiveParentByChatId(chatIdL,
-//          StateAdoptiveParent.FREE);
-//      return sendMessage;
-//    }
-//    return resetState(null, StateAdoptiveParent.FINISHED_REPORT_6);
-//  }
 
   /**
    * Сброс состояния, при ошибке ввода

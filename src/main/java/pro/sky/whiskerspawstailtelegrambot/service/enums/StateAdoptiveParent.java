@@ -1,4 +1,4 @@
-package pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent;
+package pro.sky.whiskerspawstailtelegrambot.service.enums;
 
 import java.util.ArrayList;
 import java.util.List;

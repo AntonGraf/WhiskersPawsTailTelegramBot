@@ -1,6 +1,6 @@
 package pro.sky.whiskerspawstailtelegrambot.handlers.buttonsHandler;
 
-import static pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent.*;
+import static pro.sky.whiskerspawstailtelegrambot.service.enums.StateAdoptiveParent.*;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -13,7 +13,7 @@ import pro.sky.whiskerspawstailtelegrambot.service.StateService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
-import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.service.enums.StateAdoptiveParent;
 
 /**
  * Тут кнопки меняющие состояния
@@ -53,7 +53,7 @@ public class StateChangingButtons {
    * выбо кнопок меняющих состояние
    */
   public SendMessage handleClick(String textMessage) {
-
+    textMessage = textMessage != null ? textMessage : "";//костыль от nullPointer при отправке фото без текста
     SendMessage sendMessage = null;
 
     switch (textMessage) {
