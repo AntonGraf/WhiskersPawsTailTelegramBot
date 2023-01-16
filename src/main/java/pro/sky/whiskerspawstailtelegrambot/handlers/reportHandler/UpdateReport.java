@@ -1,5 +1,6 @@
 package pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler;
 
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -89,6 +90,8 @@ public class UpdateReport {
     if (isCorrect) {
       reportRecord.setReportAboutHabits(value);
       reportRecord.setIsReportCompleted(true);
+      reportRecord.setIsReportCompleted(true);
+      reportRecord.setDateTime(LocalDateTime.now());
       return reportRecord;
     }
     return null;
