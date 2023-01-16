@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import pro.sky.whiskerspawstailtelegrambot.handlers.RegistrationHandler;
 import pro.sky.whiskerspawstailtelegrambot.handlers.mainHandler.GetBaseInfoFromUpdate;
 import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.ReportHandler;
 import pro.sky.whiskerspawstailtelegrambot.service.StateService;
-import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.service.enums.StateAdoptiveParent;
 
 /**
  * обработчик состояний

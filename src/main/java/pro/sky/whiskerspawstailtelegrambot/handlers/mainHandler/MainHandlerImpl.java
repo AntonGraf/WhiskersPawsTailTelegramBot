@@ -9,12 +9,12 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import pro.sky.whiskerspawstailtelegrambot.handlers.CallbackQueryHandler;
 import pro.sky.whiskerspawstailtelegrambot.handlers.StandardReplyHandler;
 import pro.sky.whiskerspawstailtelegrambot.handlers.buttonsHandler.StateChangingButtons;
-import pro.sky.whiskerspawstailtelegrambot.handlers.mediaTypeHandler.MediaHandler;
+import pro.sky.whiskerspawstailtelegrambot.handlers.mediaContentHandler.MediaHandler;
 import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.ReportHandler;
 import pro.sky.whiskerspawstailtelegrambot.handlers.stateHandlers.StateHandler;
 import pro.sky.whiskerspawstailtelegrambot.service.StateService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
-import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.service.enums.StateAdoptiveParent;
 
 @Slf4j
 @Component("MainHandler")

@@ -16,7 +16,7 @@ import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeybo
 import pro.sky.whiskerspawstailtelegrambot.util.FilterAdoptedPets;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
 import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
-import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.service.enums.StateAdoptiveParent;
 
 @Service
 @Slf4j
@@ -24,21 +24,15 @@ import pro.sky.whiskerspawstailtelegrambot.util.stateAdaptiveParent.StateAdoptiv
 public class ReportService {
 
   private final PetService petService;
-  private final FormReplyMessages formReplyMessages;
   private final ReportRepository reportRepository;
   private final AdoptiveParentService adoptiveParentService;
-  private final ConfigKeyboard configKeyboard;
   private final ReportMapper reportMapper;
 
-  public ReportService(PetService petService,
-      FormReplyMessages formReplyMessages, ReportRepository reportRepository,
-      AdoptiveParentService adoptiveParentService,
-      ConfigKeyboard configKeyboard, ReportMapper reportMapper) {
+  public ReportService(PetService petService, ReportRepository reportRepository,
+      AdoptiveParentService adoptiveParentService, ReportMapper reportMapper) {
     this.petService = petService;
-    this.formReplyMessages = formReplyMessages;
     this.reportRepository = reportRepository;
     this.adoptiveParentService = adoptiveParentService;
-    this.configKeyboard = configKeyboard;
     this.reportMapper = reportMapper;
   }
 
@@ -116,6 +110,7 @@ public class ReportService {
     long id = newReportRecord.getId();
 
     ReportRecord oldReportRecord = getReportById(id);
+    oldReportRecord.setPet_id(newReportRecord.getPet_id());
     oldReportRecord.setPhotoPet(newReportRecord.getPhotoPet());
     oldReportRecord.setDiet(newReportRecord.getDiet());
     oldReportRecord.setReportAboutFeelings(newReportRecord.getReportAboutFeelings());

@@ -4,14 +4,16 @@ package pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.telegram.telegrambots.meta.api.objects.Document;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import pro.sky.whiskerspawstailtelegrambot.service.ReportService;
 
 
-
 public class CheckingReport {
+
   public Long checkCorrectPetId(String textMessage, ReportService reportService) {
 
     Long tmpPetId = parserStringPetId(textMessage);
@@ -45,20 +47,20 @@ public class CheckingReport {
     return true;//true для теста todo
   }
 
-  public byte[] checkPhotoOrDoc(Message message) {
+  public boolean checkPhotoOrDoc(Message message) {
 
-    List<PhotoSize> photoSizes = message.getPhoto();
-    Document messageDocument = message.getDocument();
-
-    if (photoSizes.size() > 0 && photoSizes.get(0).getFileSize() > 1024 ) {
-     byte[] bytes = photoSizes.get(0).getFilePath().getBytes();
-      return bytes;
+    long photoOrDocMinSize = 20480;//размер фото в байтах
+    PhotoSize photoSize = null;
+    Document messageDocument = null;
+    if (message.hasPhoto()) {
+      photoSize = message.getPhoto().get(message.getPhoto().size() - 1);
+      return photoSize.getFileSize() > photoOrDocMinSize;
     }
-    if (messageDocument.getFileSize() > 1024) {
-       byte[] bytes = messageDocument.getThumb().getFilePath().getBytes();
-      return bytes;
+    if (message.hasDocument()) {
+      messageDocument = message.getDocument();
+      return messageDocument.getFileSize() > photoOrDocMinSize;
     }
-    return null;
+    return false;
   }
 
 

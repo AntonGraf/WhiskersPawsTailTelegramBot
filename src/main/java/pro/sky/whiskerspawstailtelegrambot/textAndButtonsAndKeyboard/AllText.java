@@ -23,7 +23,9 @@ public abstract class AllText {
   public static final String DELIMITER_FOR_PARSER_PETS = "----------------------\n";
   public static final String CANCEL_TEXT = "Отмена";
   public static final String CANCEL_CREATE_REPORT_TEXT = "Отменить создание отчета";
-  public static final String SEND_TEXT = "Отправить";
+  public static final String FILE_SUCCESSFUL = "Файл успешно загружен! ";
+  public static final String SEND_TEXT = ""
+      + "Отправить";
   public static final String MENU_SEND_PET_REPORT_TEXT = "В этом меню вы можете прислать отчет о вашем питомце";
 
   public static final String CANCEL_RETURN_MAIN_MENU_TEXT = "Отмена.\nВозврат в главное меню.";
@@ -36,7 +38,7 @@ public abstract class AllText {
   public static final String ENTER_ERROR_DATA_TEXT = "Вы ввели некоректные данные для отчета, попробуйте снова или нажмите отмена";
   public static final String DIET_SEND_REPORT_TEXT = "Расскажите о питании вашего питомца.";
   public static final String FEELINGS_SEND_REPORT_TEXT = "Опишите сомачувствие вашего питомца.";
-  public static final String HABITS_SEND_REPORT_TEXT = "Напишите какие изменения произошли в привычках питомца?.";
+  public static final String HABITS_SEND_REPORT_TEXT = "Напишите какие изменения произошли в привычках питомца?";
 
   //*
   public static final String YOU_HAVE_NO_ADOPTED_PETS_TEXT = "У вас нет животных требующих отправки отчета";
@@ -49,6 +51,9 @@ public abstract class AllText {
   public static final String NO_TEXT_AND_PHOTO_SEND_REPORT_TEXT = "В отчете нехватает текста и фото, попробуйте снова.";
   public static final String NO_TEXT_SEND_REPORT_TEXT = "В отчете нехватает текста, попробуйте снова.";
   public static final String NO_PHOTO_SEND_REPORT_TEXT = "В отчете нехватает фото, попробуйте снова.";
+  public static final String PHOTO_SUCCESSFUL_REPORT_TEXT = "Фото успешно сохранено.";
+  public static final String DOC_SUCCESSFUL_REPORT_TEXT = "Документ успешно сохранено.";
+  public static final String FILE_SUCCESSFUL_REPORT_TEXT = "Файл успешно сохранено.";
 
   //endregion
 
