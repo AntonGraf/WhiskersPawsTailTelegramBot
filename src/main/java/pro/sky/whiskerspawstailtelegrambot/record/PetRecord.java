@@ -49,7 +49,7 @@ public class PetRecord implements Serializable {
     @JsonIgnore
     Shelter shelter;
 
-
+    String petType;
     @JsonIgnore
     AdoptiveParent adoptiveParent;
 

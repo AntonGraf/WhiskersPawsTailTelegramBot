@@ -174,7 +174,7 @@ class AdoptiveParentServiceTest {
 
         assertThat(adoptiveParentService.getListOfAdoptiveParent()).asList().contains(adoptiveParentTestPositive);
 
-        verify(adoptiveParentRepo, times(1)).findAll();
+        verify(adoptiveParentRepo, times(3)).findAll();
 
     }
 
@@ -186,7 +186,7 @@ class AdoptiveParentServiceTest {
 
         assertThatExceptionOfType(ElemNotFound.class).isThrownBy(() -> adoptiveParentService.getListOfAdoptiveParent());
 
-        verify(adoptiveParentRepo, times(1)).findAll();
+        verify(adoptiveParentRepo, times(3)).findAll();
 
     }
 
