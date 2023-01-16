@@ -50,4 +50,10 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
     Optional<Pet> findPetByIdAndAdoptiveParentIsNull(Long petId);
 
     Collection<Pet> findPetsByTestPeriodAndTestPeriodTimeBefore(boolean testPeriod, LocalDateTime testPeriodTime);
+
+    /**
+     * получить всех питомцев по chat id усыновителя
+     * @param chatId chat id усыновителя
+     */
+   Collection<Pet> getAllByAdoptiveParent_ChatId(Long chatId);
 }

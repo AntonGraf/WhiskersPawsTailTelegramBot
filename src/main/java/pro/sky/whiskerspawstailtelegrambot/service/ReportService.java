@@ -1,17 +1,17 @@
 package pro.sky.whiskerspawstailtelegrambot.service;
 
 import java.util.Collection;
-import java.util.List;
 import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pro.sky.whiskerspawstailtelegrambot.entity.Report;
 import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
+import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFoundChecked;
+import pro.sky.whiskerspawstailtelegrambot.loger.FormLogInfo;
 import pro.sky.whiskerspawstailtelegrambot.mapper.ReportMapper;
 import pro.sky.whiskerspawstailtelegrambot.record.PetRecord;
 import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
 import pro.sky.whiskerspawstailtelegrambot.repository.ReportRepository;
-import pro.sky.whiskerspawstailtelegrambot.util.FilterAdoptedPets;
 import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
 
 @Service
@@ -38,38 +38,23 @@ public class ReportService {
    * @param id Id отчета
    * @return отчет по его Id
    */
-  public ReportRecord getReportById(long id) {
-    Report report = reportRepository.findById(id).orElseThrow(() -> new ElemNotFound());
+  public ReportRecord getReportById(Long id) throws ElemNotFoundChecked {
+    log.info(FormLogInfo.getInfo());
+    Report report = reportRepository.findById(id)
+        .orElseThrow(() -> new ElemNotFoundChecked("Отчет по такому id не найден"));
     return reportMapper.toRecord(report);
-  }
-
-  /**
-   * Получить отчет по Id животного
-   *
-   * @param petId Id животного
-   * @return отчет по id животного
-   */
-  public ReportRecord getReportByPetId(Long petId) {
-
-    Report report = reportRepository.getReportByPet_id(petId);
-    ReportRecord reportRecord = null;
-    if (report != null) {
-      reportRecord = reportMapper.toRecord(report);
-    }
-    return reportRecord;
   }
 
   /**
    * Получить незавершенный отчет по chatId пользователя
    */
-  public ReportRecord getReportByChatIdAndIsReportCompletedFalse(Long chatId) {
+  public ReportRecord getReportByChatIdAndIsReportCompletedFalse(Long chatId)
+      throws Exception {
+    log.info(FormLogInfo.getInfo());
+    Report allReportCompletedFalse = reportRepository.getByChatIdAndIsReportCompletedFalse(
+        chatId).orElseThrow(Exception::new);//может возникнуть ситуация когда отчетов будет несколько, тогда исключение
 
-    Report report = reportRepository.getReportByChatIdAndIsReportCompletedFalse(chatId);
-
-    if (report != null) {
-      return reportMapper.toRecord(report);
-    }
-    return null;
+    return reportMapper.toRecord(allReportCompletedFalse);
   }
 
   /**
@@ -78,7 +63,7 @@ public class ReportService {
    * @return новй созданый отчет
    */
   public ReportRecord addNewBlankReportWithChatId(Long chatId) {
-    removeAllBlankReportByChatId(chatId);
+    log.info(FormLogInfo.getInfo());
     Report report = new Report();
     report.setChatId(chatId);
     report.setIsReportCompleted(false);
@@ -87,17 +72,17 @@ public class ReportService {
   }
 
   /**
-   * удалить все отчеты по чат id со статусом false
+   * удалить все отчеты по чат id со статусом false используется при нажатии отправить отчет и при
+   * отмене отчета для того что бы не создавались новые пустые отчеты, в случае некоректного
+   * заполнения
    *
    * @param chatId
    */
-  public List<Report> removeAllBlankReportByChatId(Long chatId) {
-    List<Report> report = reportRepository.getAllByChatIdAndIsReportCompletedFalse(
+  public void deleteAllByChatIdAndIsReportCompletedFalse(Long chatId) {
+    Collection<Report> allStartedReport = reportRepository.getAllByChatIdAndIsReportCompletedFalse(
         chatId);
-    reportRepository.deleteAll(report);
-    return report;
+    reportRepository.deleteAll(allStartedReport);
   }
-
 
   /**
    * Обновить существующий отчет по его id
@@ -106,19 +91,23 @@ public class ReportService {
    * @return обновленный отчет
    */
   public ReportRecord updateReport(ReportRecord newReportRecord) {
+    log.info(FormLogInfo.getInfo());
 
-    long id = newReportRecord.getId();
-
-    ReportRecord oldReportRecord = getReportById(id);
-    oldReportRecord.setPet_id(newReportRecord.getPet_id());
-    oldReportRecord.setPhotoPet(newReportRecord.getPhotoPet());
-    oldReportRecord.setDiet(newReportRecord.getDiet());
-    oldReportRecord.setReportAboutFeelings(newReportRecord.getReportAboutFeelings());
-    oldReportRecord.setReportAboutHabits(newReportRecord.getReportAboutHabits());
-    oldReportRecord.setIsReportCompleted(newReportRecord.getIsReportCompleted());
-    oldReportRecord.setDateTime(newReportRecord.getDateTime());
-
-    reportRepository.save(reportMapper.toEntity(oldReportRecord));
+    ReportRecord oldReportRecord = null;
+    try {
+      Long id = newReportRecord.getId();
+      oldReportRecord = getReportById(id);
+      oldReportRecord.setPet_id(newReportRecord.getPet_id());
+      oldReportRecord.setPhotoPet(newReportRecord.getPhotoPet());
+      oldReportRecord.setDiet(newReportRecord.getDiet());
+      oldReportRecord.setReportAboutFeelings(newReportRecord.getReportAboutFeelings());
+      oldReportRecord.setReportAboutHabits(newReportRecord.getReportAboutHabits());
+      oldReportRecord.setIsReportCompleted(newReportRecord.getIsReportCompleted());
+      oldReportRecord.setDateTime(newReportRecord.getDateTime());
+      reportRepository.save(reportMapper.toEntity(oldReportRecord));
+    } catch (ElemNotFoundChecked e) {
+      throw new RuntimeException("Невозможно обновть ReportRecord");
+    }
     return newReportRecord;
   }
 
@@ -129,23 +118,14 @@ public class ReportService {
    * @param chatId чат id пользователя
    * @return Список животных в  текстовом формате для отправки пользователю.
    */
-  public String showAllAdoptedPetsByChatId(Long chatId) {
-    log.info("Вызов метода " + new Throwable()
-        .getStackTrace()[0]
-        .getMethodName() + " класса " + this.getClass().getName());
+  public String showAllAdoptedPetsByChatId(Long chatId) throws Exception {
+    log.info(FormLogInfo.getInfo());
 
-    Collection<PetRecord> allPet = petService.findAllPet();
-    if (allPet != null) {
-      Collection<PetRecord> petRecords = petService.findAllPet();
-
-      FilterAdoptedPets filterAdoptedPets = new FilterAdoptedPets();
-      petRecords = filterAdoptedPets.byChatId(chatId, petRecords);
+    Collection<PetRecord> allPetByChatId = petService.getAllPetAdoptiveParentByChatId(chatId);
 
       ParserToBot parserToBot = new ParserToBot();
-      String allAdoptedPets = parserToBot.parserPet(petRecords);
-      return allAdoptedPets;
-    }
-    return null;
+      return parserToBot.parserPet(allPetByChatId);
+
   }
 
   /**
@@ -154,14 +134,8 @@ public class ReportService {
    * @param petId
    * @return
    */
-  public PetRecord getPetByPetId(Long petId) {
-    PetRecord petRecord;
-    try {
-      petRecord = petService.findPet(petId);
-    } catch (Exception e) {
-      petRecord = null;
-    }
-    return petRecord;
+  public PetRecord getPetByPetId(Long petId) throws ElemNotFound {
+    return petService.findPet(petId);
   }
 
 }

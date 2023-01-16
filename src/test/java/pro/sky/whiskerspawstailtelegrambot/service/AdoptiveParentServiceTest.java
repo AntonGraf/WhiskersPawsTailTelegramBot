@@ -30,187 +30,229 @@ import static org.mockito.Mockito.*;
  */
 @ExtendWith(MockitoExtension.class)
 class AdoptiveParentServiceTest {
-    @Mock
-    AdoptiveParentRepo adoptiveParentRepo;
-    @Spy
-    AdoptiveParentMapper adoptiveParentMapper;
-    @InjectMocks
-    AdoptiveParentService adoptiveParentService;
 
-    String ANYSTRING;
-    long ANYLONG;
-    List<Pet> pets;
-    List<PetRecord> petRecords;
-    AdoptiveParentRecord adoptiveParentTestPositive;
-    AdoptiveParent adoptiveParent;
+  @Mock
+  AdoptiveParentRepo adoptiveParentRepo;
+  @Spy
+  AdoptiveParentMapper adoptiveParentMapper;
+  @InjectMocks
+  AdoptiveParentService adoptiveParentService;
 
-    @BeforeEach
-    void init(){
-        ANYSTRING = "anystring";
-        ANYLONG = 1L;
-        pets = new ArrayList<>();
-        petRecords = new ArrayList<>();
-        adoptiveParentTestPositive = new AdoptiveParentRecord(1l, "fullName", "phone", true, "start", 0l,
-            petRecords);
-        adoptiveParent = new AdoptiveParent(1l, "fullName", "phone", true, "start", 0l, pets);
-    }
+  String ANYSTRING;
+  long ANYLONG;
+  List<Pet> pets;
+  List<PetRecord> petRecords;
+  AdoptiveParentRecord adoptiveParentTestPositive;
+  AdoptiveParent adoptiveParent;
 
-    @AfterEach
-    void clearAll(){
-        ANYSTRING = null;
-        ANYLONG = 0;
-        pets.clear();
-        petRecords.clear();
-        adoptiveParentTestPositive = null;
-        adoptiveParent = null;
-    }
+  @BeforeEach
+  void init() {
+    ANYSTRING = "anystring";
+    ANYLONG = 1L;
+    pets = new ArrayList<>();
+    petRecords = new ArrayList<>();
+    adoptiveParentTestPositive = new AdoptiveParentRecord(1l, "fullName", "phone", true, "start",
+        0l,
+        petRecords);
+    adoptiveParent = new AdoptiveParent(1l, "fullName", "phone", true, "start", 0l, pets);
+  }
 
-    @Test
-    void getParentIdByNameAndPhoneAndChatIdPositiveFullName() {
-        when(adoptiveParentRepo.getAdoptiveParentByFullName(ANYSTRING)).thenReturn(adoptiveParent);
+  @AfterEach
+  void clearAll() {
+    ANYSTRING = null;
+    ANYLONG = 0;
+    pets.clear();
+    petRecords.clear();
+    adoptiveParentTestPositive = null;
+    adoptiveParent = null;
+  }
 
-        assertThat(adoptiveParentService.getParentIdByNameAndPhoneAndChatId(ANYSTRING, null, null)).isEqualTo(ANYLONG);
+  @Test
+  void getParentIdByNameAndPhoneAndChatIdPositiveFullName() {
+    when(adoptiveParentRepo.getAdoptiveParentByFullName(ANYSTRING)).thenReturn(adoptiveParent);
 
-        verify(adoptiveParentRepo, times(1)).getAdoptiveParentByFullName(ANYSTRING);
-    }
+    assertThat(
+        adoptiveParentService.getParentIdByNameAndPhoneAndChatId(ANYSTRING, null, null)).isEqualTo(
+        ANYLONG);
 
-    @Test
-    void getParentIdByNameAndPhoneAndChatIdPositivePhone() {
-        when(adoptiveParentRepo.getAdoptiveParentByPhone(ANYSTRING)).thenReturn(adoptiveParent);
+    verify(adoptiveParentRepo, times(1)).getAdoptiveParentByFullName(ANYSTRING);
+  }
 
-        assertThat(adoptiveParentService.getParentIdByNameAndPhoneAndChatId(null, ANYSTRING, null)).isEqualTo(ANYLONG);
+  @Test
+  void getParentIdByNameAndPhoneAndChatIdPositivePhone() {
+    when(adoptiveParentRepo.getAdoptiveParentByPhone(ANYSTRING)).thenReturn(adoptiveParent);
 
-        verify(adoptiveParentRepo, times(1)).getAdoptiveParentByPhone(ANYSTRING);
-    }
+    assertThat(
+        adoptiveParentService.getParentIdByNameAndPhoneAndChatId(null, ANYSTRING, null)).isEqualTo(
+        ANYLONG);
 
-    @Test
-    void getParentIdByNameAndPhoneAndChatIdPositiveChatId() {
-        when(adoptiveParentRepo.getAdoptiveParentByChatId(ANYLONG)).thenReturn(adoptiveParent);
+    verify(adoptiveParentRepo, times(1)).getAdoptiveParentByPhone(ANYSTRING);
+  }
 
-        assertThat(adoptiveParentService.getParentIdByNameAndPhoneAndChatId(null, null, ANYLONG)).isEqualTo(1L);
+  @Test
+  void getParentIdByNameAndPhoneAndChatIdPositiveChatId() {
+    when(adoptiveParentRepo.getAdoptiveParentByChatId(ANYLONG)).thenReturn(adoptiveParent);
 
-        verify(adoptiveParentRepo, times(1)).getAdoptiveParentByChatId(ANYLONG);
-    }
+    assertThat(
+        adoptiveParentService.getParentIdByNameAndPhoneAndChatId(null, null, ANYLONG)).isEqualTo(
+        1L);
 
-    @Test
-    void getParentIdByNameAndPhoneAndChatIdNegative() {
-        assertThatExceptionOfType(ElemNotFound.class).isThrownBy(() -> adoptiveParentService.getParentIdByNameAndPhoneAndChatId(null, null, null));
+    verify(adoptiveParentRepo, times(1)).getAdoptiveParentByChatId(ANYLONG);
+  }
 
-        assertThatExceptionOfType(ElemNotFound.class).isThrownBy(() -> adoptiveParentService.getParentIdByNameAndPhoneAndChatId("", "", 0L));
-    }
+  @Test
+  void getParentIdByNameAndPhoneAndChatIdNegative() {
+    assertThatExceptionOfType(ElemNotFound.class).isThrownBy(
+        () -> adoptiveParentService.getParentIdByNameAndPhoneAndChatId(null, null, null));
 
-    @Test
-    void getAdoptiveParentByIDPositive() {
-        when(adoptiveParentRepo.findById(anyLong())).thenReturn(Optional.ofNullable(adoptiveParent));
+    assertThatExceptionOfType(ElemNotFound.class).isThrownBy(
+        () -> adoptiveParentService.getParentIdByNameAndPhoneAndChatId("", "", 0L));
+  }
 
-        when(adoptiveParentMapper.toRecord(adoptiveParent)).thenReturn(adoptiveParentTestPositive);
+  @Test
+  void getAdoptiveParentByIDPositive() {
+    when(adoptiveParentRepo.findById(anyLong())).thenReturn(Optional.ofNullable(adoptiveParent));
 
-        assertThat(adoptiveParentService.getAdoptiveParentByID(1L)).isEqualTo(adoptiveParentTestPositive);
+    when(adoptiveParentMapper.toRecord(adoptiveParent)).thenReturn(adoptiveParentTestPositive);
 
-        verify(adoptiveParentRepo, times(1)).findById(any());
+    assertThat(adoptiveParentService.getAdoptiveParentByID(1L)).isEqualTo(
+        adoptiveParentTestPositive);
 
-    }
+    verify(adoptiveParentRepo, times(1)).findById(any());
 
-    @Test
-    void getAdoptiveParentByIDNegative() {
-        assertThatExceptionOfType(ElemNotFound.class).isThrownBy(() -> adoptiveParentService.getAdoptiveParentByID(1));
-    }
+  }
 
-    @Test
-    void deleteAdoptiveParentByIDPositive() {
+  @Test
+  void getAdoptiveParentByIDNegative() {
+    assertThatExceptionOfType(ElemNotFound.class).isThrownBy(
+        () -> adoptiveParentService.getAdoptiveParentByID(1));
+  }
 
-        when(adoptiveParentRepo.findById(ANYLONG)).thenReturn(Optional.ofNullable(adoptiveParent));
-        when(adoptiveParentMapper.toRecord(adoptiveParent)).thenReturn(adoptiveParentTestPositive);
-        doNothing().when(adoptiveParentRepo).deleteById(ANYLONG);
+  @Test
+  void deleteAdoptiveParentByIDPositive() {
 
+    when(adoptiveParentRepo.findById(ANYLONG)).thenReturn(Optional.ofNullable(adoptiveParent));
+    when(adoptiveParentMapper.toRecord(adoptiveParent)).thenReturn(adoptiveParentTestPositive);
+    doNothing().when(adoptiveParentRepo).deleteById(ANYLONG);
 
-        assertThat(adoptiveParentService.deleteAdoptiveParentByID(1L)).isEqualTo(adoptiveParentTestPositive);
+    assertThat(adoptiveParentService.deleteAdoptiveParentByID(1L)).isEqualTo(
+        adoptiveParentTestPositive);
 
-        verify(adoptiveParentRepo, times(1)).findById(any());
-        verify(adoptiveParentRepo, times(1)).deleteById(any());
-    }
+    verify(adoptiveParentRepo, times(1)).findById(any());
+    verify(adoptiveParentRepo, times(1)).deleteById(any());
+  }
 
-    @Test
-    void deleteAdoptiveParentByIDNegative() {
+  @Test
+  void deleteAdoptiveParentByIDNegative() {
 
-        assertThatExceptionOfType(ElemNotFound.class).isThrownBy(() -> adoptiveParentService.deleteAdoptiveParentByID(1));
-    }
+    assertThatExceptionOfType(ElemNotFound.class).isThrownBy(
+        () -> adoptiveParentService.deleteAdoptiveParentByID(1));
+  }
 
-    @Test
-    void addAdoptiveParentPositive() {
-        when(adoptiveParentMapper.toEntity(adoptiveParentTestPositive)).thenReturn(adoptiveParent);
+  @Test
+  void addAdoptiveParentPositive() {
+    when(adoptiveParentMapper.toEntity(adoptiveParentTestPositive)).thenReturn(adoptiveParent);
 
-        when(adoptiveParentRepo.save(adoptiveParent)).thenReturn(adoptiveParent);
+    when(adoptiveParentRepo.save(adoptiveParent)).thenReturn(adoptiveParent);
 
-        when(adoptiveParentMapper.toRecord(adoptiveParent)).thenReturn(adoptiveParentTestPositive);
+    when(adoptiveParentMapper.toRecord(adoptiveParent)).thenReturn(adoptiveParentTestPositive);
 
-        assertThat(adoptiveParentService.addAdoptiveParent(adoptiveParentTestPositive)).isEqualTo(adoptiveParentTestPositive);
+    assertThat(adoptiveParentService.addAdoptiveParent(adoptiveParentTestPositive)).isEqualTo(
+        adoptiveParentTestPositive);
 
-        verify(adoptiveParentRepo, times(1)).save(adoptiveParent);
+    verify(adoptiveParentRepo, times(1)).save(adoptiveParent);
 
-    }
+  }
 
-    @Test
-    void addAdoptiveParentNegativeWithNullEntity() {
-        assertThatExceptionOfType(ElemNotFound.class).isThrownBy(() -> adoptiveParentService.addAdoptiveParent(null));
+  @Test
+  void addAdoptiveParentNegativeWithNullEntity() {
+    assertThatExceptionOfType(ElemNotFound.class).isThrownBy(
+        () -> adoptiveParentService.addAdoptiveParent(null));
 
-    }
+  }
 
-    @Test
-    void addAdoptiveParentNegativeWithEmptyOrMistakeFields() {
-        assertThatExceptionOfType(ElemNotFound.class).isThrownBy(() -> adoptiveParentService.addAdoptiveParent(null));
-    }
+  @Test
+  void addAdoptiveParentNegativeWithEmptyOrMistakeFields() {
+    assertThatExceptionOfType(ElemNotFound.class).isThrownBy(
+        () -> adoptiveParentService.addAdoptiveParent(null));
+  }
 
-    @Test
-    void getListOfAdoptiveParentPositive() {
-        List<AdoptiveParent> adoptiveParents = new ArrayList<>();
-        adoptiveParents.add(adoptiveParent);
-        List<AdoptiveParentRecord> adoptiveParentRecords = new ArrayList<>();
-        adoptiveParentRecords.add(adoptiveParentTestPositive);
+  @Test
+  void getListOfAdoptiveParentPositive() {
+    List<AdoptiveParent> adoptiveParents = new ArrayList<>();
+    adoptiveParents.add(adoptiveParent);
+    List<AdoptiveParentRecord> adoptiveParentRecords = new ArrayList<>();
+    adoptiveParentRecords.add(adoptiveParentTestPositive);
 
-        when(adoptiveParentRepo.findAll()).thenReturn(adoptiveParents);
+    when(adoptiveParentRepo.findAll()).thenReturn(adoptiveParents);
 
-        when(adoptiveParentMapper.toRecordList(adoptiveParents)).thenReturn(adoptiveParentRecords);
+    when(adoptiveParentMapper.toRecordList(adoptiveParents)).thenReturn(adoptiveParentRecords);
 
-        assertThat(adoptiveParentService.getListOfAdoptiveParent()).asList().contains(adoptiveParentTestPositive);
+    assertThat(adoptiveParentService.getListOfAdoptiveParent()).asList()
+        .contains(adoptiveParentTestPositive);
 
-        verify(adoptiveParentRepo, times(3)).findAll();
+    verify(adoptiveParentRepo, times(3)).findAll();
 
-    }
+  }
 
-    @Test
-    void getListOfAdoptiveParentNegative() {
-        when(adoptiveParentRepo.findAll()).thenReturn(null);
+  @Test
+  void getListOfAdoptiveParentNegative() {
+    when(adoptiveParentRepo.findAll()).thenReturn(null);
 
-        when(adoptiveParentMapper.toRecordList(null)).thenReturn(null);
+    when(adoptiveParentMapper.toRecordList(null)).thenReturn(null);
 
-        assertThatExceptionOfType(ElemNotFound.class).isThrownBy(() -> adoptiveParentService.getListOfAdoptiveParent());
+    assertThatExceptionOfType(ElemNotFound.class).isThrownBy(
+        () -> adoptiveParentService.getListOfAdoptiveParent());
 
-        verify(adoptiveParentRepo, times(3)).findAll();
+    verify(adoptiveParentRepo, times(3)).findAll();
 
-    }
+  }
 
-    @Test
-    void updateAdoptiveParentPositive() {
-        when(adoptiveParentRepo.findById(anyLong())).thenReturn(Optional.ofNullable(adoptiveParent));
+  @Test
+  void updateAdoptiveParentPositive() {
+    when(adoptiveParentRepo.findById(anyLong())).thenReturn(Optional.ofNullable(adoptiveParent));
 
-        when(adoptiveParentMapper.toEntity(adoptiveParentTestPositive)).thenReturn(adoptiveParent);
+    when(adoptiveParentMapper.toEntity(adoptiveParentTestPositive)).thenReturn(adoptiveParent);
 
-        when(adoptiveParentRepo.save(adoptiveParent)).thenReturn(adoptiveParent);
+    when(adoptiveParentRepo.save(adoptiveParent)).thenReturn(adoptiveParent);
 
-        when(adoptiveParentMapper.toRecord(adoptiveParent)).thenReturn(adoptiveParentTestPositive);
+    when(adoptiveParentMapper.toRecord(adoptiveParent)).thenReturn(adoptiveParentTestPositive);
 
-        assertThat(adoptiveParentService.updateAdoptiveParent(ANYLONG, adoptiveParentTestPositive)).isEqualTo(adoptiveParentTestPositive);
+    assertThat(
+        adoptiveParentService.updateAdoptiveParent(ANYLONG, adoptiveParentTestPositive)).isEqualTo(
+        adoptiveParentTestPositive);
 
-        verify(adoptiveParentRepo, times(1)).findById(any());
+    verify(adoptiveParentRepo, times(1)).findById(any());
 
-        verify(adoptiveParentRepo, times(1)).save(adoptiveParent);
-    }
+    verify(adoptiveParentRepo, times(1)).save(adoptiveParent);
+  }
 
-    @Test
-    void updateAdoptiveParentNegative() {
-        assertThatExceptionOfType(ElemNotFound.class).isThrownBy(() -> adoptiveParentService.updateAdoptiveParent(1, null));
-        assertThatExceptionOfType(ElemNotFound.class).isThrownBy(() -> adoptiveParentService.updateAdoptiveParent(0, adoptiveParentTestPositive));
-    }
+  @Test
+  void updateAdoptiveParentNegative() {
+    assertThatExceptionOfType(ElemNotFound.class).isThrownBy(
+        () -> adoptiveParentService.updateAdoptiveParent(1, null));
+    assertThatExceptionOfType(ElemNotFound.class).isThrownBy(
+        () -> adoptiveParentService.updateAdoptiveParent(0, adoptiveParentTestPositive));
+  }
+
+  @Test
+  void getAdoptiveParentByChatId() {
+    when(adoptiveParentRepo.getAdoptiveParentByChatId(anyLong())).thenReturn(adoptiveParent);
+    when(adoptiveParentMapper.toRecord(adoptiveParent)).thenReturn(adoptiveParentTestPositive);
+
+    assertThat(
+        adoptiveParentService.getAdoptiveParentByChatId(ANYLONG)).isEqualTo(
+        adoptiveParentTestPositive);
+    verify(adoptiveParentRepo, times(1)).getAdoptiveParentByChatId(any());
+  }
+  @Test
+  void getAdoptiveParentByChatIdNegative() {
+    when(adoptiveParentRepo.getAdoptiveParentByChatId(anyLong())).thenReturn(null);
+
+    assertThat(
+        adoptiveParentService.getAdoptiveParentByChatId(ANYLONG)).isEqualTo(
+        null);
+    verify(adoptiveParentRepo, times(1)).getAdoptiveParentByChatId(any());
+  }
 
 }

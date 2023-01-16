@@ -15,15 +15,16 @@ import java.util.List;
 @Repository
 public interface ReportRepository extends JpaRepository<Report, Long> {
 
-   Report getReportByPet_id(Long id);
+//  Report getReportByChatIdAndIsReportCompletedFalse(Long chatId);
 
-  Report getReportByChatIdAndIsReportCompletedFalse(Long chatId);
+  Optional<Report> getByChatIdAndIsReportCompletedFalse(Long chatId);
 
-  List<Report> getAllByChatIdAndIsReportCompletedFalse(Long chatId);
+  List <Report> getAllByChatIdAndIsReportCompletedFalse(Long chatId);
 
-//  Optional<Report> getReportByPet_id(Long id);
-//
+
+  //
 //  Optional<Report> getReportByChatIdAndIsReportCompletedFalse(Long chatId);
+//  Optional<List<Report>> getAllByChatIdAndIsReportCompletedFalse(Long chatId);
 //
 //  Optional<List<Report>> getAllByChatIdAndIsReportCompletedFalse(Long chatId);
 

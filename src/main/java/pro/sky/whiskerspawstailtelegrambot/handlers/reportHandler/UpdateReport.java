@@ -1,11 +1,10 @@
 package pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import pro.sky.whiskerspawstailtelegrambot.handlers.mainHandler.GetBaseInfoFromUpdate;
-import pro.sky.whiskerspawstailtelegrambot.handlers.mediaContentHandler.MediaHandler;
 import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.MediaService;
 import pro.sky.whiskerspawstailtelegrambot.service.ReportService;
@@ -16,8 +15,7 @@ import pro.sky.whiskerspawstailtelegrambot.service.ReportService;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UpdateReport {
 
-  final ReportRecord reportRecord;
-  Message message;
+
   String value;
   CheckingReport checkingReport;
   final ReportService reportService;
@@ -27,9 +25,8 @@ public class UpdateReport {
   /**
    * Создание ReportRecord, проверка и добавление вводимой информации в ReportRecord
    */
-  public UpdateReport(ReportRecord reportRecord, ReportService reportService,
+  public UpdateReport(ReportService reportService,
       GetBaseInfoFromUpdate baseInfo, MediaService mediaService) {
-    this.reportRecord = reportRecord;
     this.reportService = reportService;
     this.baseInfo = baseInfo;
     this.mediaService = mediaService;
@@ -38,63 +35,54 @@ public class UpdateReport {
 
   public void init() {
     checkingReport = new CheckingReport();
-    message = baseInfo.getMessage();
     value = baseInfo.getTextMessage();
   }
 
-  public ReportRecord checkAndUpdateReportId() {
+  public ReportRecord checkAndUpdateReportId(ReportRecord reportRecord)
+      throws IllegalArgumentException {
     Long petId = checkingReport.checkCorrectPetId(value, reportService);
-    if (petId != null) {
-      reportRecord.setPet_id(petId);
-      return reportRecord;
-    }
-    return null;
+    reportRecord.setPet_id(petId);
+    return reportRecord;
+
   }
 
-  public ReportRecord checkAndUpdatePhotoOrDoc() {
-    boolean isCorrect = checkingReport.checkPhotoOrDoc(message);
-    if (isCorrect) {
-      byte[] bytes = new byte[0];
-      if (message.hasPhoto()) {
-        bytes = mediaService.processPhoto(baseInfo).getMediaContent().getFileAsArrayOfBytes();
-      }
-      if (message.hasDocument()) {
-        bytes = mediaService.processDoc(baseInfo).getMediaContent().getFileAsArrayOfBytes();
-      }
-      reportRecord.setPhotoPet(bytes);
-      return reportRecord;
+  public ReportRecord checkAndUpdatePhotoOrDoc(ReportRecord reportRecord)
+      throws IllegalArgumentException {
+    checkingReport.checkPhotoOrDoc(baseInfo);
+    byte[] bytes = new byte[0];
+    if (baseInfo.getMessage().hasPhoto()) {
+      bytes = mediaService.processPhoto(baseInfo).getMediaContent().getFileAsArrayOfBytes();
     }
-    return null;
+    if (baseInfo.getMessage().hasDocument()) {
+      bytes = mediaService.processDoc(baseInfo).getMediaContent().getFileAsArrayOfBytes();
+    }
+    reportRecord.setPhotoPet(bytes);
+    return reportRecord;
   }
 
-  public ReportRecord checkAndUpdateEnterDiet() {
-    boolean isCorrect = checkingReport.checkText(value);
-    if (isCorrect) {
-      reportRecord.setDiet(value);
-      return reportRecord;
-    }
-    return null;
+  public ReportRecord checkAndUpdateEnterDiet(ReportRecord reportRecord)
+      throws IllegalArgumentException {
+    checkingReport.checkText(value);
+    reportRecord.setDiet(value);
+    return reportRecord;
   }
 
-  public ReportRecord checkAndUpdateEnterFeelings() {
-    boolean isCorrect = checkingReport.checkText(value);
-    if (isCorrect) {
-      reportRecord.setReportAboutFeelings(value);
-      return reportRecord;
-    }
-    return null;
+  public ReportRecord checkAndUpdateEnterFeelings(ReportRecord reportRecord)
+      throws IllegalArgumentException {
+    checkingReport.checkText(value);
+    reportRecord.setReportAboutFeelings(value);
+    return reportRecord;
   }
 
-  public ReportRecord checkAndUpdateEnterHabits() {
-    boolean isCorrect = checkingReport.checkText(value);
-    if (isCorrect) {
-      reportRecord.setReportAboutHabits(value);
-      reportRecord.setIsReportCompleted(true);
-      reportRecord.setIsReportCompleted(true);
-      reportRecord.setDateTime(LocalDateTime.now());
-      return reportRecord;
-    }
-    return null;
+  public ReportRecord checkAndUpdateEnterHabits(ReportRecord reportRecord)
+      throws IllegalArgumentException {
+    checkingReport.checkText(value);
+    reportRecord.setReportAboutHabits(value);
+    reportRecord.setIsReportCompleted(true);
+    reportRecord.setIsReportCompleted(true);
+    reportRecord.setDateTime(LocalDateTime.now());
+    return reportRecord;
+
   }
 
 

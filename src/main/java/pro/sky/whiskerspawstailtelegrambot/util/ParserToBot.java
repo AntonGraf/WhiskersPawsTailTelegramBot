@@ -69,9 +69,6 @@ public class ParserToBot {
   }
 
   public String parserPet(Collection<PetRecord> petRecords) {
-    if (petRecords.isEmpty()) {
-      return null;
-    }
 
     StringBuilder stringBuilder = new StringBuilder();
     int count = 0;
