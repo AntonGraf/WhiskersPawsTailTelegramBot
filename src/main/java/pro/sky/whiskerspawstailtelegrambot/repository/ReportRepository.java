@@ -16,9 +16,9 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 
   Report getReportByChatIdAndIsReportCompletedFalse(Long chatId);
 
-  List<Report> getReportsByChatIdAndIsReportCompletedFalse(Long chatId);
-
-  Report getReportByIsReportCompletedFalseAndChatId(Long chatId);
+//  List<Report> getReportsByChatIdAndIsReportCompletedFalse(Long chatId);
+//
+//  Report getReportByIsReportCompletedFalseAndChatId(Long chatId);
   List<Report> getAllByIsReportCompletedFalseAndChatId(Long chatId);
 
 }

@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import pro.sky.whiskerspawstailtelegrambot.handlers.mainHandler.GetBaseInfoFromUpdate;
-import pro.sky.whiskerspawstailtelegrambot.handlers.mediaContentHandler.MediaHandler;
 import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.MediaService;
 import pro.sky.whiskerspawstailtelegrambot.service.ReportService;
@@ -102,7 +101,7 @@ public class WorkingWithReport {
   }
 
   private SendMessage cancelCreateReport() {
-    reportService.removeBlankReportByChatId(baseInfo.getChatIdL());
+    reportService.removeAllBlankReportByChatId(baseInfo.getChatIdL());
     sendMessage = formReplyMessages.replyMessage(chatId, CANCEL_RETURN_MAIN_MENU_TEXT,
         configKeyboard.initKeyboardOnClickStart());
     stateService.updateStateAdoptiveParentByChatId(chatIdL,

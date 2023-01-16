@@ -70,7 +70,7 @@ public class MainHandlerImpl implements MainHandler {
         return sendMessage;
       }
 
-      StateAdoptiveParent stateAdoptiveParent = stateHandler// затем если статус не FREE обрабатываем все запросы в соответсвующих Handler
+      StateAdoptiveParent stateAdoptiveParent = stateService// затем если статус не FREE обрабатываем все запросы в соответсвующих Handler
           .getStateAdoptiveParentByChatId(baseInfo.getChatIdL());
       if (stateAdoptiveParent != null && stateAdoptiveParent != StateAdoptiveParent.FREE) {
         return stateHandler.processByState(baseInfo, stateAdoptiveParent);
