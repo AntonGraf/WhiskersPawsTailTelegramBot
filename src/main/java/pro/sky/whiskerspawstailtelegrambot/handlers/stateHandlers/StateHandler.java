@@ -52,14 +52,14 @@ public class StateHandler {
   /**
    * получить состояние пользователя по chatId
    */
-  public StateAdoptiveParent getStateAdoptiveParentByChatId(long chatId) {
-    StateAdoptiveParent stateAdoptiveParentByChatId = stateService.getStateAdoptiveParentByChatId(
-        chatId);
-    if (stateAdoptiveParentByChatId == null) {
-      return null;
-    }
-    return stateAdoptiveParentByChatId;
-  }
+//  public StateAdoptiveParent getStateAdoptiveParentByChatId(long chatId) {
+//    StateAdoptiveParent stateAdoptiveParentByChatId = stateService.getStateAdoptiveParentByChatId(
+//        chatId);
+//    if (stateAdoptiveParentByChatId == null) {
+//      return null;
+//    }
+//    return stateAdoptiveParentByChatId;
+//  }
 
   /**
    * проверить на соответсвие состоянию из состояний отправки отчета

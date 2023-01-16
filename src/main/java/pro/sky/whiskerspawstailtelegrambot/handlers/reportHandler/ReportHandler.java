@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import pro.sky.whiskerspawstailtelegrambot.handlers.mainHandler.GetBaseInfoFromUpdate;
-import pro.sky.whiskerspawstailtelegrambot.handlers.mediaContentHandler.MediaHandler;
 import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.MediaService;
 import pro.sky.whiskerspawstailtelegrambot.service.ReportService;
@@ -44,9 +43,11 @@ public class ReportHandler {
         .getStackTrace()[0]
         .getMethodName() + " класса " + this.getClass().getName());
 
-    ReportRecord reportRecord = reportService.getReportInStartStateByChatId(baseInfo.getChatIdL());
+    ReportRecord reportRecord = reportService.getReportByChatIdAndIsReportCompletedFalse(
+        baseInfo.getChatIdL());
 
-    WorkingWithReport workingWithReport = new WorkingWithReport(baseInfo, reportService, stateService,
+    WorkingWithReport workingWithReport = new WorkingWithReport(baseInfo, reportService,
+        stateService,
         mediaService);
     sendMessage = workingWithReport.work(reportRecord, stateAdoptiveParent);
 

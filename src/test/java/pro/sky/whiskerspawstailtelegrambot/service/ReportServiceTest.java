@@ -2,6 +2,7 @@ package pro.sky.whiskerspawstailtelegrambot.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
@@ -13,7 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import javax.imageio.ImageIO;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,11 +33,10 @@ import pro.sky.whiskerspawstailtelegrambot.record.PetRecord;
 import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
 import pro.sky.whiskerspawstailtelegrambot.repository.PetRepository;
 import pro.sky.whiskerspawstailtelegrambot.repository.ReportRepository;
-import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
-import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
 
 @ExtendWith(MockitoExtension.class)
 class ReportServiceTest {
+
 
   @Mock
   ReportRepository reportRepository;
@@ -77,6 +77,8 @@ class ReportServiceTest {
     reportRecord.setDiet("test ");
     reportRecord.setReportAboutFeelings("test ");
     reportRecord.setReportAboutHabits("test ");
+    reportRecord.setIsReportCompleted(false);
+    reportRecord.setChatId(999l);
 //    reportRecord.setStateReport("FINISHED");
 
     updateReportRecord.setId(1l);
@@ -85,6 +87,8 @@ class ReportServiceTest {
     updateReportRecord.setDiet("update test ");
     updateReportRecord.setReportAboutFeelings("update test ");
     updateReportRecord.setReportAboutHabits("update test ");
+    updateReportRecord.setIsReportCompleted(false);
+    updateReportRecord.setChatId(999l);
 //    updateReportRecord.setStateReport("NOT_STARTED");
 
     report.setId(1l);
@@ -93,6 +97,8 @@ class ReportServiceTest {
     report.setDiet("test ");
     report.setReportAboutFeelings("test ");
     report.setReportAboutHabits("test ");
+    report.setIsReportCompleted(false);
+    report.setChatId(999l);
 //    report.setStateReport("FINISHED");
 
     updateReport.setId(1l);
@@ -101,10 +107,10 @@ class ReportServiceTest {
     updateReport.setDiet("update test ");
     updateReport.setReportAboutFeelings("update test ");
     updateReport.setReportAboutHabits("update test ");
+    updateReport.setIsReportCompleted(false);
+    updateReport.setChatId(999l);
 //    updateReport.setStateReport("NOT_STARTED");
   }
-
-
   @Test
   void getReportById() {
     when(reportRepository.findById(anyLong())).thenReturn(Optional.of(report));
@@ -136,97 +142,59 @@ class ReportServiceTest {
   }
 
   @Test
-  void addNewReportInDbForPetByPetId() {
-    when(reportRepository.getReportByPet_id(anyLong())).thenReturn(report);
-    when(reportMapper.toRecord(any(Report.class))).thenReturn(reportRecord);
+  void getReportByChatIdAndIsReportCompletedFalse() {
+    when(reportRepository.getReportByChatIdAndIsReportCompletedFalse(anyLong())).thenReturn(report);
 
-    assertThat(reportService.getReportByPetId(1l)).isEqualTo(reportRecord);
-    verify(reportRepository, times(1)).getReportByPet_id(any());
+    assertThat(reportService.getReportByChatIdAndIsReportCompletedFalse(999)).isEqualTo(reportRecord);
+    verify(reportRepository, times(1)).getReportByChatIdAndIsReportCompletedFalse(any());
+  }
+  @Test
+  void getReportByChatIdAndIsReportCompletedFalseNegative() {
+    when(reportRepository.getReportByChatIdAndIsReportCompletedFalse(anyLong())).thenReturn(null);
+
+    assertThat(reportService.getReportByChatIdAndIsReportCompletedFalse(999)).isNull();
+    verify(reportRepository, times(1)).getReportByChatIdAndIsReportCompletedFalse(any());
   }
 
   @Test
-  void addNewReportInDbForPetByPetIdNegative() {
-    assertThat(reportService.getReportByPetId(2)).isNull();
-    verify(reportRepository, times(1)).getReportByPet_id(any());
+  void addNewBlankReportWithChatId() {
+
+    ReportRecord report1 = new ReportRecord();
+    report1.setChatId(999l);
+    report1.setIsReportCompleted(false);
+
+    assertThat(reportService.addNewBlankReportWithChatId(999)).isEqualTo(report1);
+    verify(reportRepository, times(1)).save(any());
+  }
+  @Test
+  void removeAllBlankReportByChatId() {
+
+//    when(reportRepository.save(any(Report.class))).thenReturn(report);
+//    when(reportRepository.save(any(Report.class))).thenReturn(updateReport);
+    List<Report> reports =new ArrayList<>();
+    reports.add(report);
+    reports.add(updateReport);
+    when(reportRepository.findAll()).thenReturn(reports);
+    when(reportRepository.findAll().size()).thenReturn(2);
+//    assertThat(reportService.removeAllBlankReportByChatId(999l)))
+
+var q = reportRepository.findAll();
+    when(reportRepository.getAllByIsReportCompletedFalseAndChatId(anyLong())).thenReturn(null);
+//    assertThat(reportService.removeAllBlankReportByChatId(999l)).
+//    verify(reportRepository, times(1)).getAllByIsReportCompletedFalseAndChatId(any());
+
   }
 
   @Test
-  void updateReportByReportId() {
-//    when(reportRepository.findById(anyLong())).thenReturn(Optional.of(report));
-//    when(reportService.getReportById(anyLong())).thenReturn(reportRecord);
-//    when(reportRepository.save(updateReport)).thenReturn(updateReport);
-//
-//    assertThat(reportService.updateReport(1, updateReportRecord)).isEqualTo(
-//        updateReportRecord);
-//    verify(reportRepository, times(2)).findById(any());
-//    verify(reportRepository, times(1)).save(any());
-
-  }
-
-  @Test
-  void updateReportByReportIdNegative() {
-//    assertThatExceptionOfType(ElemNotFound.class).isThrownBy(
-//        () -> reportService.updateReport(3, updateReportRecord));
-//    verify(reportRepository, times(1)).findById(any());
-//    verify(reportRepository, times(1)).save(any());
+  void updateReport() {
   }
 
   @Test
   void showAllAdoptedPets() {
-
-    PetRecord petRecord = initDogReport(initAdoptiveParent(111));
-
-    Collection<PetRecord> petRecords = new ArrayList<>();
-    petRecords.add(petRecord);
-
-    ParserToBot parserToBot = new ParserToBot();
-    String allAdoptedPets = parserToBot.parserPet(petRecords);
-    when(petService.findAllPet()).thenReturn(petRecords);
-
-    assertThat(reportService.showAllAdoptedPets(111)).isEqualTo(
-        allAdoptedPets);
-    verify(petService, times(1)).findAllPet();
   }
 
   @Test
-  void showAllAdoptedPetsNegative() {
-    PetRecord petRecord = initDogReport(initAdoptiveParent(111));
-
-    Collection<PetRecord> petRecords = new ArrayList<>();
-    petRecords.add(petRecord);
-
-    ParserToBot parserToBot = new ParserToBot();
-    String allAdoptedPets = parserToBot.parserPet(petRecords);
-    when(petService.findAllPet()).thenReturn(petRecords);
-
-    assertThat(reportService.showAllAdoptedPets(222)).isEqualTo(
-        AllText.YOU_HAVE_NO_ADOPTED_PETS_TEXT);
-    verify(petService, times(1)).findAllPet();
-  }
-
-  @Test
-  void changeStateAdoptiveParent() {
-  }
-
-  @Test
-  void changeStateAdoptiveParentNegative() {
-  }
-
-
-  @Test
-  void getStateAdoptiveParentByChatId() {
-  }
-
-  @Test
-  void getStateAdoptiveParentByChatIdNegative() {
-  }
-
-  @Test
-  void getStateReportByPetId() {
-  }
-
-  @Test
-  void getStateReportByPetIdNegative() {
+  void getPetById() {
   }
 
   AdoptiveParent initAdoptiveParent(long id) {

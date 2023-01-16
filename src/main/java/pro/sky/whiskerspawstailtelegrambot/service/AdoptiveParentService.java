@@ -176,38 +176,5 @@ public class AdoptiveParentService {
     return adoptiveParentMapper.toRecord(adoptiveParentRepo.getAdoptiveParentByChatId(chatId));
   }
 
-  /**
-   * Получить state AdoptiveParent по chatId
-   *
-   * @param chatId string chatId
-   * @return состояни пользователя
-   */
-  public StateAdoptiveParent getStateAdoptiveParentByChatId(long chatId) {
-     log.info("Вызов метода " + new Throwable()
-        .getStackTrace()[0]
-        .getMethodName() + " класса " + this.getClass().getName());
-    AdoptiveParentRecord adoptiveParentRecord = getAdoptiveParentByChatId(chatId);
-    if (adoptiveParentRecord != null) {
-      String state = adoptiveParentRecord.getState();
-      return StateAdoptiveParent.valueOf(state);
-    }
-    return null;
-  }
-
-  /**
-   *
-   * Обновить state пользователя по его chatId
-   * @param chatId long chatId
-   * @param state стейт на который нужно обновить
-   * @return Обновленный adoptiveParentRecord или null
-   */
-  public AdoptiveParentRecord updateStateAdoptiveParentByChatId(long chatId, StateAdoptiveParent state){
-    AdoptiveParentRecord adoptiveParentRecord = getAdoptiveParentByChatId(chatId);
-    if (adoptiveParentRecord != null) {
-      adoptiveParentRecord.setState(state.name());
-      updateAdoptiveParent(adoptiveParentRecord.getId(),adoptiveParentRecord);
-    }
-    return adoptiveParentRecord;
-  }
 
 }

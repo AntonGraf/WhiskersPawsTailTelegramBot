@@ -8,15 +8,11 @@ import org.springframework.stereotype.Service;
 import pro.sky.whiskerspawstailtelegrambot.entity.Report;
 import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
 import pro.sky.whiskerspawstailtelegrambot.mapper.ReportMapper;
-import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.record.PetRecord;
 import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
 import pro.sky.whiskerspawstailtelegrambot.repository.ReportRepository;
-import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FilterAdoptedPets;
-import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
 import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
-import pro.sky.whiskerspawstailtelegrambot.service.enums.StateAdoptiveParent;
 
 @Service
 @Slf4j
@@ -35,8 +31,6 @@ public class ReportService {
     this.adoptiveParentService = adoptiveParentService;
     this.reportMapper = reportMapper;
   }
-
-
   /**
    * Получить отчет по его Id
    *
@@ -67,15 +61,14 @@ public class ReportService {
   /**
    * Получить незавершенный отчет по chatId пользователя
    */
-  public ReportRecord getReportInStartStateByChatId(long chatId) {
+  public ReportRecord getReportByChatIdAndIsReportCompletedFalse(long chatId) {
 
     Report report = reportRepository.getReportByChatIdAndIsReportCompletedFalse(chatId);
 
-    ReportRecord reportRecord = null;
     if (report != null) {
-      reportRecord = reportMapper.toRecord(report);
+      return  reportMapper.toRecord(report);
     }
-    return reportRecord;
+    return null;
   }
 
   /**
@@ -84,7 +77,7 @@ public class ReportService {
    * @return новй созданый отчет
    */
   public ReportRecord addNewBlankReportWithChatId(long chatId) {
-    removeBlankReportByChatId(chatId);
+    removeAllBlankReportByChatId(chatId);
     Report report = new Report();
     report.setChatId(chatId);
     report.setIsReportCompleted(false);
@@ -92,7 +85,11 @@ public class ReportService {
     return reportMapper.toRecord(report);
   }
 
-  public void removeBlankReportByChatId(Long chatId) {
+  /**
+   * удалить все отчеты по чат id со статусом false
+   * @param chatId
+   */
+  public void removeAllBlankReportByChatId(Long chatId) {
     List<Report> report = reportRepository.getAllByIsReportCompletedFalseAndChatId(
         chatId);
     reportRepository.deleteAll(report);
@@ -143,54 +140,11 @@ public class ReportService {
     return allAdoptedPets;
   }
 
-
   /**
-   * Изменениние состояния пользователя
-   *
-   * @param chatId chat id пользователя
-   * @param state  Список состояний пользвателя, га который нужно заменить уже сужествующий
-   * @return новый статус
+   * получить питомца по его ID
+   * @param petId
+   * @return
    */
-  public StateAdoptiveParent updateStateAdoptiveParentByChatId(long chatId,
-      StateAdoptiveParent state) {
-    log.info("Вызов метода " + new Throwable()
-        .getStackTrace()[0]
-        .getMethodName() + " класса " + this.getClass().getName());
-
-    AdoptiveParentRecord oldAPR = adoptiveParentService.getAdoptiveParentByChatId(
-        chatId);
-    long id = oldAPR.getId();
-    oldAPR.setState(state.name());
-
-    AdoptiveParentRecord newAPR = adoptiveParentService.updateAdoptiveParent(id, oldAPR);
-    return StateAdoptiveParent.valueOf(newAPR.getState());
-  }
-
-  /**
-   * Получить состояние пользователя, по его чат ид
-   *
-   * @param chatId чат ид пользователя
-   * @return состояние пользователя из бд
-   */
-  public StateAdoptiveParent getStateAdoptiveParentByChatId(long chatId) {
-    return adoptiveParentService.getStateAdoptiveParentByChatId(chatId);
-  }
-
-  /**
-   * Получить состояние отчета по id животного
-   *
-   * @param petId id животного
-   * @return Состояние отчета из бд или null
-   */
-//  public StateReport getStateReportByPetId(long petId) {
-//
-//    ReportRecord reportRecord = getReportByPetId(petId);
-//    StateReport stateReport;
-//    if (reportRecord != null) {
-//      return reportRecord.getStateReport();
-//    }
-//    return null;
-//  }
   public PetRecord getPetById(long petId) {
     PetRecord petRecord;
     try {

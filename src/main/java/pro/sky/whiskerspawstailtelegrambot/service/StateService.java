@@ -38,7 +38,6 @@ public class StateService {
     return null;
   }
 
-
   /**
    * Получить AdoptiveParent по chat id
    *
@@ -54,7 +53,7 @@ public class StateService {
 
 
   /**
-   * Получить state AdoptiveParent по chatId
+   *  получить состояние пользователя по chatId
    *
    * @param chatId string chatId
    * @return состояни пользователя
@@ -70,7 +69,6 @@ public class StateService {
     }
     return null;
   }
-
   /**
    * Обновить state пользователя по его chatId
    *
