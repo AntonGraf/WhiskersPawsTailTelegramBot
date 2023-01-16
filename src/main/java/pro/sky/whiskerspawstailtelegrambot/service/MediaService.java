@@ -75,7 +75,7 @@ public class MediaService {
       MediaContent persistentBinaryContent = getPersistentMediaContent(response);
       MediaDocument documentRecord = buildTransientDoc(telegramDoc, persistentBinaryContent);
       saveDocument(documentRecord);
-      return formReplyMessages.replyMessage(message, AllText.DOC_SUCCESSFUL_REPORT_TEXT,
+      return formReplyMessages.replyMessage(message.getChatId().toString(), AllText.DOC_SUCCESSFUL_REPORT_TEXT,
           configKeyboard.initKeyboardOnClickStart());
     } else {
       log.error("Bad response from telegram service: " + response);
@@ -113,7 +113,7 @@ public class MediaService {
       MediaContent persistentBinaryContent = getPersistentMediaContent(response);
       MediaPhoto mediaPhoto = buildTransientPhoto(telegramPhoto, persistentBinaryContent);
       savePhoto(mediaPhoto);
-      return formReplyMessages.replyMessage(message, AllText.PHOTO_SUCCESSFUL_REPORT_TEXT,
+      return formReplyMessages.replyMessage(message.getChatId().toString(), AllText.PHOTO_SUCCESSFUL_REPORT_TEXT,
           configKeyboard.initKeyboardOnClickStart());
     } else {
       log.error("Bad response from telegram service: " + response);
