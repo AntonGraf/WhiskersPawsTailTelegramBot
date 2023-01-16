@@ -135,7 +135,7 @@ public class MediaService {
       MediaContent persistentBinaryContent = getPersistentMediaContent(response);
       MediaPhoto mediaPhoto = buildTransientPhoto(telegramPhoto, persistentBinaryContent);
       savePhoto(mediaPhoto);
-      return formReplyMessages.replyMessage(message.getChatId().toString(), AllText.PHOTO_SUCCESSFUL_REPORT_TEXT,
+      return formReplyMessages.replyMessage(String.valueOf(message), AllText.PHOTO_SUCCESSFUL_REPORT_TEXT,
           configKeyboard.initKeyboardOnClickStart());
     } else {
       log.error("Bad response from telegram service: " + response);
