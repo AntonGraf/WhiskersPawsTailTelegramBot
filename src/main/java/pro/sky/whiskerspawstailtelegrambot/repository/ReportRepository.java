@@ -1,5 +1,6 @@
 package pro.sky.whiskerspawstailtelegrambot.repository;
 
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import pro.sky.whiskerspawstailtelegrambot.entity.Report;
@@ -14,14 +15,21 @@ import java.util.List;
 @Repository
 public interface ReportRepository extends JpaRepository<Report, Long> {
 
-  Report getReportByPet_id(Long id);
+   Report getReportByPet_id(Long id);
 
   Report getReportByChatIdAndIsReportCompletedFalse(Long chatId);
+
+  List<Report> getAllByChatIdAndIsReportCompletedFalse(Long chatId);
+
+//  Optional<Report> getReportByPet_id(Long id);
+//
+//  Optional<Report> getReportByChatIdAndIsReportCompletedFalse(Long chatId);
+//
+//  Optional<List<Report>> getAllByChatIdAndIsReportCompletedFalse(Long chatId);
 
 //  List<Report> getReportsByChatIdAndIsReportCompletedFalse(Long chatId);
 //
 //  Report getReportByIsReportCompletedFalseAndChatId(Long chatId);
-  List<Report> getAllByIsReportCompletedFalseAndChatId(Long chatId);
 
   List<Report> findReportsByDateTimeAfter(LocalDateTime dateTime);
 

@@ -110,7 +110,7 @@ public class WorkingWithReport {
   }
 
   private SendMessage startReport0() {
-    String allPetByChatId = reportService.showAllAdoptedPets(baseInfo.getChatIdL());
+    String allPetByChatId = reportService.showAllAdoptedPetsByChatId(baseInfo.getChatIdL());
     if (allPetByChatId == null) {
       stateService.updateStateAdoptiveParentByChatId(chatIdL,
           StateAdoptiveParent.FREE);

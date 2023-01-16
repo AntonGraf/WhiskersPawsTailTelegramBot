@@ -31,6 +31,7 @@ public class ReportService {
     this.adoptiveParentService = adoptiveParentService;
     this.reportMapper = reportMapper;
   }
+
   /**
    * Получить отчет по его Id
    *
@@ -48,7 +49,7 @@ public class ReportService {
    * @param petId Id животного
    * @return отчет по id животного
    */
-  public ReportRecord getReportByPetId(long petId) {
+  public ReportRecord getReportByPetId(Long petId) {
 
     Report report = reportRepository.getReportByPet_id(petId);
     ReportRecord reportRecord = null;
@@ -61,12 +62,12 @@ public class ReportService {
   /**
    * Получить незавершенный отчет по chatId пользователя
    */
-  public ReportRecord getReportByChatIdAndIsReportCompletedFalse(long chatId) {
+  public ReportRecord getReportByChatIdAndIsReportCompletedFalse(Long chatId) {
 
     Report report = reportRepository.getReportByChatIdAndIsReportCompletedFalse(chatId);
 
     if (report != null) {
-      return  reportMapper.toRecord(report);
+      return reportMapper.toRecord(report);
     }
     return null;
   }
@@ -76,7 +77,7 @@ public class ReportService {
    *
    * @return новй созданый отчет
    */
-  public ReportRecord addNewBlankReportWithChatId(long chatId) {
+  public ReportRecord addNewBlankReportWithChatId(Long chatId) {
     removeAllBlankReportByChatId(chatId);
     Report report = new Report();
     report.setChatId(chatId);
@@ -87,12 +88,14 @@ public class ReportService {
 
   /**
    * удалить все отчеты по чат id со статусом false
+   *
    * @param chatId
    */
-  public void removeAllBlankReportByChatId(Long chatId) {
-    List<Report> report = reportRepository.getAllByIsReportCompletedFalseAndChatId(
+  public List<Report> removeAllBlankReportByChatId(Long chatId) {
+    List<Report> report = reportRepository.getAllByChatIdAndIsReportCompletedFalse(
         chatId);
     reportRepository.deleteAll(report);
+    return report;
   }
 
 
@@ -115,7 +118,8 @@ public class ReportService {
     oldReportRecord.setIsReportCompleted(newReportRecord.getIsReportCompleted());
     oldReportRecord.setDateTime(newReportRecord.getDateTime());
 
-    return reportMapper.toRecord(reportRepository.save(reportMapper.toEntity(oldReportRecord)));
+    reportRepository.save(reportMapper.toEntity(oldReportRecord));
+    return newReportRecord;
   }
 
 
@@ -125,28 +129,32 @@ public class ReportService {
    * @param chatId чат id пользователя
    * @return Список животных в  текстовом формате для отправки пользователю.
    */
-  public String showAllAdoptedPets(long chatId) {
+  public String showAllAdoptedPetsByChatId(Long chatId) {
     log.info("Вызов метода " + new Throwable()
         .getStackTrace()[0]
         .getMethodName() + " класса " + this.getClass().getName());
 
-    Collection<PetRecord> petRecords = petService.findAllPet();
+    Collection<PetRecord> allPet = petService.findAllPet();
+    if (allPet != null) {
+      Collection<PetRecord> petRecords = petService.findAllPet();
 
-    FilterAdoptedPets filterAdoptedPets = new FilterAdoptedPets();
-    petRecords = filterAdoptedPets.byChatId(chatId, petRecords);
+      FilterAdoptedPets filterAdoptedPets = new FilterAdoptedPets();
+      petRecords = filterAdoptedPets.byChatId(chatId, petRecords);
 
-    ParserToBot parserToBot = new ParserToBot();
-    String allAdoptedPets = parserToBot.parserPet(petRecords);
-
-    return allAdoptedPets;
+      ParserToBot parserToBot = new ParserToBot();
+      String allAdoptedPets = parserToBot.parserPet(petRecords);
+      return allAdoptedPets;
+    }
+    return null;
   }
 
   /**
    * получить питомца по его ID
+   *
    * @param petId
    * @return
    */
-  public PetRecord getPetById(long petId) {
+  public PetRecord getPetByPetId(Long petId) {
     PetRecord petRecord;
     try {
       petRecord = petService.findPet(petId);

@@ -1,11 +1,8 @@
 package pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler;
 
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.telegram.telegrambots.meta.api.objects.Document;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
@@ -17,7 +14,7 @@ public class CheckingReport {
   public Long checkCorrectPetId(String textMessage, ReportService reportService) {
 
     Long tmpPetId = parserStringPetId(textMessage);
-    Long petId = tmpPetId != null ? reportService.getPetById(tmpPetId).getId() : null;
+    Long petId = tmpPetId != null ? reportService.getPetByPetId(tmpPetId).getId() : null;
     return petId;
   }
 

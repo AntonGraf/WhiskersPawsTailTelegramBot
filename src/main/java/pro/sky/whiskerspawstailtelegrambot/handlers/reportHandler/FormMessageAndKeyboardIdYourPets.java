@@ -25,7 +25,7 @@ public class FormMessageAndKeyboardIdYourPets {
     SendMessage sendMessage = null;
     FormReplyMessages formReplyMessages = new FormReplyMessages();
 
-    String allPetByChatId = reportService.showAllAdoptedPets(baseInfo.getChatIdL());
+    String allPetByChatId = reportService.showAllAdoptedPetsByChatId(baseInfo.getChatIdL());
     if (allPetByChatId == null) {
       return null;
     }
