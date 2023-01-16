@@ -76,15 +76,15 @@ public class MainHandlerImpl implements MainHandler {
         return stateHandler.processByState(baseInfo, stateAdoptiveParent);
       }
 
-      if(baseInfo.getMessage().hasPhoto() || baseInfo.getMessage().hasDocument()){//обрабатываем медиа если стаус FREE
-       return mediaHandler.workingState(baseInfo);
-      }
-
       if (baseInfo.isCallbackQuery()) {//обрабатываем CallbackQuery если стаус FREE
         sendMessage = callbackQueryHandler.handler(baseInfo);
       } else {
         Message message = baseInfo.getMessage();//обрабатываем стандартную клавиатуру если стаус FREE
         sendMessage = standardReplyHandler.startHandler(baseInfo, message);
+      }
+
+      if(baseInfo.getMessage().hasPhoto() || baseInfo.getMessage().hasDocument()){//обрабатываем медиа если стаус FREE
+        mediaHandler.workingState(baseInfo);
       }
 
     } catch (Exception e) {

@@ -68,17 +68,17 @@ public class StandardReplyHandler {
             parserToBot.parserVolunteer(volunteerService.getAllVolunteers()));
 
       case (AllText.HOW_TAKE_DOG):
-        return sendMessage = formReplyMessages.replyMessage(message, AllText.HOW_TAKE_DOG_SHELTER,
+        return sendMessage = formReplyMessages.replyMessage(chatId, AllText.HOW_TAKE_DOG_SHELTER,
             configKeyboard.initKeyboardOnClickStart());
 
       case (AllText.INFO_SHELTER_TEXT):
-        return sendMessage = formReplyMessages.replyMessage(message,
+        return sendMessage = formReplyMessages.replyMessage(chatId,
             AllText.INFO,
             configKeyboard.initKeyboardOnClickStart());
       //------------------> Показать Id
       case (AllText.SHOW_ME_ID):
         AdoptiveParentRecord adoptiveParentRecord =
-            adoptiveParentService.getAdoptiveParentByChatId(Long.parseLong(chatId));
+            adoptiveParentService.getAdoptiveParentByChatId(baseInfo.getChatIdL());
         if (adoptiveParentRecord != null) {
           //проверяем если есть в бд, то просто id
           return new SendMessage(chatId, AllText.SHOW_ID_OK + adoptiveParentRecord.getId());
@@ -88,7 +88,8 @@ public class StandardReplyHandler {
       //------------------> Показать Всех животных
       case (AllText.SHOW_ALL_ANIMAL):
 
-        return sendMessage = formReplyMessages.replyMessage(message, AllText.CHOOSE_CATEGORY,
+        return sendMessage = formReplyMessages.replyMessage(baseInfo.getChatId(),
+            AllText.CHOOSE_CATEGORY,
             configKeyboard
                 .formReplyKeyboardInOneRowInline
                     (AllText.CAT,
@@ -98,42 +99,42 @@ public class StandardReplyHandler {
 
       //------------------> Показать Всех животных
       case ("/1"): // Выбор информации из списка меню информации
-        return sendMessage = formReplyMessages.replyMessage(message,
+        return sendMessage = formReplyMessages.replyMessage(baseInfo.getChatId(),
             shelterService.getOfShelterMessage((byte) 1),
             configKeyboard.initKeyboardOnClickStart());
 
       case ("/2"):
 
-        return sendMessage = formReplyMessages.replyMessage(message,
+        return sendMessage = formReplyMessages.replyMessage(baseInfo.getChatId(),
             shelterService.getOfShelterMessage((byte) 2),
             configKeyboard.initKeyboardOnClickStart());
       case ("/3"):
-        return sendMessage = formReplyMessages.replyMessage(message,
+        return sendMessage = formReplyMessages.replyMessage(baseInfo.getChatId(),
             shelterService.getOfShelterMessage((byte) 3),
             configKeyboard.initKeyboardOnClickStart());
 
       case ("/4"):
-        return sendMessage = formReplyMessages.replyMessage(message,
+        return sendMessage = formReplyMessages.replyMessage(baseInfo.getChatId(),
             shelterService.getOfShelterMessage((byte) 4),
             configKeyboard.initKeyboardOnClickStart());
       case ("/5"):
-        return sendMessage = formReplyMessages.replyMessage(message,
+        return sendMessage = formReplyMessages.replyMessage(baseInfo.getChatId(),
             shelterService.getOfShelterMessage((byte) 5),
             configKeyboard.initKeyboardOnClickStart());
       case ("/6"):
-        return sendMessage = formReplyMessages.replyMessage(message,
+        return sendMessage = formReplyMessages.replyMessage(baseInfo.getChatId(),
             shelterService.getOfShelterMessage((byte) 6),
             configKeyboard.initKeyboardOnClickStart());
       case ("/7"):
-        return sendMessage = formReplyMessages.replyMessage(message,
+        return sendMessage = formReplyMessages.replyMessage(baseInfo.getChatId(),
             shelterService.getOfShelterMessage((byte) 7),
             configKeyboard.initKeyboardOnClickStart());
       case ("/8"):
-        return sendMessage = formReplyMessages.replyMessage(message,
+        return sendMessage = formReplyMessages.replyMessage(baseInfo.getChatId(),
             shelterService.getOfShelterMessage((byte) 8),
             configKeyboard.initKeyboardOnClickStart());
       case ("/9"):
-        return sendMessage = formReplyMessages.replyMessage(message,
+        return sendMessage = formReplyMessages.replyMessage(baseInfo.getChatId(),
             shelterService.getOfShelterMessage((byte) 9),
             configKeyboard.initKeyboardOnClickStart());
 
