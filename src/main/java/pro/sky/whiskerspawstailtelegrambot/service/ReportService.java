@@ -113,6 +113,7 @@ public class ReportService {
     oldReportRecord.setReportAboutFeelings(newReportRecord.getReportAboutFeelings());
     oldReportRecord.setReportAboutHabits(newReportRecord.getReportAboutHabits());
     oldReportRecord.setIsReportCompleted(newReportRecord.getIsReportCompleted());
+    oldReportRecord.setDateTime(newReportRecord.getDateTime());
 
     return reportMapper.toRecord(reportRepository.save(reportMapper.toEntity(oldReportRecord)));
   }
