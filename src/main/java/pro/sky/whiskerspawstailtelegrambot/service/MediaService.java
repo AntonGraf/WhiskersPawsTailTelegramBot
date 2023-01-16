@@ -75,7 +75,7 @@ public class MediaService {
       MediaContent persistentBinaryContent = getPersistentMediaContent(response);
       MediaDocument documentRecord = buildTransientDoc(telegramDoc, persistentBinaryContent);
       saveDocument(documentRecord);
-      return formReplyMessages.replyMessage(String.valueOf(message), AllText.DOC_SUCCESSFUL_REPORT_TEXT,
+      return formReplyMessages.replyMessage(message.getChatId().toString(), AllText.DOC_SUCCESSFUL_REPORT_TEXT,
           configKeyboard.initKeyboardOnClickStart());
     } else {
       log.error("Bad response from telegram service: " + response);
