@@ -1,12 +1,13 @@
 package pro.sky.whiskerspawstailtelegrambot.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Objects;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 
 /**
@@ -60,7 +61,7 @@ public class Report {
    */
   @ManyToOne(cascade = CascadeType.PERSIST)
   @JoinColumn(name = "pet_id", referencedColumnName = "id", insertable = false, updatable = false)
-  @JsonBackReference
+  @JsonIgnore
   Pet pet;
 
   /**
@@ -73,6 +74,9 @@ public class Report {
    */
   @Column(name = "chat_id")
   Long chatId;
+
+  @Column(name = "date_time")
+  LocalDateTime dateTime;
 
   @Override
   public boolean equals(Object o) {
