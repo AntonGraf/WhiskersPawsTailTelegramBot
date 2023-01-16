@@ -80,20 +80,19 @@ public class MainHandlerImpl implements MainHandler {
       }
 
       if (baseInfo.isCallbackQuery()) {//обрабатываем CallbackQuery если стаус FREE
-        sendMessage = callbackQueryHandler.handler(baseInfo);
+        return callbackQueryHandler.handler(baseInfo);
       } else if (baseInfo.getMessage().hasPhoto() || baseInfo.getMessage()
           .hasDocument()) {//обрабатываем медиа если стаус FREE
-        mediaHandler.workingState(baseInfo);
+        return mediaHandler.workingState(baseInfo);
       } else {
         Message message = baseInfo.getMessage();//обрабатываем стандартную клавиатуру если стаус FREE
-        sendMessage = standardReplyHandler.startHandler(baseInfo, message);
+        return sendMessage = standardReplyHandler.startHandler(baseInfo, message);
       }
 
 
     } catch (Exception e) {
       return sendMessage = new SendMessage(baseInfo.getChatId(), e.getMessage());
     }
-    return sendMessage;
   }
 
 
