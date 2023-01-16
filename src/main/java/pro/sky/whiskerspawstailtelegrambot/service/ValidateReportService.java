@@ -18,9 +18,13 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class ValidateReportService {
+    //Репозиторий с отчетами
     private final ReportRepository reportRepository;
+    //Сервис с испытательными сроками
     private final TestPeriodService testPeriodService;
+    //Маппер отчетов
     private final ReportMapper reportMapper;
+    //Подключенный бот для отправки сообщений
     private final TelegramBotUpdatesListener bot;
 
     public ValidateReportService(ReportRepository reportRepository, TestPeriodService testPeriodService,
@@ -62,10 +66,14 @@ public class ValidateReportService {
                 .forEach(chatId -> sendMessage(chatId, AllText.BAD_REPORT));
     }
 
-    public void sendMessageToAdoptiveParentAnyReportLastDays() {
+    /**
+     * Отправляет сообщение усыновителям, которые не прислали отчеты за последние дни
+     * @param countDays - количество дней, которые усыновители не присылали отчеты
+     */
+    public void sendMessageToAdoptiveParentAnyReportLastDays(int countDays) {
         log.info("Отправляем сообщение усыновителям, не приславших отчеты за последние два дня");
         Collection<PetRecord> petRecordsWithTestPeriod = testPeriodService.getPetsHaveTestPeriod();
-        LocalDateTime reportDateTime = LocalDateTime.now().minusDays(2);
+        LocalDateTime reportDateTime = LocalDateTime.now().minusDays(countDays);
 
         for (PetRecord petRecord : petRecordsWithTestPeriod) {
             long countReports = reportRepository.countByPet_idAndDateTimeAfter(petRecord.getId(), reportDateTime);
@@ -75,6 +83,11 @@ public class ValidateReportService {
         }
     }
 
+    /**
+     * Отправка сообщения усыновителю, через телеграмбот
+     * @param chatId    - куда отправлять сообщение
+     * @param text      - какой текст отправлять
+     */
     private void sendMessage(long chatId, String text)  {
         log.debug("Отправляем сообщение " + chatId);
         SendMessage sendMessage = new SendMessage(String.valueOf(chatId), text);
