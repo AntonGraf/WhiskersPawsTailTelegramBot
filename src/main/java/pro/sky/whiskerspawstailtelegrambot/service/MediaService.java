@@ -43,8 +43,8 @@ public class MediaService {
   private String fileInfoUri;
   @Value("${service.file_storage.uri}")
   private String fileStorageUri;
-  //  @Value("${link.address}")
-//  private String linkAddress;
+  @Value("${link.address}")
+  private String linkAddress;
   private final PhotoRepository photoRepository;
   private final DocumentRepository documentRepository;
   private final MediaContentRepository mediaContentRepository;
@@ -227,9 +227,8 @@ public class MediaService {
     HttpHeaders headers = new HttpHeaders();
     HttpEntity<String> request = new HttpEntity<>(headers);
 
-    String fileInfoUri1 = fileInfoUri == null ? "" : fileInfoUri;
     return restTemplate.exchange(
-        fileInfoUri1,
+        fileInfoUri,
         HttpMethod.GET,
         request,
         String.class,
