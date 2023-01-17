@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
 import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
+import pro.sky.whiskerspawstailtelegrambot.loger.FormLogInfo;
 import pro.sky.whiskerspawstailtelegrambot.mapper.AdoptiveParentMapper;
 import pro.sky.whiskerspawstailtelegrambot.mapper.ReportMapper;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
@@ -11,7 +12,6 @@ import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
 import pro.sky.whiskerspawstailtelegrambot.repository.AdoptiveParentRepo;
 
 import java.util.Collection;
-import pro.sky.whiskerspawstailtelegrambot.service.enums.StateAdoptiveParent;
 
 /**
  * Сервис слой для усыновителя
@@ -170,10 +170,9 @@ public class AdoptiveParentService {
    * @return AdoptiveParentRecord
    */
   public AdoptiveParentRecord getAdoptiveParentByChatId(long chatId) {
-     log.info("Вызов метода " + new Throwable()
-        .getStackTrace()[0]
-        .getMethodName() + " класса " + this.getClass().getName());
-    return adoptiveParentMapper.toRecord(adoptiveParentRepo.getAdoptiveParentByChatId(chatId));
+    log.info(FormLogInfo.getInfo());
+    AdoptiveParent adoptiveParent = adoptiveParentRepo.getAdoptiveParentByChatId(chatId);
+    return adoptiveParentMapper.toRecord(adoptiveParent);
   }
 
 

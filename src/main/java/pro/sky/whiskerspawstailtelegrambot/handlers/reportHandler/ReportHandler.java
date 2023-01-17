@@ -4,13 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import pro.sky.whiskerspawstailtelegrambot.handlers.mainHandler.GetBaseInfoFromUpdate;
-import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
+import pro.sky.whiskerspawstailtelegrambot.loger.FormLogInfo;
 import pro.sky.whiskerspawstailtelegrambot.service.MediaService;
 import pro.sky.whiskerspawstailtelegrambot.service.ReportService;
 import pro.sky.whiskerspawstailtelegrambot.service.StateService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
-import pro.sky.whiskerspawstailtelegrambot.service.enums.StateAdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.util.enums.StateAdoptiveParent;
 
 /**
  * обработка репорт на будующее
@@ -38,18 +38,12 @@ public class ReportHandler {
 
   public SendMessage workingState(GetBaseInfoFromUpdate baseInfo,
       StateAdoptiveParent stateAdoptiveParent) {
-
-    log.info("Вызов метода " + new Throwable()
-        .getStackTrace()[0]
-        .getMethodName() + " класса " + this.getClass().getName());
-
-    ReportRecord reportRecord = reportService.getReportByChatIdAndIsReportCompletedFalse(
-        baseInfo.getChatIdL());
+    log.info(FormLogInfo.getInfo());
 
     WorkingWithReport workingWithReport = new WorkingWithReport(baseInfo, reportService,
         stateService,
         mediaService);
-    sendMessage = workingWithReport.work(reportRecord, stateAdoptiveParent);
+    sendMessage = workingWithReport.work(stateAdoptiveParent);
 
     return sendMessage;
   }

@@ -1,6 +1,7 @@
 package pro.sky.whiskerspawstailtelegrambot.service;
 
 import java.io.IOException;
+import java.util.Collection;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pro.sky.whiskerspawstailtelegrambot.entity.Pet;
 import pro.sky.whiskerspawstailtelegrambot.entity.Shelter;
 import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
+import pro.sky.whiskerspawstailtelegrambot.loger.FormLogInfo;
 import pro.sky.whiskerspawstailtelegrambot.mapper.PetMapper;
 import pro.sky.whiskerspawstailtelegrambot.mapper.PetMapperImpl;
 import pro.sky.whiskerspawstailtelegrambot.record.PetRecord;
@@ -22,13 +24,17 @@ import java.util.List;
 import java.util.Optional;
 import pro.sky.whiskerspawstailtelegrambot.repository.PetRepository;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PetServiceTest {
@@ -223,5 +229,38 @@ class PetServiceTest {
     private MockMultipartFile getTestPhoto() {
         return new MockMultipartFile("data", "photo.jpeg",
             MediaType.MULTIPART_FORM_DATA_VALUE, "photo.jpeg".getBytes());
+    }
+
+    @Test
+    void getAllPetAdoptiveParentByChatId() throws Exception {
+        Pet pet1 = new Pet();
+        pet1.setId(1L);
+        pet1.setPetType("dog");
+
+        Collection<Pet> pets = new ArrayList<>();
+        pets.add(pet1);
+
+        PetRecord petRecord1= new PetRecord();
+        petRecord1.setId(1L);
+        petRecord1.setPetType("dog");
+
+        Collection<PetRecord> petRecords = new ArrayList<>();
+        petRecords.add(petRecord1);
+
+        when(petRepository.getAllByAdoptiveParent_ChatId(anyLong())).thenReturn(pets);
+        when(petMapper.toRecordList(pets)).thenReturn(petRecords);
+
+        assertThat(
+            out.getAllPetAdoptiveParentByChatId(anyLong())).isEqualTo(
+            petRecords);
+        verify(petRepository, times(1)).getAllByAdoptiveParent_ChatId(anyLong());
+    }
+    @Test
+    void getAllPetAdoptiveParentByChatIdNegative() {
+        when(petRepository.getAllByAdoptiveParent_ChatId(anyLong())).thenReturn(null);
+
+        assertThatExceptionOfType(Exception.class).isThrownBy(
+            () -> out.getAllPetAdoptiveParentByChatId(anyLong()));
+        verify(petRepository, times(1)).getAllByAdoptiveParent_ChatId(anyLong());
     }
 }

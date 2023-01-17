@@ -1,6 +1,6 @@
 package pro.sky.whiskerspawstailtelegrambot.handlers;
 
-import static pro.sky.whiskerspawstailtelegrambot.service.enums.StateAdoptiveParent.*;
+import static pro.sky.whiskerspawstailtelegrambot.util.enums.StateAdoptiveParent.*;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import pro.sky.whiskerspawstailtelegrambot.service.AdoptiveParentService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
-import pro.sky.whiskerspawstailtelegrambot.service.enums.StateAdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.util.enums.StateAdoptiveParent;
 
 /**
  * Обработка сообщений при регистрации

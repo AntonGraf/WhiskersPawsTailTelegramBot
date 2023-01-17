@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pro.sky.whiskerspawstailtelegrambot.entity.Pet;
 import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
+import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFoundChecked;
+import pro.sky.whiskerspawstailtelegrambot.loger.FormLogInfo;
 import pro.sky.whiskerspawstailtelegrambot.mapper.PetMapper;
 import pro.sky.whiskerspawstailtelegrambot.record.PetRecord;
 import pro.sky.whiskerspawstailtelegrambot.repository.PetRepository;
@@ -29,7 +31,7 @@ import pro.sky.whiskerspawstailtelegrambot.repository.PetRepository;
 @Service
 @Slf4j
 @Transactional
-public class  PetService {
+public class PetService {
 
   @Value("${pet.photo.dir.path}")
   private String petDir;
@@ -46,6 +48,7 @@ public class  PetService {
 
   /**
    * Получение питомца в БД по id
+   *
    * @param petId
    * @return возвращает питомца
    */
@@ -57,6 +60,7 @@ public class  PetService {
 
   /**
    * Коллекция всех питомцев в БД
+   *
    * @return список всех питомцев хранящиеся в БД
    */
   public Collection<PetRecord> findAllPet() { //GetAll
@@ -87,7 +91,8 @@ public class  PetService {
    * @param photo
    * @throws IOException
    */
-  public void editPet(Long petId, String fullName, String age, String description, String petType, MultipartFile photo) throws IOException { //Put
+  public void editPet(Long petId, String fullName, String age, String description, String petType,
+      MultipartFile photo) throws IOException { //Put
     log.info("Изменение данных питомца в БД");
     Pet pet = petMapper.toEntity(findPet(petId));
     if (fullName != null && !fullName.isEmpty() && !fullName.isBlank()) {
@@ -111,6 +116,7 @@ public class  PetService {
 
   /**
    * Добавление id усыновителя в БД в таблицу Pet
+   *
    * @param petId
    * @param adoptiveParentId
    */
@@ -123,6 +129,7 @@ public class  PetService {
 
   /**
    * загрузка фотографии питомца в БД
+   *
    * @param petId
    * @param file
    * @throws IOException
@@ -150,6 +157,7 @@ public class  PetService {
 
   /**
    * вспомогательный медот для загрузки фотографий
+   *
    * @return расширение файла
    */
   private String getExtension(String fileName) {
@@ -165,7 +173,8 @@ public class  PetService {
    * @param photo
    * @throws IOException
    */
-  public void addPet(String fullName, String age, String description, String petType, MultipartFile photo) throws IOException { //Post
+  public void addPet(String fullName, String age, String description, String petType,
+      MultipartFile photo) throws IOException { //Post
     log.info("Добавление питомца в БД");
     Pet pet = new Pet();
     if (fullName != null && !fullName.isEmpty() && !fullName.isBlank()) {
@@ -185,12 +194,21 @@ public class  PetService {
     if (photo != null) {
       uploadPhoto(petRecord.getId(), photo);
     }
-
-
   }
 
+  /**
+   * получить всех питомцев по chat id усыновителя Метод может выбрасывть проверяемое исключение
+   *
+   * @param chatId chat id усыновителя
+   */
+  Collection<PetRecord> getAllPetAdoptiveParentByChatId(Long chatId) throws Exception {
+    log.info(FormLogInfo.getInfo());
 
-
-
+    Collection<Pet> pets = petRepository.getAllByAdoptiveParent_ChatId(chatId);
+    if (pets.size() == 0) {
+      throw new Exception("Питомцы этого пользователя не найдены.");
+    }
+    return petMapper.toRecordList(pets);
+  }
 
 }

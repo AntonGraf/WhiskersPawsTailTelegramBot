@@ -1,23 +1,25 @@
 package pro.sky.whiskerspawstailtelegrambot.handlers.buttonsHandler;
 
-import static pro.sky.whiskerspawstailtelegrambot.service.enums.StateAdoptiveParent.*;
+import static pro.sky.whiskerspawstailtelegrambot.util.enums.StateAdoptiveParent.*;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import pro.sky.whiskerspawstailtelegrambot.handlers.mainHandler.GetBaseInfoFromUpdate;
 import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.ReportHandler;
 import pro.sky.whiskerspawstailtelegrambot.handlers.stateHandlers.StateHandler;
-import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
+import pro.sky.whiskerspawstailtelegrambot.loger.FormLogInfo;
 import pro.sky.whiskerspawstailtelegrambot.service.StateService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
-import pro.sky.whiskerspawstailtelegrambot.service.enums.StateAdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.util.enums.StateAdoptiveParent;
 
 /**
  * Тут кнопки меняющие состояния
  */
+@Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class StateChangingButtons {
 
@@ -53,9 +55,9 @@ public class StateChangingButtons {
    * выбо кнопок меняющих состояние
    */
   public SendMessage handleClick(String textMessage) {
+    log.info(FormLogInfo.getInfo());
     textMessage = textMessage != null ? textMessage : "";//костыль от nullPointer при отправке фото без текста
     SendMessage sendMessage = null;
-
     switch (textMessage) {
 
       case AllText.CANCEL_TEXT:
@@ -95,9 +97,9 @@ public class StateChangingButtons {
    * реакция на кнопку отмена создания отчета смена состояния на CANCEL_CREATE_REPORT
    */
   private SendMessage clickCancelSendReport() {
-    AdoptiveParentRecord adoptiveParentRecord = stateService.updateStateAdoptiveParentByChatId(
-        chatIdL, StateAdoptiveParent.CANCEL_CREATE_REPORT);
-    if (adoptiveParentRecord == null) {
+    StateAdoptiveParent stateAdoptiveParent = stateService.updateStateAdoptiveParentByChatId(
+        chatIdL, CANCEL_CREATE_REPORT);
+    if (stateAdoptiveParent == NULL) {
       formReplyMessages.replyMessage(chatId,
           AllText.ERROR_REPLY_TEXT, configKeyboard.initKeyboardOnClickStart());
     }
@@ -110,12 +112,12 @@ public class StateChangingButtons {
    */
   private SendMessage clickRegistration() {
     StateAdoptiveParent state = stateService.getStateAdoptiveParentByChatId(chatIdL);
-    if (state != null) {
+    if (state != NULL) {
       return new SendMessage(chatId, AllText.ALREADY_REGISTERED);
     }
-    if(state == null){
-      state = NULL;
-    }
+//    if(state == null){
+//      state = NULL;
+//    }
     return stateHandler.processByState(baseInfo,state);
 
   }
@@ -125,15 +127,13 @@ public class StateChangingButtons {
    */
   private SendMessage clickSendReport() {
     StateAdoptiveParent state = START_0;
-    AdoptiveParentRecord adoptiveParentRecord = stateService
+    StateAdoptiveParent stateAdoptiveParent = stateService
         .updateStateAdoptiveParentByChatId(chatIdL, state);
-    if (adoptiveParentRecord == null) {
+    if (stateAdoptiveParent == NULL) {
       return formReplyMessages.replyMessage(chatId,
           AllText.REGISTRATION_INIT, configKeyboard.formReplyKeyboardInOneRow(AllText.START_TEXT));
     }
     return stateHandler.processByState(baseInfo, state);
-
-//    return reportHandler.workingState(baseInfo, state);
   }
 
   /**
@@ -141,7 +141,7 @@ public class StateChangingButtons {
    */
   private SendMessage clickStartText() {
     if (stateService.getStateAdoptiveParentByChatId(chatIdL)
-        != null) {
+        != NULL) {
       //приветсвенное сообщение, вылетает только после регистрации
       return formReplyMessages.replyMessage(chatId,
           AllText.WELCOME_MESSAGE_TEXT,

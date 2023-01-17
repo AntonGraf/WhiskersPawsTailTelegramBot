@@ -7,7 +7,9 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFoundChecked;
 import pro.sky.whiskerspawstailtelegrambot.handlers.mainHandler.GetBaseInfoFromUpdate;
+import pro.sky.whiskerspawstailtelegrambot.loger.FormLogInfo;
 import pro.sky.whiskerspawstailtelegrambot.service.ReportService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
@@ -17,15 +19,12 @@ import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
 public class FormMessageAndKeyboardIdYourPets {
 
   public SendMessage get(
-      GetBaseInfoFromUpdate baseInfo, ReportService reportService) {
-    log.info("Вызов метода " + new Throwable()
-        .getStackTrace()[0]
-        .getMethodName() + " класса " + this.getClass().getName());
+      GetBaseInfoFromUpdate baseInfo, String allPetByChatId) {
+    log.info(FormLogInfo.getInfo());
 
     SendMessage sendMessage = null;
     FormReplyMessages formReplyMessages = new FormReplyMessages();
 
-    String allPetByChatId = reportService.showAllAdoptedPets(baseInfo.getChatIdL());
     if (allPetByChatId == null) {
       return null;
     }
@@ -38,10 +37,7 @@ public class FormMessageAndKeyboardIdYourPets {
   }
 
   private InlineKeyboardMarkup form(String allPetByChatId) {
-
-    log.info("Вызов метода " + new Throwable()
-        .getStackTrace()[0]
-        .getMethodName() + " класса " + this.getClass().getName());
+    log.info(FormLogInfo.getInfo());
 
     if (allPetByChatId == null) {
       return null;

@@ -2,9 +2,9 @@ package pro.sky.whiskerspawstailtelegrambot.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -14,6 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import javax.imageio.ImageIO;
@@ -25,14 +26,17 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.entity.Pet;
 import pro.sky.whiskerspawstailtelegrambot.entity.Report;
 import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFound;
+import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFoundChecked;
 import pro.sky.whiskerspawstailtelegrambot.mapper.ReportMapper;
 import pro.sky.whiskerspawstailtelegrambot.mapper.ReportMapperImpl;
 import pro.sky.whiskerspawstailtelegrambot.record.PetRecord;
 import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
 import pro.sky.whiskerspawstailtelegrambot.repository.PetRepository;
 import pro.sky.whiskerspawstailtelegrambot.repository.ReportRepository;
+import pro.sky.whiskerspawstailtelegrambot.util.ParserToBot;
 
 @ExtendWith(MockitoExtension.class)
 class ReportServiceTest {
@@ -42,8 +46,7 @@ class ReportServiceTest {
   ReportRepository reportRepository;
   @Spy
   ReportMapper reportMapper = new ReportMapperImpl();
-  //  @Mock
-//  ReportMapper reportMapper;
+
   @InjectMocks
   ReportService reportService;
 
@@ -111,8 +114,9 @@ class ReportServiceTest {
     updateReport.setChatId(999l);
 //    updateReport.setStateReport("NOT_STARTED");
   }
+
   @Test
-  void getReportById() {
+  void getReportById() throws ElemNotFoundChecked {
     when(reportRepository.findById(anyLong())).thenReturn(Optional.of(report));
     when(reportMapper.toRecord(any(Report.class))).thenReturn(reportRecord);
 
@@ -122,38 +126,27 @@ class ReportServiceTest {
 
   @Test
   void getReportByIdNegative() {
-    assertThatExceptionOfType(ElemNotFound.class).isThrownBy(() -> reportService.getReportById(2));
+    assertThatExceptionOfType(ElemNotFoundChecked.class).isThrownBy(() -> reportService.getReportById(2l));
     verify(reportRepository, times(1)).findById(any());
   }
 
   @Test
-  void getReportByPetId() {
-    when(reportRepository.getReportByPet_id(anyLong())).thenReturn(report);
-    when(reportMapper.toRecord(any(Report.class))).thenReturn(reportRecord);
+  void getReportByChatIdAndIsReportCompletedFalse() throws Exception {
+    when(reportRepository.getByChatIdAndIsReportCompletedFalse(anyLong())).thenReturn(
+        Optional.ofNullable(report));
 
-    assertThat(reportService.getReportByPetId(1l)).isEqualTo(reportRecord);
-    verify(reportRepository, times(1)).getReportByPet_id(any());
+    assertThat(reportService.getReportByChatIdAndIsReportCompletedFalse(999L)).isEqualTo(
+        reportRecord);
+    verify(reportRepository, times(1)).getByChatIdAndIsReportCompletedFalse(any());
   }
 
-  @Test
-  void getReportByPetIdNegative() {
-    assertThat(reportService.getReportByPetId(2)).isNull();
-    verify(reportRepository, times(1)).getReportByPet_id(any());
-  }
-
-  @Test
-  void getReportByChatIdAndIsReportCompletedFalse() {
-    when(reportRepository.getReportByChatIdAndIsReportCompletedFalse(anyLong())).thenReturn(report);
-
-    assertThat(reportService.getReportByChatIdAndIsReportCompletedFalse(999)).isEqualTo(reportRecord);
-    verify(reportRepository, times(1)).getReportByChatIdAndIsReportCompletedFalse(any());
-  }
   @Test
   void getReportByChatIdAndIsReportCompletedFalseNegative() {
-    when(reportRepository.getReportByChatIdAndIsReportCompletedFalse(anyLong())).thenReturn(null);
+    when(reportRepository.getByChatIdAndIsReportCompletedFalse(anyLong())).thenReturn(null);
 
-    assertThat(reportService.getReportByChatIdAndIsReportCompletedFalse(999)).isNull();
-    verify(reportRepository, times(1)).getReportByChatIdAndIsReportCompletedFalse(any());
+    assertThatExceptionOfType(Exception.class).isThrownBy(
+        () -> reportService.getReportByChatIdAndIsReportCompletedFalse(999L));
+    verify(reportRepository, times(1)).getByChatIdAndIsReportCompletedFalse(any());
   }
 
   @Test
@@ -163,52 +156,124 @@ class ReportServiceTest {
     report1.setChatId(999l);
     report1.setIsReportCompleted(false);
 
-    assertThat(reportService.addNewBlankReportWithChatId(999)).isEqualTo(report1);
+    assertThat(reportService.addNewBlankReportWithChatId(999L)).isEqualTo(report1);
     verify(reportRepository, times(1)).save(any());
   }
-  @Test
-  void removeAllBlankReportByChatId() {
 
-//    when(reportRepository.save(any(Report.class))).thenReturn(report);
-//    when(reportRepository.save(any(Report.class))).thenReturn(updateReport);
-    List<Report> reports =new ArrayList<>();
+  @Test
+  void deleteAllByChatIdAndIsReportCompletedFalse() {
+
+    List<Report> reports = new ArrayList<>();
     reports.add(report);
     reports.add(updateReport);
-    when(reportRepository.findAll()).thenReturn(reports);
-    when(reportRepository.findAll().size()).thenReturn(2);
-//    assertThat(reportService.removeAllBlankReportByChatId(999l)))
 
-var q = reportRepository.findAll();
-    when(reportRepository.getAllByIsReportCompletedFalseAndChatId(anyLong())).thenReturn(null);
-//    assertThat(reportService.removeAllBlankReportByChatId(999l)).
-//    verify(reportRepository, times(1)).getAllByIsReportCompletedFalseAndChatId(any());
+    when(reportRepository.getAllByChatIdAndIsReportCompletedFalse(anyLong())).thenReturn(reports);
+    reportService.deleteAllByChatIdAndIsReportCompletedFalse(999l);
+;
+    verify(reportRepository, times(1)).deleteAll(any());
+  }
+
+  @Test
+  void deleteAllByChatIdAndIsReportCompletedFalseNegative() {
+    List<Report> reports = new ArrayList<>();
+    reports.add(report);
+    reports.add(updateReport);
+
+    when(reportRepository.getAllByChatIdAndIsReportCompletedFalse(anyLong())).thenReturn(reports);
+    reportService.deleteAllByChatIdAndIsReportCompletedFalse(999l);
+    ;
+    verify(reportRepository, times(1)).deleteAll(any());
+  }
+
+  @Test
+  void updateReport() throws ElemNotFoundChecked {
+    when(reportRepository.findById(anyLong())).thenReturn(Optional.ofNullable(report));
+    when(reportService.getReportById(anyLong())).thenReturn(reportRecord);
+
+    assertThat(reportService.updateReport(updateReportRecord)).isEqualTo(updateReportRecord);
+    verify(reportRepository, times(2)).findById(any());
+    verify(reportRepository, times(1)).save(any());
 
   }
 
   @Test
-  void updateReport() {
+  void updateReportNegative()  {
+    assertThatExceptionOfType(ElemNotFoundChecked.class).isThrownBy(
+        () -> reportService.getReportById(null));
+    assertThatExceptionOfType(RuntimeException.class).isThrownBy(
+        () -> reportService.updateReport(updateReportRecord));
+    verify(reportRepository, times(0)).save(any());
   }
 
   @Test
-  void showAllAdoptedPets() {
+  void showAllAdoptedPets() throws Exception {
+    Pet pet1 = initDog(initAdoptiveParent(111L), 1L);
+    Pet pet2 = initDog(initAdoptiveParent(111L), 2L);
+    Collection<Pet> pets = new ArrayList<>();
+    pets.add(pet1);
+    pets.add(pet2);
+
+    PetRecord petRecord = initPetRecord(initAdoptiveParent(111L), 1L);
+    PetRecord petRecord2 = initPetRecord(initAdoptiveParent(111L), 2L);
+    Collection<PetRecord> petRecords = new ArrayList<>();
+    petRecords.add(petRecord);
+    petRecords.add(petRecord2);
+
+    when(petService.getAllPetAdoptiveParentByChatId(anyLong())).thenReturn(petRecords);
+
+    ParserToBot parserToBot = new ParserToBot();
+    String allAdoptedPets = parserToBot.parserPet(petRecords);
+
+    assertThat(reportService.showAllAdoptedPetsByChatId(111L)).isEqualTo(allAdoptedPets);
+    verify(petService, times(1)).getAllPetAdoptiveParentByChatId(anyLong());
+  }
+
+  @Test
+  void showAllAdoptedPetsNegative() throws Exception {
+    when(petService.getAllPetAdoptiveParentByChatId(anyLong())).thenReturn(null);
+
+    assertThatExceptionOfType(Exception.class).isThrownBy(
+        () -> reportService.showAllAdoptedPetsByChatId(999L));
+    verify(petService, times(1)).getAllPetAdoptiveParentByChatId(anyLong());
   }
 
   @Test
   void getPetById() {
+    PetRecord petRecord = initPetRecord(initAdoptiveParent(111L), 1L);
+    when(petService.findPet(anyLong())).thenReturn(petRecord);
+
+    assertThat(reportService.getPetByPetId(anyLong())).isEqualTo(petRecord);
+    verify(petService, times(1)).findPet(anyLong());
   }
 
-  AdoptiveParent initAdoptiveParent(long id) {
+  @Test
+  void getPetByIdNegative() {
+    when(petService.findPet(anyLong())).thenReturn(null);
+    assertThat(reportService.getPetByPetId(anyLong())).isNull();
+    verify(petService, times(1)).findPet(anyLong());
+  }
+
+  AdoptiveParent initAdoptiveParent(Long id) {
     AdoptiveParent adoptiveParent = new AdoptiveParent();
     adoptiveParent.setChatId(id);
     return adoptiveParent;
   }
 
-  PetRecord initDogReport(AdoptiveParent adoptiveParent) {
+  PetRecord initPetRecord(AdoptiveParent adoptiveParent, Long idPet) {
 
     PetRecord petRecord = new PetRecord();
-    petRecord.setId(1l);
+    petRecord.setId(idPet);
     petRecord.setFullName("dog 1");
     petRecord.setAdoptiveParent(adoptiveParent);
     return petRecord;
   }
+  Pet initDog(AdoptiveParent adoptiveParent, Long idPet) {
+
+    Pet pet = new Pet();
+    pet.setId(idPet);
+    pet.setFullName("dog 1");
+    pet.setAdoptiveParent(adoptiveParent);
+    return pet;
+  }
+
 }

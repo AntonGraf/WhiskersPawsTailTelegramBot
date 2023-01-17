@@ -3,10 +3,12 @@ package pro.sky.whiskerspawstailtelegrambot.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFoundChecked;
+import pro.sky.whiskerspawstailtelegrambot.loger.FormLogInfo;
 import pro.sky.whiskerspawstailtelegrambot.mapper.AdoptiveParentMapper;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.repository.StateRepository;
-import pro.sky.whiskerspawstailtelegrambot.service.enums.StateAdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.util.enums.StateAdoptiveParent;
 
 @Service
 @Slf4j
@@ -21,22 +23,6 @@ public class StateService {
     this.stateChangeRepos = stateRepository;
   }
 
-  /**
-   * Получить id AdoptiveParent по chat id
-   *
-   * @param chatId chatId
-   * @return AdoptiveParentRecord
-   */
-  public Long getAdoptiveParentIdByChatId(long chatId) {
-    log.info("Вызов метода " + new Throwable()
-        .getStackTrace()[0]
-        .getMethodName() + " класса " + this.getClass().getName());
-    AdoptiveParent adoptiveParent = stateChangeRepos.getAdoptiveParentByChatId(chatId);
-    if(adoptiveParent != null){
-      return stateChangeRepos.getAdoptiveParentByChatId(chatId).getChatId();
-    }
-    return null;
-  }
 
   /**
    * Получить AdoptiveParent по chat id
@@ -44,31 +30,36 @@ public class StateService {
    * @param chatId chatId
    * @return AdoptiveParentRecord
    */
-  public AdoptiveParentRecord getAdoptiveParentByChatId(long chatId) {
-    log.info("Вызов метода " + new Throwable()
-        .getStackTrace()[0]
-        .getMethodName() + " класса " + this.getClass().getName());
-    return adoptiveParentMapper.toRecord(stateChangeRepos.getAdoptiveParentByChatId(chatId));
+  public AdoptiveParentRecord getAdoptiveParentByChatId(Long chatId) throws ElemNotFoundChecked {
+    log.info(FormLogInfo.getInfo());
+    AdoptiveParent adoptiveParent = stateChangeRepos.getAdoptiveParentByChatId(chatId)
+        .orElseThrow(() -> new ElemNotFoundChecked("Пользователь по такому id не найден"));
+
+    return adoptiveParentMapper.toRecord(adoptiveParent);
   }
 
 
   /**
-   *  получить состояние пользователя по chatId
+   * получить состояние пользователя по chatId
    *
    * @param chatId string chatId
    * @return состояни пользователя
    */
-  public StateAdoptiveParent getStateAdoptiveParentByChatId(long chatId) {
-    log.info("Вызов метода " + new Throwable()
-        .getStackTrace()[0]
-        .getMethodName() + " класса " + this.getClass().getName());
-    AdoptiveParentRecord adoptiveParentRecord = getAdoptiveParentByChatId(chatId);
-    if (adoptiveParentRecord != null) {
+  public StateAdoptiveParent getStateAdoptiveParentByChatId(Long chatId) {
+    log.info(FormLogInfo.getInfo());
+    AdoptiveParentRecord adoptiveParentRecord = null;
+
+    try {
+      adoptiveParentRecord = getAdoptiveParentByChatId(chatId);
       String state = adoptiveParentRecord.getState();
       return StateAdoptiveParent.valueOf(state);
+
+    } catch (ElemNotFoundChecked e) {
+      log.info(FormLogInfo.getCatch());
+      return StateAdoptiveParent.NULL;
     }
-    return null;
   }
+
   /**
    * Обновить state пользователя по его chatId
    *
@@ -76,19 +67,20 @@ public class StateService {
    * @param state  стейт на который нужно обновить
    * @return
    */
-  public AdoptiveParentRecord updateStateAdoptiveParentByChatId(long chatId,
+  public StateAdoptiveParent updateStateAdoptiveParentByChatId(Long chatId,
       StateAdoptiveParent state) {
-    Long id = getAdoptiveParentIdByChatId(chatId);
-    AdoptiveParent adoptiveParent = stateChangeRepos.getAdoptiveParentByChatId(chatId);
-    if (adoptiveParent != null) {
+    try {
+      AdoptiveParent adoptiveParent = stateChangeRepos.getAdoptiveParentByChatId(chatId)
+          .orElseThrow(() -> new ElemNotFoundChecked("Пользователь по такому id не найден"));
       adoptiveParent.setState(state.name());
       stateChangeRepos.save(adoptiveParent);
-      return adoptiveParentMapper.toRecord(adoptiveParent);
+      adoptiveParentMapper.toRecord(adoptiveParent);
+      return state;
+    } catch (ElemNotFoundChecked e) {
+      return StateAdoptiveParent.NULL;
     }
-    return null;
+
   }
-
-
 
 
 }

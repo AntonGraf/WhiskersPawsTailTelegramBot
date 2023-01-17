@@ -6,7 +6,13 @@ import pro.sky.whiskerspawstailtelegrambot.record.PetRecord;
 
 public class FilterAdoptedPets {
 
-  public Collection<PetRecord> byChatId(long chatId, Collection<PetRecord> collectionPets){
+  /**
+   * ФПолучить список питомцев которые есть у пользователя по его chatId
+   * @param chatId
+   * @param collectionPets список всех питомцев в БД
+   * @return
+   */
+  public Collection<PetRecord> byChatId(Long chatId, Collection<PetRecord> collectionPets){
 
     collectionPets = collectionPets
         .stream()

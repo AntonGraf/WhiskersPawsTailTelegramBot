@@ -43,7 +43,7 @@ public class MediaService {
   private String fileInfoUri;
   @Value("${service.file_storage.uri}")
   private String fileStorageUri;
-  //  @Value("${link.address}")
+//  @Value("${link.address}")
 //  private String linkAddress;
   private final PhotoRepository photoRepository;
   private final DocumentRepository documentRepository;
@@ -67,13 +67,13 @@ public class MediaService {
   }
 
   /**
-   * Метод сохраняет документ в БД, перегрузка метода с
-   * параметром GetBaseInfoFromUpdate используется для сохранения
-   * фото из любого участка кода и различаются возращаемым значением
+   * Метод сохраняет документ в БД, перегрузка метода с параметром GetBaseInfoFromUpdate
+   * используется для сохранения фото из любого участка кода и различаются возращаемым значением
+   *
    * @param message Сообщение из Update или GetBaseInfoFromUpdate
    * @return SendMessage
    */
-  public SendMessage processDoc(Message message) {
+  public SendMessage processDoc(Message message) throws IllegalArgumentException {
     Document telegramDoc = message.getDocument();
     String fileId = telegramDoc.getFileId();
     ResponseEntity<String> response = getFilePath(fileId);
@@ -81,22 +81,25 @@ public class MediaService {
       MediaContent persistentBinaryContent = getPersistentMediaContent(response);
       MediaDocument documentRecord = buildTransientDoc(telegramDoc, persistentBinaryContent);
       saveDocument(documentRecord);
-      return formReplyMessages.replyMessage(message.getChatId().toString(), AllText.DOC_SUCCESSFUL_REPORT_TEXT,
+      return formReplyMessages.replyMessage(message.getChatId().toString(),
+          AllText.DOC_SUCCESSFUL_REPORT_TEXT,
           configKeyboard.initKeyboardOnClickStart());
     } else {
       log.error("Bad response from telegram service: " + response);
-      return null;
+      throw new IllegalArgumentException("Bad response from telegram service: " + response);
     }
   }
+
   /**
-   * Метод сохраняет документ в БД, перегрузка метода с
-   * параметром GetBaseInfoFromUpdate используется для сохранения
-   * фото из любого участка кода и различаются возращаемым значением
+   * Метод сохраняет документ в БД, перегрузка метода с параметром GetBaseInfoFromUpdate
+   * используется для сохранения фото из любого участка кода и различаются возращаемым значением
+   *
    * @param info GetBaseInfoFromUpdate
    * @return MediaDocumentRecord
    */
-  public MediaDocumentRecord processDoc(GetBaseInfoFromUpdate info) {
-    org.telegram.telegrambots.meta.api.objects.Document telegramDoc = info.getMessage()
+  public MediaDocumentRecord processDoc(GetBaseInfoFromUpdate info)
+      throws IllegalArgumentException {
+    Document telegramDoc = info.getMessage()
         .getDocument();
     String fileId = telegramDoc.getFileId();
     ResponseEntity<String> response = getFilePath(fileId);
@@ -106,26 +109,28 @@ public class MediaService {
       return mediaDocumentMapper.toRecord(saveDocument(mediaDocument));
     } else {
       log.error("Bad response from telegram service: " + response);
-      return null;
+      throw new IllegalArgumentException("Bad response from telegram service: " + response);
     }
   }
+
   /**
    * сохранить документ в БД
+   *
    * @param mediaDocument
    * @return
    */
-  public MediaDocument saveDocument(MediaDocument mediaDocument) {
+  public MediaDocument saveDocument(MediaDocument mediaDocument) throws IllegalArgumentException {
     return documentRepository.save(mediaDocument);
   }
 
   /**
-   * Метод сохраняет фото в БД, перегрузка метода с
-   * параметром GetBaseInfoFromUpdate используется для сохранения
-   * фото из любого участка кода и различаются возращаемым значением
+   * Метод сохраняет фото в БД, перегрузка метода с параметром GetBaseInfoFromUpdate используется
+   * для сохранения фото из любого участка кода и различаются возращаемым значением
+   *
    * @param message Сообщение из Update или GetBaseInfoFromUpdate
    * @return SendMessage
    */
-  public SendMessage processPhoto(Message message) {
+  public SendMessage processPhoto(Message message) throws IllegalArgumentException {
     var photoSizeCount = message.getPhoto().size();
     var photoIndex = photoSizeCount > 1 ? message.getPhoto().size() - 1 : 0;
     PhotoSize telegramPhoto = message.getPhoto().get(photoIndex);
@@ -135,17 +140,19 @@ public class MediaService {
       MediaContent persistentBinaryContent = getPersistentMediaContent(response);
       MediaPhoto mediaPhoto = buildTransientPhoto(telegramPhoto, persistentBinaryContent);
       savePhoto(mediaPhoto);
-      return formReplyMessages.replyMessage(String.valueOf(message), AllText.PHOTO_SUCCESSFUL_REPORT_TEXT,
+      return formReplyMessages.replyMessage(String.valueOf(message),
+          AllText.PHOTO_SUCCESSFUL_REPORT_TEXT,
           configKeyboard.initKeyboardOnClickStart());
     } else {
       log.error("Bad response from telegram service: " + response);
-      return null;
+      throw new IllegalArgumentException("Bad response from telegram service: " + response);
     }
   }
+
   /**
-   * Метод сохраняет фото в БД, перегрузка метода с
-   * параметром GetBaseInfoFromUpdate используется для сохранения
-   * фото из любого участка кода и различаются возращаемым значением
+   * Метод сохраняет фото в БД, перегрузка метода с параметром GetBaseInfoFromUpdate используется
+   * для сохранения фото из любого участка кода и различаются возращаемым значением
+   *
    * @param info GetBaseInfoFromUpdate
    * @return MediaDocumentRecord
    */
@@ -161,12 +168,13 @@ public class MediaService {
       return mediaPhotoMapper.toRecord(savePhoto(mediaPhoto));
     } else {
       log.error("Bad response from telegram service: " + response);
-      return null;
+      throw new IllegalArgumentException("Bad response from telegram service: " + response);
     }
   }
 
   /**
    * сохранить фото в БД
+   *
    * @param mediaPhoto
    * @return
    */
@@ -180,6 +188,10 @@ public class MediaService {
     MediaContent transientBinaryContent = MediaContent.builder()
         .fileAsArrayOfBytes(fileInByte)
         .build();
+    return saveMediaContent(transientBinaryContent);
+  }
+
+  public MediaContent saveMediaContent(MediaContent transientBinaryContent) {
     return mediaContentRepository.save(transientBinaryContent);
   }
 
@@ -232,7 +244,7 @@ public class MediaService {
       urlObj = new URL(fullUri);
     } catch (MalformedURLException e) {
       log.error("Error download");
-      return null;
+      throw new IllegalArgumentException("Error download");
     }
 
     //TODO подумать над оптимизацией
@@ -240,7 +252,7 @@ public class MediaService {
       return is.readAllBytes();
     } catch (IOException e) {
       log.error("Error download");
-      return null;
+      throw new IllegalArgumentException("Error download");
     }
   }
 
