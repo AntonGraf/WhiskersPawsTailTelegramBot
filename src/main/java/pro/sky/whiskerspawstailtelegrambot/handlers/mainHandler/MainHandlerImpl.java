@@ -14,7 +14,7 @@ import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.ReportHandler;
 import pro.sky.whiskerspawstailtelegrambot.handlers.stateHandlers.StateHandler;
 import pro.sky.whiskerspawstailtelegrambot.service.StateService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
-import pro.sky.whiskerspawstailtelegrambot.service.enums.StateAdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.util.enums.StateAdoptiveParent;
 
 @Slf4j
 @Component("MainHandler")

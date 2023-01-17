@@ -2,14 +2,13 @@ package pro.sky.whiskerspawstailtelegrambot.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static pro.sky.whiskerspawstailtelegrambot.service.enums.StateAdoptiveParent.FREE;
-import static pro.sky.whiskerspawstailtelegrambot.service.enums.StateAdoptiveParent.NULL;
+import static pro.sky.whiskerspawstailtelegrambot.util.enums.StateAdoptiveParent.FREE;
+import static pro.sky.whiskerspawstailtelegrambot.util.enums.StateAdoptiveParent.NULL;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,7 +21,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import pro.sky.whiskerspawstailtelegrambot.entity.AdoptiveParent;
 import pro.sky.whiskerspawstailtelegrambot.entity.Pet;
 import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFoundChecked;
@@ -31,7 +29,6 @@ import pro.sky.whiskerspawstailtelegrambot.mapper.AdoptiveParentMapperImpl;
 import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.record.PetRecord;
 import pro.sky.whiskerspawstailtelegrambot.repository.StateRepository;
-import pro.sky.whiskerspawstailtelegrambot.service.enums.StateAdoptiveParent;
 
 @ExtendWith(MockitoExtension.class)
 class StateServiceTest {

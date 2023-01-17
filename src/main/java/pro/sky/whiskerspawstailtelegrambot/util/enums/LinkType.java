@@ -1,4 +1,4 @@
-package pro.sky.whiskerspawstailtelegrambot.service.enums;
+package pro.sky.whiskerspawstailtelegrambot.util.enums;
 
 public enum LinkType {
   GET_DOC("file/get-doc"),

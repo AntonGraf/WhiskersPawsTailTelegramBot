@@ -1,6 +1,6 @@
 package pro.sky.whiskerspawstailtelegrambot.handlers.buttonsHandler;
 
-import static pro.sky.whiskerspawstailtelegrambot.service.enums.StateAdoptiveParent.*;
+import static pro.sky.whiskerspawstailtelegrambot.util.enums.StateAdoptiveParent.*;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -10,12 +10,11 @@ import pro.sky.whiskerspawstailtelegrambot.handlers.mainHandler.GetBaseInfoFromU
 import pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler.ReportHandler;
 import pro.sky.whiskerspawstailtelegrambot.handlers.stateHandlers.StateHandler;
 import pro.sky.whiskerspawstailtelegrambot.loger.FormLogInfo;
-import pro.sky.whiskerspawstailtelegrambot.record.AdoptiveParentRecord;
 import pro.sky.whiskerspawstailtelegrambot.service.StateService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
-import pro.sky.whiskerspawstailtelegrambot.service.enums.StateAdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.util.enums.StateAdoptiveParent;
 
 /**
  * Тут кнопки меняющие состояния

@@ -1,4 +1,4 @@
-package pro.sky.whiskerspawstailtelegrambot.service.enums;
+package pro.sky.whiskerspawstailtelegrambot.util.enums;
 
 import java.util.ArrayList;
 import java.util.List;

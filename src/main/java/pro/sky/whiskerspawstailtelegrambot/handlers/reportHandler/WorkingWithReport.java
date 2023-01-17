@@ -2,12 +2,10 @@ package pro.sky.whiskerspawstailtelegrambot.handlers.reportHandler;
 
 import static pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.AllText.*;
 
-import liquibase.pro.packaged.R;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import pro.sky.whiskerspawstailtelegrambot.exception.ElemNotFoundChecked;
 import pro.sky.whiskerspawstailtelegrambot.handlers.mainHandler.GetBaseInfoFromUpdate;
 import pro.sky.whiskerspawstailtelegrambot.loger.FormLogInfo;
 import pro.sky.whiskerspawstailtelegrambot.record.ReportRecord;
@@ -16,7 +14,7 @@ import pro.sky.whiskerspawstailtelegrambot.service.ReportService;
 import pro.sky.whiskerspawstailtelegrambot.service.StateService;
 import pro.sky.whiskerspawstailtelegrambot.textAndButtonsAndKeyboard.ConfigKeyboard;
 import pro.sky.whiskerspawstailtelegrambot.util.FormReplyMessages;
-import pro.sky.whiskerspawstailtelegrambot.service.enums.StateAdoptiveParent;
+import pro.sky.whiskerspawstailtelegrambot.util.enums.StateAdoptiveParent;
 
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
