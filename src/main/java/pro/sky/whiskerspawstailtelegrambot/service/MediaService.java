@@ -66,7 +66,13 @@ public class MediaService {
     configKeyboard = new ConfigKeyboard();
   }
 
-
+  /**
+   * Метод сохраняет документ в БД, перегрузка метода с
+   * параметром GetBaseInfoFromUpdate используется для сохранения
+   * фото из любого участка кода и различаются возращаемым значением
+   * @param message Сообщение из Update или GetBaseInfoFromUpdate
+   * @return SendMessage
+   */
   public SendMessage processDoc(Message message) {
     Document telegramDoc = message.getDocument();
     String fileId = telegramDoc.getFileId();
@@ -82,7 +88,13 @@ public class MediaService {
       return null;
     }
   }
-
+  /**
+   * Метод сохраняет документ в БД, перегрузка метода с
+   * параметром GetBaseInfoFromUpdate используется для сохранения
+   * фото из любого участка кода и различаются возращаемым значением
+   * @param info GetBaseInfoFromUpdate
+   * @return MediaDocumentRecord
+   */
   public MediaDocumentRecord processDoc(GetBaseInfoFromUpdate info) {
     org.telegram.telegrambots.meta.api.objects.Document telegramDoc = info.getMessage()
         .getDocument();
@@ -97,12 +109,22 @@ public class MediaService {
       return null;
     }
   }
-
+  /**
+   * сохранить документ в БД
+   * @param mediaDocument
+   * @return
+   */
   public MediaDocument saveDocument(MediaDocument mediaDocument) {
     return documentRepository.save(mediaDocument);
   }
 
-
+  /**
+   * Метод сохраняет фото в БД, перегрузка метода с
+   * параметром GetBaseInfoFromUpdate используется для сохранения
+   * фото из любого участка кода и различаются возращаемым значением
+   * @param message Сообщение из Update или GetBaseInfoFromUpdate
+   * @return SendMessage
+   */
   public SendMessage processPhoto(Message message) {
     var photoSizeCount = message.getPhoto().size();
     var photoIndex = photoSizeCount > 1 ? message.getPhoto().size() - 1 : 0;
@@ -113,14 +135,20 @@ public class MediaService {
       MediaContent persistentBinaryContent = getPersistentMediaContent(response);
       MediaPhoto mediaPhoto = buildTransientPhoto(telegramPhoto, persistentBinaryContent);
       savePhoto(mediaPhoto);
-      return formReplyMessages.replyMessage(message.getChatId().toString(), AllText.PHOTO_SUCCESSFUL_REPORT_TEXT,
+      return formReplyMessages.replyMessage(String.valueOf(message), AllText.PHOTO_SUCCESSFUL_REPORT_TEXT,
           configKeyboard.initKeyboardOnClickStart());
     } else {
       log.error("Bad response from telegram service: " + response);
       return null;
     }
   }
-
+  /**
+   * Метод сохраняет фото в БД, перегрузка метода с
+   * параметром GetBaseInfoFromUpdate используется для сохранения
+   * фото из любого участка кода и различаются возращаемым значением
+   * @param info GetBaseInfoFromUpdate
+   * @return MediaDocumentRecord
+   */
   public MediaPhotoRecord processPhoto(GetBaseInfoFromUpdate info) {
     var photoSizeCount = info.getMessage().getPhoto().size();
     var photoIndex = photoSizeCount > 1 ? info.getMessage().getPhoto().size() - 1 : 0;
@@ -137,6 +165,11 @@ public class MediaService {
     }
   }
 
+  /**
+   * сохранить фото в БД
+   * @param mediaPhoto
+   * @return
+   */
   public MediaPhoto savePhoto(MediaPhoto mediaPhoto) {
     return photoRepository.save(mediaPhoto);
   }
