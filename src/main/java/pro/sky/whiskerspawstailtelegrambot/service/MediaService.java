@@ -43,8 +43,8 @@ public class MediaService {
   private String fileInfoUri;
   @Value("${service.file_storage.uri}")
   private String fileStorageUri;
-  @Value("${link.address}")
-  private String linkAddress;
+//  @Value("${link.address}")
+//  private String linkAddress;
   private final PhotoRepository photoRepository;
   private final DocumentRepository documentRepository;
   private final MediaContentRepository mediaContentRepository;
